@@ -1,0 +1,224 @@
+.invest-container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #f5f6fa;
+}
+
+/* plan card */
+
+.plan-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 2px solid #d6a85a;
+}
+
+/* header */
+
+.plan-header {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+
+.plan-header img {
+  width: 80px;
+  height: 60px;
+  border-radius: 10px;
+}
+
+/* name */
+
+.plan-name {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.plan-name h3 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.plan-tag {
+  font-size: 11px;
+  background: #eee;
+  padding: 3px 9px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+/* info */
+
+.plan-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.plan-info p {
+  font-size: 12px;
+  margin: 0;
+}
+
+.plan-value {
+  color: red;
+  font-weight: bold;
+}
+
+/* actions */
+
+.plan-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.plan-details {
+  width: 50%;
+  border: 2px solid #d6a85a;
+  background: transparent;
+  padding: 10px;
+  border-radius: 7px;
+  font-weight: bold;
+  color: #d6a85a;
+  cursor: pointer;
+}
+
+.plan-invest {
+  width: 50%;
+  background: #d6a85a;
+  border: none;
+  padding: 10px;
+  border-radius: 7px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #eee;
+}
+
+
+/* DETAILS MODAL */
+.details-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.details-modal img {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+.details-modal h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.details-grid {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.details-grid span {
+  font-weight: bold;
+  color: #d6a85a;
+}
+
+.details-grid p {
+  font-size: 12px;
+  margin: 0;
+}
+
+.details-invest {
+  width: 100%;
+  padding: 12px;
+  background: #d6a85a;
+  color: #eee;
+  border: none;
+  border-radius: 7px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.details-close {
+  width: 100%;
+  padding: 10px;
+  background: #eee;
+  color: #000;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.invest-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.invest-modal {
+  background: white;
+  width: 100%;
+  max-width: 400px;
+  padding: 25px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.invest-modal h3 {
+  margin: 15px 0 10px;
+
+}
+
+.invest-modal input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  border-radius: 7px;
+  border: 1px solid #ddd;
+}
+
+.expected-income {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* modal buttons */
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.modal-cancel {
+  flex: 1;
+  padding: 10px;
+  background: #eee;
+  color: #000;
+  border: none;
+  cursor: pointer;
+  border-radius: 7px;
+}
+
+.modal-confirm {
+  flex: 1;
+  padding: 10px;
+  background: #d6a85a;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  color: #eee;
+}

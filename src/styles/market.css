@@ -1,0 +1,220 @@
+.purchase-container {
+    max-width: 500px;
+    background-color: #f5f6fa;
+    margin: auto;
+    padding: 20px;
+}
+
+.machine-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 2px solid #d6a85a;
+}
+
+.machine-header {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.machine-header img {
+    width: 80px;
+    height: 60px;
+    border-radius: 10px;
+}
+
+.machine-header h3 {
+    font-size: 14px;
+    margin: 0;
+}
+
+.name-tag {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-right: -1px;
+}
+
+.tag {
+    font-size: 11px;
+    background: #ddd;
+    padding: 2px 8px;
+    border-radius: 10px;
+    width: fit-content;
+}
+
+.machine-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.machine-info .value {
+    color: red;
+    font-weight: bold;
+}
+
+.machine-info p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.machine-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.details {
+    border: 2px solid #d6a85a;
+    width: 50%;
+    background: transparent;
+    padding: 10px 25px;
+    border-radius: 7px;
+    font-weight: bold;
+    color: #d6a85a;
+    cursor: pointer;
+}
+
+.buy {
+    background: #d6a85a;
+    width: 50%;
+    border: none;
+    padding: 10px 35px;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #000;
+}
+
+/* MODAL OVERLAY */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* DETAILS MODAL */
+
+.details-modal {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.details-modal img {
+    width: 120px;
+    margin-bottom: 10px;
+}
+
+.details-modal h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.details-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.details-grid span {
+    font-weight: bold;
+    color: #d6a85a;
+}
+
+.details-grid p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.details-buy {
+    width: 100%;
+    padding: 12px;
+    background: #d6a85a;
+    border: none;
+    border-radius: 7px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.details-close {
+    width: 100%;
+    padding: 10px;
+    background: #eee;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+/* BUY MODAL */
+
+.buy-modal {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.buy-modal h3 {
+    margin-top: 0;
+}
+
+.buy-name {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.buy-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.buy-summary span {
+    font-weight: bold;
+    color: #d6a85a;
+}
+
+.buy-summary p {
+    font-size: 12px;
+    margin: 0;
+}
+
+.buy-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.buy-cancel {
+    flex: 1;
+    padding: 10px;
+    background: #eee;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.buy-confirm {
+    flex: 1;
+    padding: 10px;
+    background: #d6a85a;
+    border: none;
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}

@@ -1,0 +1,212 @@
+.portfolio-page {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: #f5f6fa;
+    font-family: Inter, sans-serif;
+}
+
+/* ---------- Segmented Tabs ---------- */
+
+.portfolio-tabs {
+    display: flex;
+    border-radius: 40px;
+    overflow: hidden;
+    border: 2px solid #d6a85a;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+.portfolio-tab {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    background: transparent;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: .95rem;
+    transition: .25s;
+    color: #cfa75a;
+}
+
+.portfolio-tab.active {
+    background: #d6a85a;
+    color: #eee;
+}
+
+/* ---------- Cards ---------- */
+
+.invest-cards,
+.machine-cards {
+    display: grid;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.invest-card,
+.machine-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px;
+    border: 2px solid #d6a85a;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ---------- Header ---------- */
+
+.invest-header,
+.machine-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* images */
+
+.invest-header img,
+.machine-header img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    background: #f0f0f0;
+    border-radius: 8px;
+}
+
+/* title container */
+
+.invest-header div,
+.name-tag {
+    flex: 1;
+}
+
+/* titles */
+
+.invest-header h3,
+.name-tag h3 {
+    margin: 0;
+    font-size: .95rem;
+}
+
+/* subtitle */
+
+.invest-header span,
+.tag {
+    font-size: .75rem;
+    color: #4ecca3;
+}
+
+/* ---------- Status ---------- */
+
+.status-badge {
+    font-size: .75rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.waiting {
+    background: #f5a623;
+    color: #fff;
+}
+
+.status-badge.running {
+    background: #3498db;
+    color: #fff;
+}
+
+.status-badge.claimable {
+    background: #fff6e6;
+    color: #d48a00;
+}
+
+.status-badge.completed {
+    background: #3498db;
+    color: #fff;
+}
+
+/* ---------- Info ---------- */
+
+.invest-info,
+.machine-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: .85rem;
+}
+
+.invest-info div,
+.machine-info div {
+    display: flex;
+    flex-direction: column;
+}
+
+.invest-info span,
+.machine-info span {
+    color: #7f8c8d;
+}
+
+.invest-info strong,
+.machine-info strong {
+    color: red;
+    margin-top: 5px;
+}
+
+/* ---------- Progress ---------- */
+
+.progress-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ecca3, #3f9e89);
+    transition: .4s;
+}
+
+/* ---------- Dates ---------- */
+
+.invest-dates {
+    font-size: .75rem;
+    color: #7f8c8d;
+}
+
+/* ---------- Claim Button ---------- */
+
+.claim-btn {
+    width: 100%;
+    padding: 9px;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    border: 2px solid #d6a85a;
+    color: #d6a85a;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.claim-btn:hover {
+    background: #d6a85a;
+    color: #eee;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width:768px) {
+
+    .invest-header img,
+    .machine-header img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .portfolio-tab {
+        font-size: .85rem;
+    }
+
+}

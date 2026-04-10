@@ -1,0 +1,141 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background: #000;
+    color: white;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 70px;
+    z-index: 1000;
+    box-sizing: border-box;
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+/* Logo */
+.logo {
+    margin-top: 35px;
+    height: 400%;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Balance widget */
+.balance-widget {
+    display: flex;
+    align-items: center;
+    background-color: #1f2125;
+    padding: 6px 12px;
+    margin-right: -10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    gap: 8px;
+}
+
+/* Currency symbol */
+.balance-widget .currency-symbol {
+    font-size: 16px;
+    color: #D8AE5E;
+}
+
+/* Amount */
+.balance-widget .amount {
+    font-size: 16px;
+    font-weight: bold;
+    color: #D8AE5E;
+}
+
+/* Inline currency select */
+.balance-widget .currency-select-inline {
+    background-color: transparent;
+    border: none;
+    color: #D8AE5E;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+    margin-top: 3px;
+    padding: 2px;
+}
+
+.balance-widget-divider {
+    color: #555;
+}
+
+/* Responsive for tablets and mobile */
+@media (max-width: 1024px) {
+
+    /* Shrink logo slightly */
+    .logo {
+        height: 350%;
+        margin-top: 35px;
+    }
+
+    /* Shrink balance widget padding */
+    .balance-widget {
+        padding: 4px 10px;
+        gap: 5px;
+        border-radius: 8px;
+    }
+
+    /* Shrink currency symbol */
+    .balance-widget .currency-symbol {
+        font-size: 12px;
+    }
+
+    /* Shrink amount */
+    .balance-widget .amount {
+        font-size: 14px;
+    }
+
+    /* Shrink inline select */
+    .balance-widget .currency-select-inline {
+        font-size: 14px;
+        margin-top: 3px;
+        padding: 1px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* For mobile: keep balance widget visible but compact */
+    .header-right {
+        gap: 5px;
+    }
+
+    .logo {
+        margin-top: 35px;
+        margin-left: -20px;
+        height: 350%;
+        /* slightly smaller */
+    }
+
+    .balance-widget {
+        margin-right: -18px;
+        padding: 6px 10px;
+        border-radius: 5px;
+        gap: 4px;
+    }
+
+    .balance-widget .currency-symbol {
+        font-size: 13px;
+    }
+
+    .balance-widget .amount {
+        font-size: 13px;
+    }
+
+    .balance-widget .currency-select-inline {
+        font-size: 13px;
+        padding: 1px;
+        margin-top: 1px;
+    }
+}

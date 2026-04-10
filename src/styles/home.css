@@ -1,0 +1,291 @@
+/* =========================
+   Investment Dashboard (Gold Theme)
+   Matching Purchase UI Style
+========================= */
+
+:root {
+  --bg: #f5f6fa;
+  --panel: #ffffff;
+  --panel-soft: #f7f8fc;
+  --border: #e6e6e6;
+  --text: #1f1f1f;
+  --muted: #6b7280;
+  --gold: #d6a85a;
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  --radius: 16px;
+}
+
+/* Base */
+.dashboard {
+  padding: 22px;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Topbar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.user {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+/* =========================
+   Overview Card (Premium Light)
+========================= */
+.overview-card {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  padding: 18px;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, var(--panel), var(--panel-soft));
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* subtle gold accent line */
+.overview-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.9;
+}
+
+/* soft glow corner */
+.overview-card::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(214, 168, 90, 0.18), transparent 60%);
+  pointer-events: none;
+}
+
+.overview-item {
+  position: relative;
+  padding: 12px;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.overview-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: -7px;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: var(--border);
+  opacity: 0.7;
+}
+
+.overview-item .label {
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.overview-item h2 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--text);
+}
+
+/* optional KPI hint styling */
+.overview-item small {
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.overview-item {
+  padding: 10px;
+  border-radius: 12px;
+  transition: 0.2s ease;
+}
+
+.overview-item .label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.overview-item h2 {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* =========================
+   Insights
+========================= */
+.insights {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.insight-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: var(--radius);
+  transition: 0.2s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+
+.insight-card .label {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.insight-card h3 {
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+/* =========================
+   Grid Layout
+========================= */
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+/* =========================
+   Activity
+========================= */
+.activity {
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* =========================
+   Plans
+========================= */
+.plan {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background: var(--panel-soft);
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   Transactions
+========================= */
+.card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.card li {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  background: var(--panel-soft);
+}
+
+/* =========================
+   Buttons / Status
+========================= */
+.positive {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.negative {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* =========================
+   Placeholder
+========================= */
+.placeholder {
+  height: 140px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  background: var(--panel-soft);
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 900px) {
+
+  .overview-card,
+  .insights {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+

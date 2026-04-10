@@ -1,0 +1,10 @@
+.main-content{
+  padding-top: 70px;   /* header height */
+  padding-bottom: 60px; /* bottom nav height */
+}
+
+.login-main {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
