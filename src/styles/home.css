@@ -274,6 +274,35 @@
   background: var(--panel-soft);
 }
 
+/* PROGRESS BARS */
+.progress {
+  margin-bottom: 14px;
+}
+
+.progress p {
+  font-size: 12px;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+.bar {
+  height: 8px;
+  background: #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.bar div {
+  height: 100%;
+  background: var(--gold);
+  transition: width 0.4s ease;
+}
+
+/* risk */
+.bar.danger div {
+  background: #ef4444;
+}
+
 /* =========================
    Responsive
 ========================= */
