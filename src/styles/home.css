@@ -12,12 +12,12 @@
   --muted: #6b7280;
   --gold: #d6a85a;
   --shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-  --radius: 16px;
+  --radius: 10px;
 }
 
 /* Base */
 .dashboard {
-  padding: 22px;
+  padding: 20px;
   min-height: 100vh;
   background: var(--bg);
   color: var(--text);
