@@ -261,6 +261,70 @@
   font-weight: 600;
 }
 
+/* ===== ACTIVITY TICKER ===== */
+.activity-ticker {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* scrolling container */
+.activity-track {
+  display: flex;
+  flex-direction: column;
+  animation: scrollTicker 12s linear infinite;
+}
+
+/* each row */
+.activity-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  padding: 6px 4px;
+  font-size: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  align-items: center;
+}
+
+/* subtle hover like exchanges */
+.activity-row:hover {
+  background: rgba(214, 168, 90, 0.08);
+}
+
+/* time */
+.activity-row .time {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* name */
+.activity-row .name {
+  opacity: 0.8;
+}
+
+/* amount */
+.activity-row .amount {
+  font-weight: 600;
+}
+
+/* colors */
+.activity-row .positive {
+  color: #16c784; /* exchange green */
+}
+
+.activity-row .negative {
+  color: #ea3943; /* exchange red */
+}
+
+/* smooth infinite scroll */
+@keyframes scrollTicker {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
 /* =========================
    Placeholder
 ========================= */
