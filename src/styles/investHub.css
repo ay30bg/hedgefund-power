@@ -44,7 +44,8 @@
 
 .plan-tag {
   font-size: 11px;
-  background: #eee;
+  background: #ddd;
+  color: #4ecca3;
   padding: 3px 9px;
   border-radius: 10px;
   width: fit-content;
