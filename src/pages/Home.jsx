@@ -177,20 +177,33 @@ const DashboardHomepage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* LIVE ACTIVITY */}
+
         <div className="card">
           <h3>Live Activity</h3>
-          <div className="activity">
-            {activities.map((item) => (
-              <div key={item.id} className="activity-item">
-                <span className={item.type === "deposit" ? "positive" : "negative"}>
-                  {item.type === "deposit" ? "🟢" : "🔴"}
-                </span>
-                <p>
-                  {item.name} {item.type} ${item.amount}
-                </p>
-              </div>
-            ))}
+
+          <div className="activity-ticker">
+            <div className="activity-track">
+              {activities.concat(activities).map((item, index) => (
+                <div key={index} className="activity-row">
+                  <span className="time">
+                    {new Date(item.id).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+
+                  <span className="name">{item.name}</span>
+
+                  <span
+                    className={
+                      item.type === "deposit" ? "amount positive" : "amount negative"
+                    }
+                  >
+                    {item.type === "deposit" ? "+" : "-"}${item.amount}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
