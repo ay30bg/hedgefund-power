@@ -1,0 +1,68 @@
+/* ================= about.css ================= */
+
+.about-page {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.about-header {
+  margin-bottom: 20px;
+}
+
+.about-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.about-header p {
+  margin: 5px 0 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.about-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.about-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.about-item:last-child {
+  border-bottom: none;
+}
+
+.about-item svg {
+  font-size: 20px;
+  color: #d4a64f;
+  margin-top: 4px;
+}
+
+.about-item h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.about-item p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.about-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #999;
+}
