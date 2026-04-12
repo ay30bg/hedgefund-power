@@ -122,10 +122,10 @@ const Profile = () => {
           <span>FAQ</span>
         </div>
 
-        <div className="menu-item">
-          <FiMessageSquare />
-          <span>About</span>
-        </div>
+        <div className="menu-item" onClick={() => navigate("/about")}>
+  <FiMessageSquare />
+  <span>About</span>
+</div>
 
       </div>
 
