@@ -55,11 +55,6 @@ const About = () => {
           </div>
         </div>
       </div>
-
-      {/* FOOTER */}
-      <div className="about-footer">
-        <p>© {new Date().getFullYear()} Your Platform. All rights reserved.</p>
-      </div>
     </div>
   );
 };
