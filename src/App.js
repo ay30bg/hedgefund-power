@@ -6,6 +6,7 @@ import BottomNavbar from "./components/BottomNavbar";
 
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import About from "./pages/About";
 import Market from "./pages/Market";
 import InvestHub from "./pages/InvestHub";
 import Portfolio from "./pages/Portfolio"
@@ -29,6 +30,7 @@ function Layout() {
           <Route path="/market" element={<Market />} />
           <Route path="/investhub" element={<InvestHub />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/about" element={<About />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
