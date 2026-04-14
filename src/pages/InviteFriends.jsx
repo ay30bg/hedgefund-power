@@ -30,10 +30,6 @@ const InviteFriends = () => {
       <div className="invite-hero">
         <FiGift className="invite-hero-icon" />
         <h3>Referral Program</h3>
-        <p>
-          Invite friends and earn bonuses for every successful signup and deposit.
-        </p>
-
         <div className="referral-box">
           <span>Your Code</span>
           <div className="code-row">
