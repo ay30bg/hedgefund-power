@@ -1,3 +1,7 @@
+/* =========================
+   REWARDS PAGE (ABOUT STYLE)
+========================= */
+
 .rewards-page {
   max-width: 500px;
   margin: auto;
@@ -7,7 +11,7 @@
   min-height: 100vh;
 }
 
-/* ================= HEADER (ABOUT STYLE) ================= */
+/* HEADER (same as about-header) */
 .rewards-header {
   margin-bottom: 20px;
   padding: 24px 20px;
@@ -36,22 +40,33 @@
   margin: 0;
   font-size: 22px;
   font-weight: 700;
+  color: #fff;
 }
 
-.rewards-header p {
-  margin: 5px 0 0;
-  color: #888;
-  font-size: 14px;
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-/* ================= HERO CARD ================= */
+/* HERO CARD (matches about-card feel) */
 .reward-hero {
   background: white;
   border-radius: 14px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-  padding: 18px;
-  margin-bottom: 20px;
-  border-left: 4px solid #d4a64f;
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
 .reward-hero h3 {
@@ -60,23 +75,24 @@
 }
 
 .reward-hero p {
-  margin: 5px 0 0;
+  margin: 6px 0 0;
   font-size: 13px;
   color: #666;
+  line-height: 1.4;
 }
 
 .reward-balance {
   margin-top: 12px;
-  font-size: 14px;
-  color: #333;
+  font-size: 13px;
+  color: #666;
 }
 
 .reward-balance span {
+  font-weight: 700;
   color: #d4a64f;
-  font-weight: bold;
 }
 
-/* ================= REWARD CARD LIST ================= */
+/* LIST CARD (like about-card) */
 .reward-list {
   background: white;
   border-radius: 14px;
@@ -84,56 +100,59 @@
   overflow: hidden;
 }
 
+/* ITEM (same structure as about-item) */
 .reward-card {
   display: flex;
   gap: 12px;
   padding: 16px;
   border-bottom: 1px solid #eee;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .reward-card:last-child {
   border-bottom: none;
 }
 
+/* ICON */
 .reward-icon {
   font-size: 20px;
   color: #d4a64f;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
-.reward-info {
-  flex: 1;
-}
-
+/* TEXT */
 .reward-info h4 {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .reward-info p {
   margin: 4px 0 0;
   font-size: 13px;
   color: #666;
+  line-height: 1.4;
 }
 
+/* VALUE */
 .reward-value {
+  margin-left: auto;
   font-size: 12px;
-  font-weight: bold;
-  color: #d4a64f;
+  font-weight: 600;
+  color: #111;
+  white-space: nowrap;
 }
 
-/* ================= BUTTON ================= */
+/* CLAIM BUTTON */
 .claim-btn {
   width: 100%;
-  margin-top: 20px;
-  padding: 14px;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
   border: none;
-  border-radius: 10px;
   background: #d4a64f;
-  font-weight: 600;
+  color: #111;
+  font-weight: 700;
   cursor: pointer;
-  color: #000;
   transition: 0.2s;
 }
 
