@@ -1,13 +1,20 @@
 // About.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/about.css";
-import { FiInfo, FiShield, FiUsers, FiMail } from "react-icons/fi";
+import { FiInfo, FiShield, FiUsers, FiMail, FiArrowLeft } from "react-icons/fi";
 
 const About = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="about-page">
       {/* HEADER */}
       <div className="about-header">
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          <FiArrowLeft />
+        </button>
+
         <h2>About Us</h2>
         <p>Learn more about our platform</p>
       </div>
@@ -60,5 +67,3 @@ const About = () => {
 };
 
 export default About;
-
-
