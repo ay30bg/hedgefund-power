@@ -1,0 +1,191 @@
+/* =========================
+   INVITE FRIENDS PAGE
+   (ABOUT / REWARDS STYLE)
+========================= */
+
+.invite-page {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.invite-header {
+  margin-bottom: 20px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.invite-header::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: #d4a64f;
+  opacity: 0.15;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.invite-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.invite-header p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* HERO */
+.invite-hero {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.invite-hero-icon {
+  font-size: 28px;
+  color: #d4a64f;
+  margin-bottom: 8px;
+}
+
+.invite-hero h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.invite-hero p {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+/* REFERRAL BOX */
+.referral-box {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px dashed #d4a64f;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.referral-box span {
+  font-size: 12px;
+  color: #888;
+}
+
+.code-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.code-row strong {
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.copy-btn {
+  background: #d4a64f;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* CARD */
+.invite-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* ITEM */
+.invite-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.invite-item:last-child {
+  border-bottom: none;
+}
+
+.invite-item svg {
+  font-size: 20px;
+  color: #d4a64f;
+  margin-top: 4px;
+}
+
+.invite-item h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.invite-item p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #666;
+}
+
+/* SHARE BUTTON */
+.share-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: #d4a64f;
+  color: #111;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.share-btn:hover {
+  opacity: 0.9;
+}
