@@ -86,7 +86,7 @@
     padding: 10px;
     border-radius: 7px;
     font-weight: 600;
-    color: #000;
+    color: #eee;
 }
 
 /* ASSET CARD */
@@ -275,7 +275,7 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    color: #fff;
+    color: #eee;
 }
 
 .logout-icon{
