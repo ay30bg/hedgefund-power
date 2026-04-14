@@ -13,7 +13,7 @@ import Rewards from "./pages/Rewards";
 import Invite from "./pages/InviteFriends";
 import Portfolio from "./pages/Portfolio"
 import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Signup from "./pages/Signup"; 
 
 function Layout() {
   const location = useLocation();
