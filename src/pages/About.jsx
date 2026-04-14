@@ -14,9 +14,7 @@ const About = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
-
-        <h2>About Us</h2>
-        <p>Learn more about our platform</p>
+ <h2>About Us</h2>
       </div>
 
       {/* CARD */}
