@@ -95,7 +95,7 @@ const Profile = () => {
       {/* MENU */}
       <div className="profile-menu">
 
-        <div className="menu-item">
+        <div className="menu-item" onClick={() => navigate("/invite")}>
           <FiShare2 />
           <span>Invite Friends</span>
         </div>
