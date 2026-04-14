@@ -28,10 +28,10 @@ const Rewards = () => {
   ];
 
   return (
-    <div className="rewards-page">
+    <div className="about-page rewards-page">
 
-      {/* HEADER */}
-      <div className="rewards-header">
+      {/* HEADER (same style as About.jsx) */}
+      <div className="about-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
