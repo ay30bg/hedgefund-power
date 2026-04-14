@@ -87,7 +87,7 @@
     border-radius: 7px;
     font-weight: bold;
     cursor: pointer;
-    color: #fff;
+    color: #eee;
 }
 
 /* MODAL OVERLAY */
@@ -143,7 +143,7 @@
     width: 100%;
     padding: 12px;
     background: #d6a85a;
-    color: #fff;
+    color: #eee;
     border: none;
     border-radius: 7px;
     font-weight: bold;
