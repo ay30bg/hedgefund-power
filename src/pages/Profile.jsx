@@ -100,7 +100,7 @@ const Profile = () => {
           <span>Invite Friends</span>
         </div>
 
-        <div className="menu-item">
+        <div className="menu-item" onClick={() => navigate("/rewards")}>
           <FiStar />
           <span>Rewards</span>
         </div>
