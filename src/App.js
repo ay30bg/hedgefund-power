@@ -34,7 +34,7 @@ function Layout() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
           <Route path="/rewards" element={<Rewards />} />
-          <Route path="/invite" element={<InviteFriends />} />
+          <Route path="/invite" element={<Invite />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
