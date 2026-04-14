@@ -11,7 +11,7 @@
   min-height: 100vh;
 }
 
-/* HEADER (same as about-header) */
+/* HEADER */
 .rewards-header {
   margin-bottom: 20px;
   padding: 24px 20px;
@@ -22,8 +22,10 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
+  z-index: 1; /* FIX: stacking context */
 }
 
+/* decorative circle */
 .rewards-header::after {
   content: "";
   position: absolute;
@@ -34,6 +36,8 @@
   background: #d4a64f;
   opacity: 0.15;
   border-radius: 50%;
+  pointer-events: none; /* FIX: prevents blocking clicks */
+  z-index: 0;
 }
 
 .rewards-header h2 {
@@ -43,7 +47,7 @@
   color: #fff;
 }
 
-/* BACK BUTTON */
+/* BACK BUTTON (FIXED MOBILE CLICK ISSUE) */
 .back-btn {
   position: absolute;
   left: 16px;
@@ -58,9 +62,11 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: 999; /* FIX: always clickable */
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* HERO CARD (matches about-card feel) */
+/* HERO CARD */
 .reward-hero {
   background: white;
   border-radius: 14px;
@@ -92,7 +98,7 @@
   color: #d4a64f;
 }
 
-/* LIST CARD (like about-card) */
+/* LIST CARD */
 .reward-list {
   background: white;
   border-radius: 14px;
@@ -100,7 +106,7 @@
   overflow: hidden;
 }
 
-/* ITEM (same structure as about-item) */
+/* ITEM */
 .reward-card {
   display: flex;
   gap: 12px;
@@ -142,7 +148,7 @@
   white-space: nowrap;
 }
 
-/* CLAIM BUTTON */
+/* BUTTON */
 .claim-btn {
   width: 100%;
   margin-top: 16px;
