@@ -69,8 +69,8 @@ const Profile = () => {
 
       {/* ACTION BUTTONS */}
       <div className="profile-actions">
-        <button className="topup">Top-up</button>
-        <button className="withdraw">Withdraw</button>
+        <button className="topup" onClick={() => navigate("/topup")}>Top-up</button>
+        <button className="withdraw" onClick={() => navigate("/withdraw")}>Withdraw</button>
       </div>
 
       {/* ASSET CARD */}
