@@ -1,0 +1,42 @@
+.withdraw-page {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.withdraw-page h2 {
+  margin-bottom: 20px;
+}
+
+.withdraw-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.withdraw-card h4 {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.withdraw-card input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.withdraw-btn {
+  width: 100%;
+  padding: 14px;
+  background: #111;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
