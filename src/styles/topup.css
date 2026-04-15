@@ -2,55 +2,45 @@
 .topup-page {
   max-width: 500px;
   margin: auto;
-  padding: 20px;
+  padding: 16px;
   background: #f5f6fa;
   min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
 }
 
 /* HEADER */
 .topup-header {
-  margin-bottom: 20px;
-  padding: 24px 20px;
-  border-radius: 16px;
+  margin-bottom: 16px;
+  padding: 20px;
+  border-radius: 18px;
   text-align: center;
-  background: linear-gradient(135deg, #111, #1c1c1c);
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
   color: #fff;
   position: relative;
-  overflow: hidden;
-}
-
-.topup-header::after {
-  content: "";
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 120px;
-  height: 120px;
-  background: #d4a64f;
-  opacity: 0.15;
-  border-radius: 50%;
 }
 
 .topup-header h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 /* CARD */
 .topup-card {
   background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
   overflow: hidden;
+  margin-bottom: 16px;
 }
 
-/* ITEMS */
+/* ITEM */
 .topup-item {
   display: flex;
   gap: 12px;
   padding: 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0f0;
+  align-items: flex-start;
 }
 
 .topup-item:last-child {
@@ -58,14 +48,16 @@
 }
 
 .topup-item svg {
-  font-size: 20px;
+  font-size: 18px;
   color: #d4a64f;
-  margin-top: 4px;
+  margin-top: 2px;
 }
 
 .topup-item h4 {
   margin: 0;
-  font-size: 14px;
+  font-size: 13px;
+  color: #888;
+  font-weight: 500;
 }
 
 /* INPUTS */
@@ -73,41 +65,66 @@
 .topup-item select {
   width: 100%;
   margin-top: 6px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e5e5;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.topup-item input:focus,
+.topup-item select:focus {
+  border-color: #d4a64f;
+  box-shadow: 0 0 0 2px rgba(212,166,79,0.15);
 }
 
 /* WALLET */
 .wallet {
+  margin-top: 6px;
   font-size: 13px;
-  background: #f1f1f1;
+  background: #f8f8f8;
   padding: 10px;
   border-radius: 8px;
   word-break: break-all;
+  border: 1px dashed #ddd;
+}
+
+.topup-item span {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #999;
 }
 
 /* BUTTON */
 .topup-btn {
   width: 100%;
-  margin-top: 20px;
   padding: 14px;
-  background: #d4a64f;
+  background: linear-gradient(135deg, #d4a64f, #b8903c);
   border: none;
-  color: white;
-  border-radius: 12px;
-  font-weight: bold;
+  color: #fff;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.topup-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(212,166,79,0.25);
 }
 
 /* BACK BUTTON */
 .back-btn {
   position: absolute;
-  left: 15px;
-  top: 20px;
-  background: transparent;
+  left: 12px;
+  top: 18px;
+  background: rgba(255,255,255,0.1);
   border: none;
   color: white;
-  font-size: 20px;
+  padding: 6px;
+  border-radius: 8px;
   cursor: pointer;
 }
