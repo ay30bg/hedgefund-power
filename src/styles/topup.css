@@ -1,42 +1,86 @@
-/* BALANCE CARD */
-.balance-card {
-  background: linear-gradient(135deg, #111, #1c1c1c);
-  color: white;
-  padding: 18px;
-  border-radius: 16px;
+/* GLOBAL PAGE */
+.page {
+  max-width: 480px;
+  margin: auto;
+  padding: 16px;
+  background: #f6f7fb;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
+.header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.back-btn {
+  background: #fff;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+}
+
+/* BALANCE CARD */
+.balance-card {
+  background: linear-gradient(135deg, #0f0f0f, #1f1f1f);
+  color: #fff;
+  padding: 18px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
 .balance-card p {
-  font-size: 13px;
+  font-size: 12px;
   color: #bbb;
 }
 
 .balance-card h1 {
   margin-top: 6px;
-  font-size: 26px;
+  font-size: 28px;
+  font-weight: 600;
 }
 
 /* SECTION */
 .section {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 .section label {
-  font-size: 13px;
-  color: #888;
-  display: block;
+  font-size: 12px;
+  color: #777;
   margin-bottom: 6px;
+  display: block;
 }
 
-.section input {
+/* INPUT */
+input {
   width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #e6e6e6;
+  font-size: 15px;
+  background: #fff;
+  transition: all 0.2s ease;
 }
 
-/* QUICK BUTTONS */
+input:focus {
+  border-color: #d4a64f;
+  box-shadow: 0 0 0 3px rgba(212,166,79,0.15);
+  outline: none;
+}
+
+/* QUICK AMOUNT */
 .quick-amounts {
   display: flex;
   gap: 10px;
@@ -45,55 +89,93 @@
 
 .quick-amounts button {
   flex: 1;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  background: white;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #eee;
+  background: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* WALLET */
+.quick-amounts button:hover {
+  border-color: #d4a64f;
+  color: #d4a64f;
+}
+
+/* WALLET BOX */
 .wallet-box {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #f1f1f1;
-  padding: 10px;
-  border-radius: 10px;
+  background: #f1f3f6;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  word-break: break-all;
 }
 
 .wallet-box button {
-  background: none;
+  background: #fff;
   border: none;
+  padding: 6px;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-/* INFO */
+/* INFO BOX */
 .info-box {
-  background: #fff8e6;
+  background: #fffaf0;
+  border: 1px solid #f5e2b8;
   padding: 12px;
-  border-radius: 10px;
-  font-size: 13px;
+  border-radius: 12px;
+  font-size: 12px;
   color: #8a6d3b;
-  margin-bottom: 20px;
+  line-height: 1.6;
 }
 
-/* SUMMARY */
+/* SUMMARY (Withdraw) */
 .summary-box {
   background: #fff;
+  border-radius: 14px;
   padding: 14px;
-  border-radius: 12px;
-  margin-bottom: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.04);
 }
 
 .summary-box div {
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.summary-box div:last-child {
+  font-weight: 600;
+}
+
+/* PRIMARY BUTTON */
+.primary-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d4a64f, #b8903c);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.2s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(212,166,79,0.3);
 }
 
 /* SUCCESS TEXT */
 .success-text {
-  color: green;
+  color: #28a745;
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 6px;
 }
