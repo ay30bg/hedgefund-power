@@ -117,7 +117,7 @@ const Profile = () => {
           </span>
         </div>
 
-        <div className="menu-item">
+        <div className="menu-item" onClick={() => navigate("/faq")}>
           <FiHelpCircle />
           <span>FAQ</span>
         </div>
