@@ -1,36 +1,84 @@
+/* PAGE */
 .topup-page {
   max-width: 500px;
   margin: auto;
   padding: 20px;
   background: #f5f6fa;
   min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.topup-page h2 {
+/* HEADER */
+.topup-header {
   margin-bottom: 20px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
 }
 
+.topup-header::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: #d4a64f;
+  opacity: 0.15;
+  border-radius: 50%;
+}
+
+.topup-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+/* CARD */
 .topup-card {
   background: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  overflow: hidden;
 }
 
-.topup-card h4 {
-  margin-bottom: 10px;
+/* ITEMS */
+.topup-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.topup-item:last-child {
+  border-bottom: none;
+}
+
+.topup-item svg {
+  font-size: 20px;
+  color: #d4a64f;
+  margin-top: 4px;
+}
+
+.topup-item h4 {
+  margin: 0;
   font-size: 14px;
 }
 
-.topup-card input,
-.topup-card select {
+/* INPUTS */
+.topup-item input,
+.topup-item select {
   width: 100%;
+  margin-top: 6px;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ddd;
 }
 
+/* WALLET */
 .wallet {
   font-size: 13px;
   background: #f1f1f1;
@@ -39,13 +87,27 @@
   word-break: break-all;
 }
 
+/* BUTTON */
 .topup-btn {
   width: 100%;
+  margin-top: 20px;
   padding: 14px;
   background: #d4a64f;
   border: none;
   color: white;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  left: 15px;
+  top: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
   cursor: pointer;
 }
