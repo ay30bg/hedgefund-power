@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/withdraw.css";
-import { FiArrowLeft, FiDollarSign, FiLock } from "react-icons/fi";
+import { FiArrowLeft } from "react-icons/fi";
 
 const Withdraw = () => {
   const navigate = useNavigate();
@@ -9,6 +9,9 @@ const Withdraw = () => {
   const [amount, setAmount] = useState("");
   const [wallet, setWallet] = useState("");
   const [password, setPassword] = useState("");
+
+  const fee = amount ? (amount * 0.05).toFixed(2) : 0;
+  const receive = amount ? (amount - fee).toFixed(2) : 0;
 
   return (
     <div className="withdraw-page">
@@ -21,48 +24,55 @@ const Withdraw = () => {
         <h2>Withdraw</h2>
       </div>
 
-      {/* CARD */}
-      <div className="withdraw-card">
+      {/* BALANCE */}
+      <div className="balance-card">
+        <p>Available Balance</p>
+        <h1>$12,500</h1>
+      </div>
 
-        <div className="withdraw-item">
-          <FiDollarSign />
-          <div>
-            <h4>Amount ($)</h4>
-            <input
-              type="number"
-              placeholder="Enter amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </div>
+      {/* AMOUNT */}
+      <div className="section">
+        <label>Enter Amount</label>
+        <input
+          type="number"
+          placeholder="Minimum $20"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+      </div>
+
+      {/* WALLET */}
+      <div className="section">
+        <label>Wallet Address</label>
+        <input
+          type="text"
+          placeholder="Enter wallet address"
+          value={wallet}
+          onChange={(e) => setWallet(e.target.value)}
+        />
+      </div>
+
+      {/* PASSWORD */}
+      <div className="section">
+        <label>Withdrawal Password</label>
+        <input
+          type="password"
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </div>
+
+      {/* FEE BREAKDOWN */}
+      <div className="summary-box">
+        <div>
+          <span>Fee (5%)</span>
+          <span>${fee}</span>
         </div>
-
-        <div className="withdraw-item">
-          <FiDollarSign />
-          <div>
-            <h4>Wallet Address</h4>
-            <input
-              type="text"
-              placeholder="Enter wallet address"
-              value={wallet}
-              onChange={(e) => setWallet(e.target.value)}
-            />
-          </div>
+        <div>
+          <span>You Receive</span>
+          <span>${receive}</span>
         </div>
-
-        <div className="withdraw-item">
-          <FiLock />
-          <div>
-            <h4>Withdrawal Password</h4>
-            <input
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </div>
-
       </div>
 
       {/* BUTTON */}
