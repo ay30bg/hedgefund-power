@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/topup.css";
-import { FiArrowLeft, FiCreditCard, FiDollarSign } from "react-icons/fi";
+import { FiArrowLeft, FiCopy } from "react-icons/fi";
 
 const TopUp = () => {
   const navigate = useNavigate();
+
   const [amount, setAmount] = useState("");
-  const [method, setMethod] = useState("crypto");
+  const [copied, setCopied] = useState(false);
 
   const walletAddress = "0xA1B2C3D4E5F6G7H8";
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(walletAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div className="topup-page">
@@ -18,51 +25,57 @@ const TopUp = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
-        <h2>Top-up</h2>
+        <h2>Deposit</h2>
       </div>
 
-      {/* CARD */}
-      <div className="topup-card">
+      {/* BALANCE */}
+      <div className="balance-card">
+        <p>Current Balance</p>
+        <h1>$12,500</h1>
+      </div>
 
-        <div className="topup-item">
-          <FiCreditCard />
-          <div>
-            <h4>Payment Method</h4>
-            <select value={method} onChange={(e) => setMethod(e.target.value)}>
-              <option value="crypto">Crypto</option>
-              <option value="bank">Bank Transfer</option>
-            </select>
-          </div>
+      {/* AMOUNT */}
+      <div className="section">
+        <label>Enter Amount</label>
+        <input
+          type="number"
+          placeholder="Minimum $10"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+
+        {/* QUICK AMOUNTS */}
+        <div className="quick-amounts">
+          {[50, 100, 500, 1000].map((amt) => (
+            <button key={amt} onClick={() => setAmount(amt)}>
+              ${amt}
+            </button>
+          ))}
         </div>
+      </div>
 
-        <div className="topup-item">
-          <FiDollarSign />
-          <div>
-            <h4>Amount ($)</h4>
-            <input
-              type="number"
-              placeholder="Enter amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </div>
+      {/* WALLET */}
+      <div className="section">
+        <label>Deposit Address (USDT - TRC20)</label>
+        <div className="wallet-box">
+          <span>{walletAddress}</span>
+          <button onClick={copyAddress}>
+            <FiCopy />
+          </button>
         </div>
+        {copied && <p className="success-text">Copied!</p>}
+      </div>
 
-        {method === "crypto" && (
-          <div className="topup-item">
-            <FiCreditCard />
-            <div>
-              <h4>Wallet Address</h4>
-              <p className="wallet">{walletAddress}</p>
-              <span>Send only USDT (TRC20)</span>
-            </div>
-          </div>
-        )}
+      {/* INFO */}
+      <div className="info-box">
+        <p>• Send only USDT (TRC20)</p>
+        <p>• Minimum deposit: $10</p>
+        <p>• Funds arrive within 1–5 minutes</p>
       </div>
 
       {/* BUTTON */}
       <button className="primary-btn">
-        Confirm Top-up
+        I Have Made Payment
       </button>
 
     </div>
