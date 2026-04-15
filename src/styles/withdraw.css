@@ -1,42 +1,103 @@
+/* PAGE */
 .withdraw-page {
   max-width: 500px;
   margin: auto;
   padding: 20px;
   background: #f5f6fa;
   min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-.withdraw-page h2 {
+/* HEADER */
+.withdraw-header {
   margin-bottom: 20px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
 }
 
+.withdraw-header::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: #d4a64f;
+  opacity: 0.15;
+  border-radius: 50%;
+}
+
+.withdraw-header h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+/* CARD */
 .withdraw-card {
   background: #fff;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  overflow: hidden;
 }
 
-.withdraw-card h4 {
-  margin-bottom: 10px;
+/* ITEMS */
+.withdraw-item {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.withdraw-item:last-child {
+  border-bottom: none;
+}
+
+.withdraw-item svg {
+  font-size: 20px;
+  color: #d4a64f;
+  margin-top: 4px;
+}
+
+.withdraw-item h4 {
+  margin: 0;
   font-size: 14px;
 }
 
-.withdraw-card input {
+/* INPUTS */
+.withdraw-item input {
   width: 100%;
+  margin-top: 6px;
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ddd;
 }
 
+/* BUTTON */
 .withdraw-btn {
   width: 100%;
+  margin-top: 20px;
   padding: 14px;
   background: #111;
   border: none;
   color: white;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  left: 15px;
+  top: 20px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
   cursor: pointer;
 }
