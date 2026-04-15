@@ -1,130 +1,99 @@
-/* PAGE */
-.topup-page {
-  max-width: 500px;
-  margin: auto;
-  padding: 16px;
-  background: #f5f6fa;
-  min-height: 100vh;
-  font-family: "Inter", Arial, sans-serif;
-}
-
-/* HEADER */
-.topup-header {
-  margin-bottom: 16px;
-  padding: 20px;
-  border-radius: 18px;
-  text-align: center;
-  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-  color: #fff;
-  position: relative;
-}
-
-.topup-header h2 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-}
-
-/* CARD */
-.topup-card {
-  background: #fff;
+/* BALANCE CARD */
+.balance-card {
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  color: white;
+  padding: 18px;
   border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
-  overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-/* ITEM */
-.topup-item {
-  display: flex;
-  gap: 12px;
-  padding: 16px;
-  border-bottom: 1px solid #f0f0f0;
-  align-items: flex-start;
+.balance-card p {
+  font-size: 13px;
+  color: #bbb;
 }
 
-.topup-item:last-child {
-  border-bottom: none;
+.balance-card h1 {
+  margin-top: 6px;
+  font-size: 26px;
 }
 
-.topup-item svg {
-  font-size: 18px;
-  color: #d4a64f;
-  margin-top: 2px;
+/* SECTION */
+.section {
+  margin-bottom: 18px;
 }
 
-.topup-item h4 {
-  margin: 0;
+.section label {
   font-size: 13px;
   color: #888;
-  font-weight: 500;
+  display: block;
+  margin-bottom: 6px;
 }
 
-/* INPUTS */
-.topup-item input,
-.topup-item select {
+.section input {
   width: 100%;
-  margin-top: 6px;
   padding: 12px;
   border-radius: 10px;
-  border: 1px solid #e5e5e5;
-  font-size: 14px;
-  outline: none;
-  transition: all 0.2s ease;
+  border: 1px solid #ddd;
 }
 
-.topup-item input:focus,
-.topup-item select:focus {
-  border-color: #d4a64f;
-  box-shadow: 0 0 0 2px rgba(212,166,79,0.15);
+/* QUICK BUTTONS */
+.quick-amounts {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.quick-amounts button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  background: white;
 }
 
 /* WALLET */
-.wallet {
-  margin-top: 6px;
-  font-size: 13px;
-  background: #f8f8f8;
+.wallet-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f1f1;
   padding: 10px;
-  border-radius: 8px;
-  word-break: break-all;
-  border: 1px dashed #ddd;
+  border-radius: 10px;
 }
 
-.topup-item span {
-  display: block;
-  margin-top: 6px;
-  font-size: 12px;
-  color: #999;
+.wallet-box button {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-/* BUTTON */
-.topup-btn {
-  width: 100%;
+/* INFO */
+.info-box {
+  background: #fff8e6;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #8a6d3b;
+  margin-bottom: 20px;
+}
+
+/* SUMMARY */
+.summary-box {
+  background: #fff;
   padding: 14px;
-  background: linear-gradient(135deg, #d4a64f, #b8903c);
-  border: none;
-  color: #fff;
-  border-radius: 14px;
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.2s;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
-.topup-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(212,166,79,0.25);
+.summary-box div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-/* BACK BUTTON */
-.back-btn {
-  position: absolute;
-  left: 12px;
-  top: 18px;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: white;
-  padding: 6px;
-  border-radius: 8px;
-  cursor: pointer;
+/* SUCCESS TEXT */
+.success-text {
+  color: green;
+  font-size: 12px;
+  margin-top: 5px;
 }
