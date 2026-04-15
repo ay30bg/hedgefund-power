@@ -1,67 +1,79 @@
-// About.jsx
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/about.css";
-import { FiInfo, FiShield, FiUsers, FiMail, FiArrowLeft } from "react-icons/fi";
+import "../styles/faq.css";
+import { FiChevronDown, FiChevronUp, FiArrowLeft } from "react-icons/fi";
 
-const About = () => {
+const faqData = [
+  {
+    question: "How do I start investing?",
+    answer:
+      "Simply create an account, fund your wallet, and choose from available investment plans."
+  },
+  {
+    question: "Is my money safe?",
+    answer:
+      "Yes, we use advanced encryption and secure systems to protect all user funds and data."
+  },
+  {
+    question: "How long do withdrawals take?",
+    answer:
+      "Withdrawals are typically processed within a few minutes to a few hours depending on network conditions."
+  },
+  {
+    question: "What is the minimum investment?",
+    answer:
+      "The minimum investment depends on the plan you choose, but it is designed to be affordable for all users."
+  },
+  {
+    question: "Can I invite friends?",
+    answer:
+      "Yes! You can earn rewards by inviting friends through your referral link."
+  }
+];
+
+const FAQ = () => {
   const navigate = useNavigate();
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
 
   return (
-    <div className="about-page">
+    <div className="faq-page">
       {/* HEADER */}
-      <div className="about-header">
+      <div className="faq-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
- <h2>About Us</h2>
+        <h2>FAQs</h2>
       </div>
 
-      {/* CARD */}
-      <div className="about-card">
-        <div className="about-item">
-          <FiInfo />
-          <div>
-            <h4>Who We Are</h4>
-            <p>
-              We are a modern digital investment platform focused on delivering
-              seamless financial experiences with transparency and security.
-            </p>
-          </div>
-        </div>
+      {/* FAQ CARD */}
+      <div className="faq-card">
+        {faqData.map((faq, index) => (
+          <div
+            key={index}
+            className="faq-item"
+            onClick={() => toggleFAQ(index)}
+          >
+            <div className="faq-question">
+              {faq.question}
+              {activeIndex === index ? (
+                <FiChevronUp className="faq-icon" />
+              ) : (
+                <FiChevronDown className="faq-icon" />
+              )}
+            </div>
 
-        <div className="about-item">
-          <FiShield />
-          <div>
-            <h4>Security</h4>
-            <p>
-              Your funds and data are protected with advanced encryption and
-              industry-standard security protocols.
-            </p>
+            {activeIndex === index && (
+              <div className="faq-answer">{faq.answer}</div>
+            )}
           </div>
-        </div>
-
-        <div className="about-item">
-          <FiUsers />
-          <div>
-            <h4>Our Mission</h4>
-            <p>
-              To empower users globally with accessible and profitable digital
-              investment opportunities.
-            </p>
-          </div>
-        </div>
-
-        <div className="about-item">
-          <FiMail />
-          <div>
-            <h4>Contact Us</h4>
-            <p>Email: support@yourplatform.com</p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default About;
+export default FAQ;
