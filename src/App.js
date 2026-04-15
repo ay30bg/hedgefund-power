@@ -10,6 +10,7 @@ import About from "./pages/About";
 import Market from "./pages/Market";
 import InvestHub from "./pages/InvestHub";
 import Rewards from "./pages/Rewards";
+import Faq from "./pages/FAQ";
 import Invite from "./pages/InviteFriends";
 import Portfolio from "./pages/Portfolio"
 import Login from "./pages/Login";
@@ -34,6 +35,7 @@ function Layout() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
           <Route path="/rewards" element={<Rewards />} />
+          <Route path="/faq" element={<Faq />} />
           <Route path="/invite" element={<Invite />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/login" element={<Login />} />
