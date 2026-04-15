@@ -1,0 +1,51 @@
+.topup-page {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #f5f6fa;
+  min-height: 100vh;
+}
+
+.topup-page h2 {
+  margin-bottom: 20px;
+}
+
+.topup-card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.topup-card h4 {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.topup-card input,
+.topup-card select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.wallet {
+  font-size: 13px;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 8px;
+  word-break: break-all;
+}
+
+.topup-btn {
+  width: 100%;
+  padding: 14px;
+  background: #d4a64f;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
