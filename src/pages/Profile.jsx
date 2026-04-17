@@ -89,7 +89,7 @@ const Profile = () => {
           {showBalance ? `$${balance.toLocaleString()}` : "****"}
         </div>
 
-        <span className="history">Transaction History ›</span>
+        <span className="history" onClick={() => navigate("/transaction-history")}>Transaction History ›</span>
       </div>
 
       {/* MENU */}
