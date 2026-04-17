@@ -1,92 +1,107 @@
 /* =========================
-   TOPUP PAGE (MODERN UI)
+   TOPUP PAGE (ABOUT STYLE)
 ========================= */
 
 .topup-page {
-  max-width: 480px;
+  max-width: 500px;
   margin: auto;
   padding: 20px;
-  background: #0f172a;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f6fa;
   min-height: 100vh;
-  color: #fff;
-  font-family: "Inter", sans-serif;
 }
 
 /* HEADER */
 .topup-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.topup-header::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: #d4a64f;
+  opacity: 0.15;
+  border-radius: 50%;
 }
 
 .topup-header h2 {
-  font-size: 20px;
-  font-weight: 600;
+  margin: 0;
+  font-size: 22px;
 }
 
+/* BACK BUTTON */
 .back-btn {
-  background: #1e293b;
+  position: absolute;
+  left: 15px;
+  top: 20px;
+  background: rgba(255,255,255,0.1);
   border: none;
   color: #fff;
   padding: 8px;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-.back-btn:hover {
-  background: #334155;
 }
 
 /* BALANCE CARD */
 .balance-card {
-  background: linear-gradient(135deg, #1d4ed8, #2563eb);
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 25px;
-  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+  text-align: center;
 }
 
 .balance-card p {
   font-size: 13px;
-  opacity: 0.8;
+  color: #888;
 }
 
 .balance-card h1 {
-  font-size: 28px;
   margin-top: 5px;
-  font-weight: bold;
+  font-size: 26px;
+  color: #111;
 }
 
 /* SECTION */
 .section {
-  margin-bottom: 20px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 15px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
 }
 
 .section label {
   font-size: 14px;
   margin-bottom: 8px;
   display: block;
-  color: #cbd5f5;
+  color: #333;
 }
 
 /* INPUT */
 .section input {
   width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid #1e293b;
-  background: #020617;
-  color: #fff;
-  font-size: 16px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
   outline: none;
-  transition: 0.3s;
 }
 
 .section input:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+  border-color: #d4a64f;
 }
 
 /* QUICK AMOUNTS */
@@ -99,17 +114,18 @@
 .quick-amounts button {
   flex: 1;
   padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: #1e293b;
-  color: #fff;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  background: #fafafa;
   cursor: pointer;
-  transition: 0.3s;
-  font-size: 14px;
+  font-size: 13px;
+  transition: 0.2s;
 }
 
 .quick-amounts button:hover {
-  background: #2563eb;
+  background: #d4a64f;
+  color: #fff;
+  border-color: #d4a64f;
 }
 
 /* WALLET BOX */
@@ -117,48 +133,42 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #020617;
-  padding: 14px;
-  border-radius: 12px;
-  border: 1px solid #1e293b;
-  word-break: break-all;
+  background: #fafafa;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #eee;
 }
 
 .wallet-box span {
-  font-size: 13px;
-  color: #e2e8f0;
+  font-size: 12px;
+  color: #555;
+  word-break: break-all;
 }
 
 .wallet-box button {
-  background: #1e293b;
+  background: #d4a64f;
   border: none;
   color: #fff;
   padding: 8px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
-}
-
-.wallet-box button:hover {
-  background: #2563eb;
 }
 
 /* SUCCESS TEXT */
 .success-text {
   margin-top: 6px;
-  color: #22c55e;
-  font-size: 13px;
+  color: green;
+  font-size: 12px;
 }
 
 /* INFO BOX */
 .info-box {
-  background: rgba(30, 41, 59, 0.6);
-  border: 1px solid #1e293b;
+  background: #fff;
+  border-radius: 14px;
   padding: 15px;
-  border-radius: 12px;
-  margin-top: 15px;
   font-size: 13px;
-  color: #cbd5f5;
+  color: #555;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
 }
 
 .info-box p {
@@ -168,19 +178,18 @@
 /* BUTTON */
 .primary-btn {
   width: 100%;
-  margin-top: 25px;
-  padding: 15px;
-  border-radius: 14px;
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 12px;
   border: none;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: white;
-  font-size: 16px;
+  background: #d4a64f;
+  color: #fff;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 
 .primary-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+  background: #b8933e;
 }
