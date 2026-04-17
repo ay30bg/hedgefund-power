@@ -24,12 +24,6 @@ const Withdraw = () => {
         <h2>Withdraw</h2>
       </div>
 
-      {/* BALANCE */}
-      <div className="balance-card">
-        <p>Available Balance</p>
-        <h1>$12,500</h1>
-      </div>
-
       {/* AMOUNT */}
       <div className="section">
         <label>Enter Amount</label>
