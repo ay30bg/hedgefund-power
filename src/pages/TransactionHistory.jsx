@@ -43,7 +43,6 @@ const TransactionHistory = () => {
   </button>
 
   <h2>Transaction History</h2>
-  <p>Your recent activities</p>
 </div>
 
       {/* LIST */}
