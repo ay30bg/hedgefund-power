@@ -77,6 +77,52 @@
   border: 1px solid #ddd;
 }
 
+/* SUMMARY BOX */
+.summary-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 10px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+}
+
+/* ROW */
+.summary-box div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+/* SEPARATOR */
+.summary-box div:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+/* LABEL */
+.summary-box span:first-child {
+  color: #777;
+}
+
+/* VALUE */
+.summary-box span:last-child {
+  font-weight: 600;
+  color: #111;
+}
+
+/* HIGHLIGHT RECEIVE */
+.summary-box div:last-child span:last-child {
+  color: #d4a64f;
+  font-size: 15px;
+}
+
+/* OPTIONAL: subtle emphasis */
+.summary-box div:last-child {
+  margin-top: 4px;
+}
+
 /* BUTTON */
 .withdraw-btn {
   width: 100%;
