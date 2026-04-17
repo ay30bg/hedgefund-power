@@ -1,0 +1,137 @@
+/* PAGE */
+.tx-page {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #f5f6fa;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* HEADER */
+.tx-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tx-header button {
+  border: none;
+  background: #eee;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.tx-header button:hover {
+  background: #e0e0e0;
+}
+
+.tx-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* LIST */
+.tx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* CARD */
+.tx-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* LEFT */
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tx-icon {
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+}
+
+/* ICON COLORS */
+.tx-icon.deposit {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.tx-icon.withdraw {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* TEXT */
+.tx-type {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.tx-date {
+  font-size: 12px;
+  color: gray;
+}
+
+/* RIGHT */
+.tx-right {
+  text-align: right;
+}
+
+.tx-amount {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.tx-amount.deposit {
+  color: #2e7d32;
+}
+
+.tx-amount.withdraw {
+  color: #c62828;
+}
+
+/* STATUS */
+.tx-status {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+/* STATUS COLORS */
+.tx-status.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.tx-status.pending {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.tx-status.failed {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* MOBILE */
+@media (max-width: 480px) {
+  .tx-page {
+    padding: 15px;
+  }
+}
