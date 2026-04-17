@@ -107,6 +107,10 @@
 /* RIGHT */
 .tx-right {
   text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
 }
 
 .tx-amount {
@@ -121,8 +125,6 @@
 
 .tx-amount.withdraw {
   color: #c62828;
-  background: none;
-  margin-bottom: -10px;
 }
 
 
