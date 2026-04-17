@@ -231,8 +231,8 @@
 }
 
 .modal-content button:last-child {
-    background-color: #f44336;
-    color: #fff;
+    background-color: #eee;
+    color: #000;
 }
 
 .modal-content button:last-child:hover {
@@ -246,7 +246,7 @@
 
 .cancel-btn{
      background-color: #eee;
-    color: #000;
+     color: #000;
 }
 
 /* Animations */
