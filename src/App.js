@@ -16,6 +16,7 @@ import TopUp from "./pages/TopUp";
 import Withdraw from "./pages/Withdraw";
 import Invite from "./pages/InviteFriends";
 import Portfolio from "./pages/Portfolio";
+import TransactionHistory from "./pages/TransactionHistory";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
@@ -41,6 +42,7 @@ function Layout() {
           <Route path="/faq" element={<Faq />} />
           <Route path="/topup" element={<TopUp />} />
           <Route path="/withdraw" element={<Withdraw />} />
+          <Route path="/transaction-history" element={<TransactionHistory />} />
           <Route path="/invite" element={<Invite />} />
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/login" element={<Login />} />
