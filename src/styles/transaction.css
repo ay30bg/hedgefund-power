@@ -3,34 +3,58 @@
   max-width: 500px;
   margin: auto;
   padding: 20px;
+  font-family: Arial, Helvetica, sans-serif;
   background: #f5f6fa;
   min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
-/* HEADER */
+/* HEADER (MATCH ABOUT) */
 .tx-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-bottom: 20px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
 }
 
-.tx-header button {
-  border: none;
-  background: #eee;
-  padding: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.tx-header button:hover {
-  background: #e0e0e0;
+.tx-header::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: #d4a64f;
+  opacity: 0.15;
+  border-radius: 50%;
 }
 
 .tx-header h2 {
-  font-size: 18px;
-  font-weight: 600;
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.tx-header p {
+  margin: 6px 0 0;
+  color: #ccc;
+  font-size: 13px;
+}
+
+/* BACK BUTTON (FIXED POSITION LIKE ABOUT) */
+.back-btn {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  padding: 8px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
 }
 
 /* LIST */
@@ -40,15 +64,21 @@
   gap: 12px;
 }
 
-/* CARD */
+/* CARD (MATCH ABOUT CARD FEEL) */
 .tx-card {
   background: white;
   border-radius: 14px;
-  padding: 14px;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: 0.2s ease;
+  border: 1px solid #eee;
+}
+
+.tx-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.06);
 }
 
 /* LEFT */
@@ -58,21 +88,14 @@
   gap: 12px;
 }
 
+/* ICON (GOLD BRAND STYLE) */
 .tx-icon {
   padding: 10px;
   border-radius: 10px;
   display: flex;
-}
-
-/* ICON COLORS */
-.tx-icon.deposit {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.tx-icon.withdraw {
-  background: #ffebee;
-  color: #c62828;
+  font-size: 16px;
+  background: rgba(212, 166, 79, 0.1);
+  color: #d4a64f;
 }
 
 /* TEXT */
@@ -83,7 +106,7 @@
 
 .tx-date {
   font-size: 12px;
-  color: gray;
+  color: #888;
 }
 
 /* RIGHT */
@@ -92,10 +115,11 @@
 }
 
 .tx-amount {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 15px;
 }
 
+/* GOLD + RED BALANCE STYLE */
 .tx-amount.deposit {
   color: #2e7d32;
 }
@@ -104,28 +128,29 @@
   color: #c62828;
 }
 
-/* STATUS */
+/* STATUS BADGE (PREMIUM STYLE) */
 .tx-status {
-  font-size: 12px;
-  padding: 3px 8px;
-  border-radius: 6px;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
   display: inline-block;
-  margin-top: 4px;
+  margin-top: 5px;
+  font-weight: 500;
 }
 
 /* STATUS COLORS */
 .tx-status.success {
-  background: #e8f5e9;
+  background: rgba(46, 125, 50, 0.1);
   color: #2e7d32;
 }
 
 .tx-status.pending {
-  background: #fff3e0;
-  color: #ef6c00;
+  background: rgba(212, 166, 79, 0.15);
+  color: #d4a64f;
 }
 
 .tx-status.failed {
-  background: #ffebee;
+  background: rgba(198, 40, 40, 0.1);
   color: #c62828;
 }
 
@@ -133,5 +158,9 @@
 @media (max-width: 480px) {
   .tx-page {
     padding: 15px;
+  }
+
+  .tx-header {
+    padding: 20px 15px;
   }
 }
