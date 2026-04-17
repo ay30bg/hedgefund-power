@@ -28,12 +28,6 @@ const TopUp = () => {
         <h2>Deposit</h2>
       </div>
 
-      {/* BALANCE */}
-      <div className="balance-card">
-        <p>Current Balance</p>
-        <h1>$12,500</h1>
-      </div>
-
       {/* AMOUNT */}
       <div className="section">
         <label>Enter Amount</label>
