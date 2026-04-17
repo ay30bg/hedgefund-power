@@ -183,11 +183,10 @@ function SignupPage() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    username: "",
     email: "",
     password: "",
     confirmPassword: "",
-    referralCode: "", // ✅ added
+    referralCode: "",
     terms: false
   });
 
@@ -195,10 +194,9 @@ function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Regex patterns
-  const usernameRegex = /^[a-zA-Z0-9_]{3,16}$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  const referralRegex = /^[A-Z0-9]{4,12}$/; // optional format
+  const referralRegex = /^[A-Z0-9]{4,12}$/;
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -209,19 +207,13 @@ function SignupPage() {
         type === "checkbox"
           ? checked
           : name === "referralCode"
-          ? value.toUpperCase() // auto uppercase
+          ? value.toUpperCase()
           : value
     });
   };
 
   const handleSubmit = () => {
     let errorMessages = [];
-
-    if (!usernameRegex.test(form.username)) {
-      errorMessages.push(
-        "Username must be 3-16 characters (letters, numbers, underscore)."
-      );
-    }
 
     if (!emailRegex.test(form.email)) {
       errorMessages.push("Enter a valid email address.");
@@ -237,7 +229,6 @@ function SignupPage() {
       errorMessages.push("Passwords do not match.");
     }
 
-    // ✅ referral validation (only if user enters it)
     if (form.referralCode && !referralRegex.test(form.referralCode)) {
       errorMessages.push("Invalid referral code format.");
     }
@@ -253,7 +244,7 @@ function SignupPage() {
       return;
     }
 
-    console.log("Signup Data:", form); // includes referralCode
+    console.log("Signup Data:", form);
 
     alert("Signup successful!");
     navigate("/login");
@@ -270,21 +261,13 @@ function SignupPage() {
 
           <input
             type="text"
-            name="username"
-            placeholder="Username *"
-            className="input-field"
-            onChange={handleChange}
-          />
-
-          <input
-            type="text"
             name="email"
             placeholder="Email *"
             className="input-field"
             onChange={handleChange}
           />
 
-          {/* ✅ REFERRAL CODE */}
+          {/* REFERRAL CODE */}
           <input
             type="text"
             name="referralCode"
