@@ -245,7 +245,8 @@
 }
 
 .cancel-btn{
-    
+     background-color: #eee;
+    color: #000;
 }
 
 /* Animations */
