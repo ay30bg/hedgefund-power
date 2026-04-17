@@ -147,8 +147,8 @@ const Profile = () => {
               value={walletAddress}
               onChange={(e) => setWalletAddress(e.target.value)}
             />
-            <button onClick={handleBindWallet}>Bind</button>
-            <button onClick={() => setShowBindWallet(false)}>Cancel</button>
+            <button className="main-btn" onClick={handleBindWallet}>Bind</button>
+            <button className="cancel-btn" onClick={() => setShowBindWallet(false)}>Cancel</button>
           </div>
         </div>
       )}
@@ -164,8 +164,8 @@ const Profile = () => {
               value={withdrawalPassword}
               onChange={(e) => setWithdrawalPassword(e.target.value)}
             />
-            <button onClick={handleSetWithdrawalPassword}>Set Password</button>
-            <button onClick={() => setShowWithdrawalPassword(false)}>
+            <button className="main-btn" onClick={handleSetWithdrawalPassword}>Set Password</button>
+            <button className="cancel-btn" onClick={() => setShowWithdrawalPassword(false)}>
               Cancel
             </button>
           </div>
