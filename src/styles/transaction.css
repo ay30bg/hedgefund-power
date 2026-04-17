@@ -44,6 +44,37 @@
   font-size: 13px;
 }
 
+/* SUMMARY SECTION */
+.tx-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 15px 0 20px;
+}
+
+/* CARD STYLE */
+.summary-card {
+  background: white;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  text-align: left;
+}
+
+.summary-card p {
+  margin: 0;
+  font-size: 12px;
+  color: #777;
+}
+
+.summary-card h3 {
+  margin: 6px 0 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+}
+
 /* BACK BUTTON (FIXED POSITION LIKE ABOUT) */
 .back-btn {
   position: absolute;
