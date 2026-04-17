@@ -45,16 +45,16 @@ const TransactionHistory = () => {
   <h2>Transaction History</h2>
 </div>
 
-      {/* SUMMARY CARDS */}
+     {/* SUMMARY CARDS */}
 <div className="tx-summary">
-  <div className="summary-card">
-    <p>Total Deposits</p>
-    <h3>$700</h3>
+  <div className="summary-card deposits">
+    <div className="label">Total Deposits</div>
+    <div className="value">+$700</div>
   </div>
 
-  <div className="summary-card">
-    <p>Total Withdrawals</p>
-    <h3>$150</h3>
+  <div className="summary-card withdrawals">
+    <div className="label">Total Withdrawals</div>
+    <div className="value">-$150</div>
   </div>
 </div>
 
