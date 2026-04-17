@@ -45,6 +45,19 @@ const TransactionHistory = () => {
   <h2>Transaction History</h2>
 </div>
 
+      {/* SUMMARY CARDS */}
+<div className="tx-summary">
+  <div className="summary-card">
+    <p>Total Deposits</p>
+    <h3>$700</h3>
+  </div>
+
+  <div className="summary-card">
+    <p>Total Withdrawals</p>
+    <h3>$150</h3>
+  </div>
+</div>
+
       {/* LIST */}
       <div className="tx-list">
         {transactions.map((tx) => (
