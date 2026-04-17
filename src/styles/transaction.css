@@ -86,11 +86,22 @@
 /* ICON (GOLD BRAND STYLE) */
 .tx-icon {
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 12px;
   display: flex;
   font-size: 16px;
-  background: rgba(212, 166, 79, 0.1);
-  color: #d4a64f;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* DEPOSIT (GREEN) */
+.tx-icon.deposit {
+  background: rgba(46, 125, 50, 0.12);
+  color: #2e7d32;
+}
+
+/* WITHDRAW (RED) */
+.tx-icon.withdraw {
+  background: rgba(198, 40, 40, 0.12);
+  color: #c62828;
 }
 
 /* TEXT */
