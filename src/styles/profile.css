@@ -239,6 +239,15 @@
     background-color: #e53935;
 }
 
+.main-btn{
+    background-color: #d4a64f;
+    color: #eee;
+}
+
+.cancel-btn{
+    
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {
