@@ -1,4 +1,4 @@
-343/* PAGE */
+/* PAGE */
 .tx-page {
   max-width: 500px;
   margin: auto;
@@ -121,6 +121,7 @@
 
 .tx-amount.withdraw {
   color: #c62828;
+  background: none;
 }
 
 
