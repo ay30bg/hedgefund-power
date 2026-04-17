@@ -37,13 +37,14 @@ const TransactionHistory = () => {
   return (
     <div className="tx-page">
       
-      {/* HEADER */}
       <div className="tx-header">
-        <button onClick={() => navigate(-1)}>
-          <FiArrowLeft />
-        </button>
-        <h2>Transaction History</h2>
-      </div>
+  <button className="back-btn" onClick={() => navigate(-1)}>
+    <FiArrowLeft />
+  </button>
+
+  <h2>Transaction History</h2>
+  <p>Your recent activities</p>
+</div>
 
       {/* LIST */}
       <div className="tx-list">
