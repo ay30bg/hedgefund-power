@@ -25,7 +25,7 @@ const TopUp = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
-        <h2>Deposit</h2>
+        <h2>Top-Up</h2>
       </div>
 
       {/* AMOUNT */}
