@@ -44,35 +44,82 @@
   font-size: 13px;
 }
 
-/* SUMMARY SECTION */
+/* =========================
+   SUMMARY DASHBOARD
+========================= */
+
 .tx-summary {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 15px 0 20px;
+  gap: 14px;
+  margin: 16px 0 22px;
 }
 
-/* CARD STYLE */
+/* BASE CARD */
 .summary-card {
-  background: white;
-  border-radius: 14px;
-  padding: 14px;
-  border: 1px solid #eee;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  text-align: left;
+  position: relative;
+  padding: 16px;
+  border-radius: 16px;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.summary-card p {
-  margin: 0;
+.summary-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* LABEL */
+.summary-card .label {
   font-size: 12px;
-  color: #777;
+  opacity: 0.85;
+  letter-spacing: 0.3px;
 }
 
-.summary-card h3 {
-  margin: 6px 0 0;
-  font-size: 18px;
+/* VALUE */
+.summary-card .value {
+  font-size: 20px;
   font-weight: 700;
-  color: #111;
+  margin-top: 8px;
+}
+
+/* =========================
+   DEPOSITS CARD (GREEN THEME)
+========================= */
+.summary-card.deposits {
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+}
+
+/* subtle glow */
+.summary-card.deposits::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+/* =========================
+   WITHDRAWALS CARD (RED THEME)
+========================= */
+.summary-card.withdrawals {
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+}
+
+.summary-card.withdrawals::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
 }
 
 /* BACK BUTTON (FIXED POSITION LIKE ABOUT) */
