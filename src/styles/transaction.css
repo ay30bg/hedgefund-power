@@ -121,7 +121,9 @@
 
 .tx-amount.withdraw {
   color: #c62828;
+  background: none;
 }
+
 
 /* STATUS BADGE (PREMIUM STYLE) */
 .tx-status {
