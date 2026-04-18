@@ -74,7 +74,7 @@
 .invite-hero {
   background: white;
   border-radius: 14px;
-  border: 1px solid #e6e6e6;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   padding: 16px;
   text-align: center;
   margin-bottom: 16px;
@@ -136,7 +136,7 @@
 .invite-card {
   background: white;
   border-radius: 14px;
-  border: 1px solid #e6e6e6;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   overflow: hidden;
 }
 
