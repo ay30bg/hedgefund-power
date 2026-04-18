@@ -68,8 +68,7 @@
 .about-card {
   background: white;
   border-radius: 14px;
-  /* box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05); */
-  border: #e6e6e6;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   overflow: hidden;
 }
 
