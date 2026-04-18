@@ -141,7 +141,7 @@
 .profile-menu {
     background: white;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e6e6e6;
     overflow: hidden;
 }
 
