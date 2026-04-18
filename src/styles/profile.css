@@ -98,7 +98,7 @@
     color: white;
     padding: 20px;
     border-radius: 10px;
-     margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 /* HEADER */
@@ -141,7 +141,7 @@
 .profile-menu {
     background: white;
     border-radius: 10px;
-    border: 1px solid #e6e6e6;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     overflow: hidden;
 }
 
