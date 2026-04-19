@@ -12,10 +12,6 @@ const FindAccount = () => {
 
   return (
     <div className="find-account-page">
-      {/* Header */}
-      <div className="header">
-        <FiArrowLeft className="back-icon" />
-      </div>
 
       {/* Content */}
       <div className="content">
