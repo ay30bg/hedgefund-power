@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../styles/findAccount.css";
-import { FiArrowLeft } from "react-icons/fi";
 
 const FindAccount = () => {
   const [email, setEmail] = useState("");
