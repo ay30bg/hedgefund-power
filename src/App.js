@@ -20,6 +20,7 @@ import TransactionHistory from "./pages/TransactionHistory";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import FindAccount from "./pages/FindAccount";
+import ResetPassword from "./pages/ResetPassword";
 
 function Layout() {
   const location = useLocation();
@@ -49,6 +50,7 @@ function Layout() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<FindAccount />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </main>
 
