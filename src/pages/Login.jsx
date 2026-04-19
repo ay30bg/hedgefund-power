@@ -1,103 +1,3 @@
-// import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { FiEye, FiEyeOff } from "react-icons/fi";
-// import "../styles/auth.css";
-// import logo from "../assets/logo.png";
-
-// function LoginPage() {
-//   const navigate = useNavigate();
-
-//   const [showPassword, setShowPassword] = useState(false);
-
-//   const [form, setForm] = useState({
-//     emailOrPhone: "",
-//     password: ""
-//   });
-
-//   const handleChange = (e) => {
-//     setForm({
-//       ...form,
-//       [e.target.name]: e.target.value
-//     });
-//   };
-
-//   const handleLogin = () => {
-//     if (!form.emailOrPhone.trim()) {
-//       alert("Please enter your email or phone number.");
-//       return;
-//     }
-
-//     if (!form.password.trim()) {
-//       alert("Please enter your password.");
-//       return;
-//     }
-
-//     // Simulated successful login
-//     alert("Login successful!");
-//     navigate("/profile");
-//   };
-
-//   return (
-//     <div className="login-container">
-//       <div className="overlay">
-//         <div className="login-box">
-
-//           <div className="logo-container">
-//             <img src={logo} alt="HedgeFund Power Logo" className="login-logo" />
-//           </div>
-
-//           <input
-//             type="text"
-//             name="emailOrPhone"
-//             placeholder="Email/Phone Number"
-//             className="input-field"
-//             onChange={handleChange}
-//           />
-
-//           {/* PASSWORD INPUT */}
-//           <div className="password-wrapper">
-//             <input
-//               type={showPassword ? "text" : "password"}
-//               name="password"
-//               placeholder="Password"
-//               className="input-field"
-//               onChange={handleChange}
-//             />
-
-//             <span
-//               className="password-icon"
-//               onClick={() => setShowPassword(!showPassword)}
-//             >
-//               {showPassword ? <FiEyeOff /> : <FiEye />}
-//             </span>
-//           </div>
-
-//           <div className="forgot">
-//             <a href="/forgot-password">Forgot Password?</a>
-//           </div>
-
-//           <button className="login-btn" onClick={handleLogin}>
-//             Login
-//           </button>
-
-//           <p className="signup">
-//             Don't have an account?{" "}
-//             <span
-//               onClick={() => navigate("/signup")}
-//               style={{ cursor: "pointer" }}
-//             >
-//               Sign Up
-//             </span>
-//           </p>
-
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default LoginPage;
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -106,7 +6,6 @@ import logo from "../assets/logo.png";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -116,36 +15,26 @@ function LoginPage() {
   });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    });
   };
 
-  const handleLogin = async () => {
-    if (!form.emailOrPhone || !form.password) {
-      alert("All fields required");
+  const handleLogin = () => {
+    if (!form.emailOrPhone.trim()) {
+      alert("Please enter your email or phone number.");
       return;
     }
 
-    try {
-      const res = await fetch(`${API_URL}/api/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(form)
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message);
-
-      localStorage.setItem("token", data.token);
-
-      alert("Login successful!");
-      navigate("/profile");
-
-    } catch (err) {
-      alert(err.message);
+    if (!form.password.trim()) {
+      alert("Please enter your password.");
+      return;
     }
+
+    // Simulated successful login
+    alert("Login successful!");
+    navigate("/profile");
   };
 
   return (
@@ -153,32 +42,52 @@ function LoginPage() {
       <div className="overlay">
         <div className="login-box">
 
-          <img src={logo} alt="Logo" className="login-logo" />
+          <div className="logo-container">
+            <img src={logo} alt="HedgeFund Power Logo" className="login-logo" />
+          </div>
 
           <input
             type="text"
             name="emailOrPhone"
-            placeholder="Email"
+            placeholder="Email/Phone Number"
+            className="input-field"
             onChange={handleChange}
           />
 
+          {/* PASSWORD INPUT */}
           <div className="password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Password"
+              className="input-field"
               onChange={handleChange}
             />
-            <span onClick={() => setShowPassword(!showPassword)}>
+
+            <span
+              className="password-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            >
               {showPassword ? <FiEyeOff /> : <FiEye />}
             </span>
           </div>
 
-          <button onClick={handleLogin}>Login</button>
+          <div className="forgot">
+            <a href="/forgot-password">Forgot Password?</a>
+          </div>
 
-          <p>
+          <button className="login-btn" onClick={handleLogin}>
+            Login
+          </button>
+
+          <p className="signup">
             Don't have an account?{" "}
-            <span onClick={() => navigate("/signup")}>Sign Up</span>
+            <span
+              onClick={() => navigate("/signup")}
+              style={{ cursor: "pointer" }}
+            >
+              Sign Up
+            </span>
           </p>
 
         </div>
@@ -188,3 +97,4 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
