@@ -19,7 +19,7 @@ import Portfolio from "./pages/Portfolio";
 import TransactionHistory from "./pages/TransactionHistory";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import FindAccount from "./pages/FindAccount";
+import FindAccount from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
 function Layout() {
