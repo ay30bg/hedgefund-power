@@ -14,9 +14,9 @@ const FindAccount = () => {
 
       {/* Content */}
       <div className="content">
-        <h1>Find My Account</h1>
+        <h1>Forgot Password</h1>
         <p>
-          To reset your password, please confirm your account first
+          Enter your email and we’ll send you a reset link.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -28,7 +28,7 @@ const FindAccount = () => {
             required
           />
 
-          <button type="submit">Next</button>
+          <button type="submit">Send Reset Link</button>
         </form>
       </div>
     </div>
