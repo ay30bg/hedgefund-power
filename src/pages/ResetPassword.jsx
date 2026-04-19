@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/resetPassword.css";
-import { FiArrowLeft } from "react-icons/fi";
+
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -19,10 +19,6 @@ const ResetPassword = () => {
 
   return (
     <div className="reset-page">
-      {/* Header */}
-      <div className="header">
-        <FiArrowLeft className="back-icon" />
-      </div>
 
       {/* Content */}
       <div className="content">
