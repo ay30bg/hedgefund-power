@@ -19,6 +19,7 @@ import Portfolio from "./pages/Portfolio";
 import TransactionHistory from "./pages/TransactionHistory";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import FindAccount from "./pages/FindAccount";
 
 function Layout() {
   const location = useLocation();
@@ -47,6 +48,7 @@ function Layout() {
           <Route path="/portfolio" element={<Portfolio />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<FindAccount />} />
         </Routes>
       </main>
 
