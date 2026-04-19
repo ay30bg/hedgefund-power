@@ -27,7 +27,7 @@ function Layout() {
 
   // hide header and bottom nav on auth pages
   const isAuthPage =
-    location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/forgot-password";
+    location.pathname === "/login" || location.pathname === "/signup" || location.pathname === "/forgot-password" || location.pathname === "/reset-password/:token";
 
   return (
     <>
