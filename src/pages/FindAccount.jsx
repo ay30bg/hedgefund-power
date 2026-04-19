@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./findAccount.css";
+import "../styles/findAccount.css";
 import { FiArrowLeft } from "react-icons/fi";
 
 const FindAccount = () => {
