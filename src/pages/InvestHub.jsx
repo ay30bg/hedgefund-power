@@ -1,5 +1,237 @@
+// // import React, { useState, useEffect } from "react";
+// // import "../styles/investHub.css";
+
+// // import goldCoin from "../assets/gold-coins.png";
+// // import goldBar from "../assets/gold-bar.png";
+// // import goldBarStack from "../assets/gold-bar-stack.png";
+// // import goldBarStacked from "../assets/gold-bar-stacked.png";
+// // import goldVault from "../assets/gold-vault.png";
+
+// // export const plans = [
+// //   { name: "Starter Gold Farm", days: 7, percent: 18, img: goldCoin },
+// //   { name: "Silver Growth Farm", days: 14, percent: 36, img: goldBar },
+// //   { name: "Golden Harvest Farm", days: 35, percent: 160, img: goldBarStack },
+// //   { name: "Diamond Yield Farm", days: 120, percent: 1200, img: goldBarStacked },
+// //   { name: "Ultimate Vault Farm", days: 200, percent: 2500, img: goldVault }
+// // ];
+
+// // export default function InvestHub() {
+
+// //   const [showInvestModal, setShowInvestModal] = useState(false);
+// //   const [showDetailsModal, setShowDetailsModal] = useState(false);
+// //   const [selectedPlan, setSelectedPlan] = useState(null);
+// //   const [amount, setAmount] = useState("");
+
+// //   // 🔥 LIVE ROI STATE (REAL-TIME MARKET)
+// //   const [liveROI, setLiveROI] = useState({});
+
+// //   // 🔥 Initialize + update market every 3 seconds
+// //   useEffect(() => {
+// //     const interval = setInterval(() => {
+// //       const updated = {};
+
+// //       plans.forEach((plan) => {
+// //         let volatility = 2;
+
+// //         if (plan.percent > 1000) volatility = 15;
+// //         else if (plan.percent > 100) volatility = 6;
+
+// //         const change =
+// //           Math.random() * volatility - volatility / 2;
+
+// //         updated[plan.name] = plan.percent + change;
+// //       });
+
+// //       setLiveROI(updated);
+// //     }, 3000);
+
+// //     return () => clearInterval(interval);
+// //   }, []);
+
+// //   const openInvestModal = (plan) => {
+// //     setSelectedPlan(plan);
+// //     setAmount("");
+// //     setShowInvestModal(true);
+// //   };
+
+// //   const openDetailsModal = (plan) => {
+// //     setSelectedPlan(plan);
+// //     setShowDetailsModal(true);
+// //   };
+
+// //   const closeModal = () => {
+// //     setShowInvestModal(false);
+// //     setShowDetailsModal(false);
+// //   };
+
+// //   // 🔥 LIVE ROI helper
+// //   const getROI = (plan) => liveROI[plan.name] ?? plan.percent;
+
+// //   const expectedIncome =
+// //     amount && selectedPlan
+// //       ? (amount * getROI(selectedPlan)) / 100
+// //       : 0;
+
+// //   return (
+// //     <div className="invest-container">
+
+// //       {plans.map((plan, index) => {
+// //         const roi = getROI(plan);
+
+// //         return (
+// //           <div className="plan-card" key={index}>
+
+// //             <div className="plan-header">
+// //               <img src={plan.img} alt="plan" />
+
+// //               <div className="plan-name">
+// //                 <h3>{plan.name}</h3>
+// //                 <span className="plan-tag">Investment Plan</span>
+// //               </div>
+// //             </div>
+
+// //             <div className="plan-info">
+
+// //               <div>
+// //                 <span className="plan-value">
+// //                   +{roi.toFixed(1)}%
+// //                 </span>
+// //                 <p>Total Return</p>
+// //               </div>
+
+// //               <div>
+// //                 <span className="plan-value">{plan.days}</span>
+// //                 <p>Days</p>
+// //               </div>
+
+// //             </div>
+
+// //             <div className="plan-actions">
+
+// //               <button
+// //                 className="plan-details"
+// //                 onClick={() => openDetailsModal(plan)}
+// //               >
+// //                 Details
+// //               </button>
+
+// //               <button
+// //                 className="plan-invest"
+// //                 onClick={() => openInvestModal(plan)}
+// //               >
+// //                 Invest
+// //               </button>
+
+// //             </div>
+
+// //           </div>
+// //         );
+// //       })}
+
+// //       {/* DETAILS MODAL */}
+// //       {showDetailsModal && selectedPlan && (
+// //         <div className="invest-overlay">
+
+// //           <div className="details-modal">
+
+// //             <img src={selectedPlan.img} alt="" />
+
+// //             <h2>{selectedPlan.name}</h2>
+
+// //             <div className="details-grid">
+
+// //               <div>
+// //                 <span>
+// //                   {getROI(selectedPlan).toFixed(1)}%
+// //                 </span>
+// //                 <p>Total ROI</p>
+// //               </div>
+
+// //               <div>
+// //                 <span>{selectedPlan.days}</span>
+// //                 <p>Duration</p>
+// //               </div>
+
+// //               <div>
+// //                 <span>
+// //                   {(getROI(selectedPlan) / selectedPlan.days).toFixed(2)}%
+// //                 </span>
+// //                 <p>Daily ROI</p>
+// //               </div>
+
+// //             </div>
+
+// //             <button
+// //               className="details-invest"
+// //               onClick={() => {
+// //                 setShowDetailsModal(false);
+// //                 openInvestModal(selectedPlan);
+// //               }}
+// //             >
+// //               Invest Now
+// //             </button>
+
+// //             <button
+// //               className="details-close"
+// //               onClick={closeModal}
+// //             >
+// //               Close
+// //             </button>
+
+// //           </div>
+
+// //         </div>
+// //       )}
+
+// //       {/* INVEST MODAL */}
+// //       {showInvestModal && selectedPlan && (
+// //         <div className="invest-overlay">
+
+// //           <div className="invest-modal">
+
+// //             <h3>Invest ({selectedPlan.days} Days)</h3>
+
+// //             <label>Deposit Amount</label>
+
+// //             <input
+// //               type="number"
+// //               placeholder="Enter amount"
+// //               value={amount}
+// //               onChange={(e) => setAmount(e.target.value)}
+// //             />
+
+// //             <div className="expected-income">
+// //               Expected Income: <b>${expectedIncome.toFixed(2)}</b>
+// //             </div>
+
+// //             <div className="modal-actions">
+
+// //               <button
+// //                 className="modal-cancel"
+// //                 onClick={closeModal}
+// //               >
+// //                 Cancel
+// //               </button>
+
+// //               <button className="modal-confirm">
+// //                 Confirm Investment
+// //               </button>
+
+// //             </div>
+
+// //           </div>
+
+// //         </div>
+// //       )}
+
+// //     </div>
+// //   );
+// // }
+
 // import React, { useState, useEffect } from "react";
 // import "../styles/investHub.css";
+
+// import { useCurrency } from "../context/CurrencyContext";
 
 // import goldCoin from "../assets/gold-coins.png";
 // import goldBar from "../assets/gold-bar.png";
@@ -17,15 +249,16 @@
 
 // export default function InvestHub() {
 
+//   const { currency } = useCurrency(); // ✅ GLOBAL CURRENCY
+
 //   const [showInvestModal, setShowInvestModal] = useState(false);
 //   const [showDetailsModal, setShowDetailsModal] = useState(false);
 //   const [selectedPlan, setSelectedPlan] = useState(null);
 //   const [amount, setAmount] = useState("");
 
-//   // 🔥 LIVE ROI STATE (REAL-TIME MARKET)
 //   const [liveROI, setLiveROI] = useState({});
 
-//   // 🔥 Initialize + update market every 3 seconds
+//   // ===== LIVE MARKET ROI =====
 //   useEffect(() => {
 //     const interval = setInterval(() => {
 //       const updated = {};
@@ -36,8 +269,7 @@
 //         if (plan.percent > 1000) volatility = 15;
 //         else if (plan.percent > 100) volatility = 6;
 
-//         const change =
-//           Math.random() * volatility - volatility / 2;
+//         const change = Math.random() * volatility - volatility / 2;
 
 //         updated[plan.name] = plan.percent + change;
 //       });
@@ -47,6 +279,8 @@
 
 //     return () => clearInterval(interval);
 //   }, []);
+
+//   const getROI = (plan) => liveROI[plan.name] ?? plan.percent;
 
 //   const openInvestModal = (plan) => {
 //     setSelectedPlan(plan);
@@ -64,17 +298,21 @@
 //     setShowDetailsModal(false);
 //   };
 
-//   // 🔥 LIVE ROI helper
-//   const getROI = (plan) => liveROI[plan.name] ?? plan.percent;
-
 //   const expectedIncome =
 //     amount && selectedPlan
 //       ? (amount * getROI(selectedPlan)) / 100
 //       : 0;
 
+//   // ===== CURRENCY FORMATTER =====
+//   const format = (value) =>
+//     `${currency.symbol}${Number(value * currency.rate).toLocaleString(undefined, {
+//       maximumFractionDigits: 2
+//     })}`;
+
 //   return (
 //     <div className="invest-container">
 
+//       {/* PLANS */}
 //       {plans.map((plan, index) => {
 //         const roi = getROI(plan);
 
@@ -135,15 +373,12 @@
 //           <div className="details-modal">
 
 //             <img src={selectedPlan.img} alt="" />
-
 //             <h2>{selectedPlan.name}</h2>
 
 //             <div className="details-grid">
 
 //               <div>
-//                 <span>
-//                   {getROI(selectedPlan).toFixed(1)}%
-//                 </span>
+//                 <span>{getROI(selectedPlan).toFixed(1)}%</span>
 //                 <p>Total ROI</p>
 //               </div>
 
@@ -171,10 +406,7 @@
 //               Invest Now
 //             </button>
 
-//             <button
-//               className="details-close"
-//               onClick={closeModal}
-//             >
+//             <button className="details-close" onClick={closeModal}>
 //               Close
 //             </button>
 
@@ -201,15 +433,12 @@
 //             />
 
 //             <div className="expected-income">
-//               Expected Income: <b>${expectedIncome.toFixed(2)}</b>
+//               Expected Income: <b>{format(expectedIncome)}</b>
 //             </div>
 
 //             <div className="modal-actions">
 
-//               <button
-//                 className="modal-cancel"
-//                 onClick={closeModal}
-//               >
+//               <button className="modal-cancel" onClick={closeModal}>
 //                 Cancel
 //               </button>
 
@@ -248,8 +477,7 @@ export const plans = [
 ];
 
 export default function InvestHub() {
-
-  const { currency } = useCurrency(); // ✅ GLOBAL CURRENCY
+  const { currency } = useCurrency();
 
   const [showInvestModal, setShowInvestModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -258,7 +486,7 @@ export default function InvestHub() {
 
   const [liveROI, setLiveROI] = useState({});
 
-  // ===== LIVE MARKET ROI =====
+  // ===== LIVE ROI =====
   useEffect(() => {
     const interval = setInterval(() => {
       const updated = {};
@@ -270,7 +498,6 @@ export default function InvestHub() {
         else if (plan.percent > 100) volatility = 6;
 
         const change = Math.random() * volatility - volatility / 2;
-
         updated[plan.name] = plan.percent + change;
       });
 
@@ -298,12 +525,15 @@ export default function InvestHub() {
     setShowDetailsModal(false);
   };
 
+  // ===== SAFE NUMBER =====
+  const numAmount = parseFloat(amount) || 0;
+
   const expectedIncome =
-    amount && selectedPlan
-      ? (amount * getROI(selectedPlan)) / 100
+    numAmount && selectedPlan
+      ? (numAmount * getROI(selectedPlan)) / 100
       : 0;
 
-  // ===== CURRENCY FORMATTER =====
+  // ===== FORMATTER =====
   const format = (value) =>
     `${currency.symbol}${Number(value * currency.rate).toLocaleString(undefined, {
       maximumFractionDigits: 2
@@ -331,9 +561,7 @@ export default function InvestHub() {
             <div className="plan-info">
 
               <div>
-                <span className="plan-value">
-                  +{roi.toFixed(1)}%
-                </span>
+                <span className="plan-value">+{roi.toFixed(1)}%</span>
                 <p>Total Return</p>
               </div>
 
@@ -423,17 +651,34 @@ export default function InvestHub() {
 
             <h3>Invest ({selectedPlan.days} Days)</h3>
 
-            <label>Deposit Amount</label>
+            <label>Deposit Amount (USD)</label>
 
             <input
               type="number"
-              placeholder="Enter amount"
+              placeholder="Minimum $10"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
 
+            {/* ===== BINANCE STYLE CONVERSION ===== */}
+            {amount && (
+              <p className="converted">
+                ≈ <span className="converted-value">
+                  {format(numAmount)}
+                </span>
+              </p>
+            )}
+
+            {/* EXPECTED INCOME */}
             <div className="expected-income">
-              Expected Income: <b>{format(expectedIncome)}</b>
+              Expected Income:
+              <b> ${expectedIncome.toFixed(2)} </b>
+
+              {amount && (
+                <span className="converted small">
+                  ≈ {format(expectedIncome)}
+                </span>
+              )}
             </div>
 
             <div className="modal-actions">
