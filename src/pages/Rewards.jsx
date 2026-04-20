@@ -77,28 +77,36 @@ import { useCurrency } from "../context/CurrencyContext";
 
 const Rewards = () => {
   const navigate = useNavigate();
-  const { currency } = useCurrency(); // ✅ ADDED
+  const { currency } = useCurrency(); // ✅ currency + rate
 
+  // ✅ Use numeric values (NOT strings)
   const rewards = [
     {
       title: "Daily Check-in Bonus",
       desc: "Log in every day to earn rewards",
-      value: "$2 - $10",
+      min: 2,
+      max: 10,
       icon: <FiGift />,
     },
     {
       title: "Referral Bonus",
       desc: "Invite friends and earn instantly",
-      value: "$5 per user",
+      amount: 5,
+      suffix: "per user",
       icon: <FiUsers />,
     },
     {
       title: "Loyalty Tier Rewards",
       desc: "Higher tiers unlock better benefits",
-      value: "$100/month",
+      amount: 100,
+      suffix: "/month",
       icon: <FiStar />,
     },
   ];
+
+  // ✅ helper formatter
+  const format = (value) =>
+    `${currency.symbol}${(value * currency.rate).toLocaleString()}`;
 
   return (
     <div className="about-page rewards-page">
@@ -111,7 +119,7 @@ const Rewards = () => {
         <h2>Rewards</h2>
       </div>
 
-      {/* HERO CARD */}
+      {/* HERO */}
       <div className="reward-hero">
         <h3>Your Rewards Hub</h3>
         <p>Earn bonuses by staying active and inviting friends</p>
@@ -121,7 +129,7 @@ const Rewards = () => {
         </div>
       </div>
 
-      {/* REWARD LIST */}
+      {/* LIST */}
       <div className="reward-list">
         {rewards.map((item, i) => (
           <div key={i} className="reward-card">
@@ -133,13 +141,21 @@ const Rewards = () => {
             </div>
 
             <div className="reward-value">
-              {item.value.split("$").join(currency.symbol)}
+              {item.min !== undefined ? (
+                <>
+                  {format(item.min)} - {format(item.max)}
+                </>
+              ) : (
+                <>
+                  {format(item.amount)} {item.suffix}
+                </>
+              )}
             </div>
           </div>
         ))}
       </div>
 
-      {/* CLAIM BUTTON */}
+      {/* BUTTON */}
       <button className="claim-btn">Claim Available Rewards</button>
     </div>
   );
