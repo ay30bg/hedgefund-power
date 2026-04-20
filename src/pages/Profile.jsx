@@ -121,9 +121,12 @@ const Profile = () => {
       <div className="profile-info">
         <div className="profile-left">
           <img
-            src={user.avatar || "https://i.pravatar.cc/100"}
-            alt="avatar"
-          />
+  src={
+    user.avatar ||
+    "https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
+  }
+  alt="avatar"
+/>
 
           <div>
             {/* ✅ FIXED DISPLAY NAME */}
