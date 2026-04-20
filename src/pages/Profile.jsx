@@ -123,7 +123,9 @@ const Profile = () => {
           <img
   src={
     user.avatar ||
-    "https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff"
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      (user._id || "user").slice(0, 10)
+    )}&background=0D8ABC&color=fff&size=128`
   }
   alt="avatar"
 />
