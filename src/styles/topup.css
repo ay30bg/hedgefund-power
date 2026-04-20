@@ -83,6 +83,30 @@
   border-color: #d4a64f;
 }
 
+.converted {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #9ca3af; /* soft gray */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 400;
+}
+
+.converted-value {
+  color: #e5e7eb; /* slightly brighter */
+  font-weight: 500;
+}
+
+/* Optional: dark mode polish */
+body.dark .converted {
+  color: #6b7280;
+}
+
+body.dark .converted-value {
+  color: #d1d5db;
+}
+
 /* QUICK AMOUNTS */
 .quick-amounts {
   display: flex;
