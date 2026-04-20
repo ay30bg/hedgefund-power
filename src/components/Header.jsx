@@ -55,12 +55,13 @@
 import React from "react";
 import "../styles/header.css";
 import logo from "../assets/logo.png";
-import { useCurrency } from "../context/CurrencyContext";
+
 import { useBalance } from "../context/BalanceContext";
+import { useCurrency } from "../context/CurrencyContext"; // ✅ GLOBAL
 
 const Header = () => {
-  const { currency, setCurrency } = useCurrency();
   const { balance } = useBalance();
+  const { currency, setCurrency } = useCurrency();
 
   const currencies = [
     { code: "USD", symbol: "$", label: "USD", rate: 1 },
@@ -76,24 +77,33 @@ const Header = () => {
 
   return (
     <header className="header">
+
+      {/* Logo */}
       <div className="header-left">
         <img src={logo} alt="Logo" className="logo" />
       </div>
 
+      {/* Balance */}
       <div className="header-right">
         <div className="balance-widget">
-          
+
+          {/* Currency Symbol */}
           <span className="currency-symbol">
             {currency.symbol}
           </span>
 
+          {/* Converted Balance */}
           <span className="amount">
-            {(balance * currency.rate).toLocaleString()}
+            {(balance * currency.rate).toLocaleString(undefined, {
+              maximumFractionDigits: 2
+            })}
           </span>
 
           <span className="balance-widget-divider">|</span>
 
+          {/* Currency Selector */}
           <select
+            className="currency-select-inline"
             value={currency.symbol}
             onChange={(e) => handleChange(e.target.value)}
           >
@@ -106,6 +116,7 @@ const Header = () => {
 
         </div>
       </div>
+
     </header>
   );
 };
