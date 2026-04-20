@@ -143,7 +143,9 @@ const Profile = () => {
           <img
   src={
     user.avatar ||
-    "https://www.gravatar.com/avatar/?d=mp&f=y"
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      user.email || "User"
+    )}&background=E2E8F0&color=475569&bold=true&size=128`
   }
   alt="avatar"
 />
@@ -155,7 +157,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* <div className="edit-btn">Edit Information ›</div> */}
       </div>
 
       {/* ACTION BUTTONS */}
