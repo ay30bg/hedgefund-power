@@ -53,8 +53,25 @@ const Profile = () => {
   }, [API]);
 
   // ================= LOADING =================
-  if (!user) return <div className="loading">Loading...</div>;
+  if (!user) {
+  return (
+    <div className="profile-loading">
+      <div className="loading-card">
+        <div className="skeleton avatar"></div>
 
+        <div className="loading-text">
+          <div className="skeleton line short"></div>
+          <div className="skeleton line long"></div>
+        </div>
+      </div>
+
+      <div className="skeleton asset-box"></div>
+      <div className="skeleton menu-item"></div>
+      <div className="skeleton menu-item"></div>
+      <div className="skeleton menu-item"></div>
+    </div>
+  );
+}
   // ================= BIND WALLET =================
   const handleBindWallet = async () => {
     if (!walletAddress) return alert("Please enter a wallet address.");
