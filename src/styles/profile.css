@@ -114,17 +114,18 @@
     font-size: 13px;
 }
 
-/* EDIT BUTTON */
-
-.edit-btn {
-    border: none;
-    background: #f1f1f1;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.avatar-fallback {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d8abc, #2563eb);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 20px;
+  text-transform: uppercase;
 }
 
 /* ACTION BUTTONS */
