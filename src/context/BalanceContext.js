@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 const BalanceContext = createContext();
 
 export const BalanceProvider = ({ children }) => {
-  const [balance, setBalance] = useState(12500);
+  const [balance, setBalance] = useState(12800);
 
   const updateBalance = (newBalance) => {
     setBalance(newBalance);
