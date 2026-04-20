@@ -7,8 +7,74 @@
     min-height: 100vh;
 }
 
-/* PROFILE CARD */
+/* ===== LOADING WRAPPER ===== */
+.profile-loading {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
+/* ===== SKELETON BASE ===== */
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s infinite;
+  border-radius: 12px;
+}
+
+/* shimmer animation */
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ===== PROFILE HEADER SKELETON ===== */
+.loading-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.loading-text {
+  flex: 1;
+}
+
+.line {
+  height: 10px;
+  margin-bottom: 8px;
+}
+
+.line.short {
+  width: 40%;
+}
+
+.line.long {
+  width: 70%;
+}
+
+/* ===== ASSET BOX ===== */
+.asset-box {
+  height: 120px;
+  width: 100%;
+  border-radius: 16px;
+}
+
+/* ===== MENU ITEMS ===== */
+.menu-item {
+  height: 50px;
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* PROFILE CARD */
 .profile-card {
     background: white;
     padding: 20px;
