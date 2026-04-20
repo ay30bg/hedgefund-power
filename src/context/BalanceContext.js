@@ -1,16 +1,81 @@
-import React, { createContext, useContext, useState } from "react";
+// import React, { createContext, useContext, useState } from "react";
+
+// const BalanceContext = createContext();
+
+// export const BalanceProvider = ({ children }) => {
+//   const [balance, setBalance] = useState(12800);
+
+//   const updateBalance = (newBalance) => {
+//     setBalance(newBalance);
+//   };
+
+//   return (
+//     <BalanceContext.Provider value={{ balance, setBalance: updateBalance }}>
+//       {children}
+//     </BalanceContext.Provider>
+//   );
+// };
+
+// export const useBalance = () => useContext(BalanceContext);
+
+
+import React, { createContext, useContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const BalanceContext = createContext();
 
-export const BalanceProvider = ({ children }) => {
-  const [balance, setBalance] = useState(12800);
+const API_URL = process.env.REACT_APP_API_URL;
+const USER_ID = localStorage.getItem("userId"); // or auth context
 
-  const updateBalance = (newBalance) => {
-    setBalance(newBalance);
+export const BalanceProvider = ({ children }) => {
+  const [balance, setBalance] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  // ================= FETCH BALANCE =================
+  const fetchBalance = async () => {
+    try {
+      setLoading(true);
+
+      const res = await axios.get(
+        `${API_URL}/api/balance/${USER_ID}`
+      );
+
+      setBalance(res.data.balance);
+    } catch (err) {
+      console.error("Error fetching balance:", err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  // ================= UPDATE BALANCE =================
+  const updateBalance = async (newBalance) => {
+    try {
+      setBalance(newBalance); // optimistic update
+
+      await axios.put(
+        `${API_URL}/api/balance/${USER_ID}`,
+        { amount: newBalance }
+      );
+    } catch (err) {
+      console.error("Error updating balance:", err.message);
+    }
+  };
+
+  // ================= INIT =================
+  useEffect(() => {
+    if (USER_ID) fetchBalance();
+  }, []);
+
   return (
-    <BalanceContext.Provider value={{ balance, setBalance: updateBalance }}>
+    <BalanceContext.Provider
+      value={{
+        balance,
+        setBalance: updateBalance,
+        loading,
+        refreshBalance: fetchBalance
+      }}
+    >
       {children}
     </BalanceContext.Provider>
   );
