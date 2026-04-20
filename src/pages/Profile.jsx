@@ -143,9 +143,7 @@ const Profile = () => {
           <img
   src={
     user.avatar ||
-    `https://ui-avatars.com/api/?name=${encodeURIComponent(
-      (user._id || "user").slice(0, 10)
-    )}&background=0D8ABC&color=fff&size=128`
+    "https://www.gravatar.com/avatar/?d=mp&f=y"
   }
   alt="avatar"
 />
