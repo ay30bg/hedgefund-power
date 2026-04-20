@@ -261,6 +261,11 @@
 //         </div>
 
 //       </div>
+//     </div>
+//   );
+// };
+
+// export default DashboardHomepage;
 
 import React, { useEffect, useState } from "react";
 import "../styles/home.css";
@@ -551,8 +556,3 @@ const DashboardHomepage = () => {
 };
 
 export default DashboardHomepage;
-//     </div>
-//   );
-// };
-
-// export default DashboardHomepage;
