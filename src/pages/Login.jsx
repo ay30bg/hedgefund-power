@@ -22,55 +22,114 @@ function LoginPage() {
     });
   };
 
+  // const handleLogin = async () => {
+  //   if (!form.email.trim()) {
+  //     alert("Please enter your email.");
+  //     return;
+  //   }
+
+  //   if (!form.password.trim()) {
+  //     alert("Please enter your password.");
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoading(true);
+
+  //     const res = await fetch(
+  //       `${process.env.REACT_APP_API_URL}/api/auth/login`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json"
+  //         },
+  //         body: JSON.stringify({
+  //           email: form.email,
+  //           password: form.password
+  //         })
+  //       }
+  //     );
+
+  //     const data = await res.json();
+
+  //     if (!res.ok) {
+  //       alert(data.message || "Login failed");
+  //       setLoading(false);
+  //       return;
+  //     }
+
+  //     // ✅ Save token
+  //     localStorage.setItem("token", data.token);
+
+  //     alert("Login successful!");
+  //     navigate("/profile");
+
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Server error. Try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleLogin = async () => {
-    if (!form.email.trim()) {
-      alert("Please enter your email.");
-      return;
-    }
+  if (!form.email.trim()) {
+    return alert("Please enter your email.");
+  }
 
-    if (!form.password.trim()) {
-      alert("Please enter your password.");
-      return;
-    }
+  if (!form.password.trim()) {
+    return alert("Please enter your password.");
+  }
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/auth/login`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            email: form.email,
-            password: form.password
-          })
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "Login failed");
-        setLoading(false);
-        return;
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/auth/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
       }
+    );
 
-      // ✅ Save token
-      localStorage.setItem("token", data.token);
+    const data = await res.json();
 
-      alert("Login successful!");
-      navigate("/profile");
+    console.log("LOGIN RESPONSE:", data); // 🔥 DEBUG
 
-    } catch (err) {
-      console.error(err);
-      alert("Server error. Try again.");
-    } finally {
-      setLoading(false);
+    if (!res.ok) {
+      alert(data.message || "Login failed");
+      return;
     }
-  };
+
+    // 🚨 HARD SAFETY CHECK
+    if (!data.token || data.token === "undefined") {
+      alert("Login failed: invalid token received");
+      return;
+    }
+
+    // ✅ SAVE TOKEN PROPERLY
+    localStorage.setItem("token", data.token);
+
+    // (optional but recommended)
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    alert("Login successful!");
+
+    navigate("/profile");
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error. Try again.");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="login-container">
