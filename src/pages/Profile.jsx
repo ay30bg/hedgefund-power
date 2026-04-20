@@ -69,6 +69,9 @@ const Profile = () => {
       <div className="skeleton menu-item"></div>
       <div className="skeleton menu-item"></div>
       <div className="skeleton menu-item"></div>
+      <div className="skeleton menu-item"></div>
+      <div className="skeleton menu-item"></div>
+      <div className="skeleton menu-item"></div>
     </div>
   );
 }
