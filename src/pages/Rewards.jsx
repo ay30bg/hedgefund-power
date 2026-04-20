@@ -73,31 +73,29 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/rewards.css";
 import { FiGift, FiStar, FiUsers, FiArrowLeft } from "react-icons/fi";
-
-import { useCurrency } from "../context/CurrencyContext"; // ✅ ADDED
+import { useCurrency } from "../context/CurrencyContext";
 
 const Rewards = () => {
   const navigate = useNavigate();
-
-  const { currency } = useCurrency(); // ✅ GLOBAL CURRENCY
+  const { currency } = useCurrency(); // ✅ ADDED
 
   const rewards = [
     {
       title: "Daily Check-in Bonus",
       desc: "Log in every day to earn rewards",
-      value: { min: 2, max: 10 },
+      value: "$2 - $10",
       icon: <FiGift />,
     },
     {
       title: "Referral Bonus",
       desc: "Invite friends and earn instantly",
-      value: { fixed: 5 },
+      value: "$5 per user",
       icon: <FiUsers />,
     },
     {
       title: "Loyalty Tier Rewards",
       desc: "Higher tiers unlock better benefits",
-      value: { max: 100 },
+      value: "$100/month",
       icon: <FiStar />,
     },
   ];
@@ -127,48 +125,22 @@ const Rewards = () => {
       <div className="reward-list">
         {rewards.map((item, i) => (
           <div key={i} className="reward-card">
-
-            <div className="reward-icon">
-              {item.icon}
-            </div>
+            <div className="reward-icon">{item.icon}</div>
 
             <div className="reward-info">
               <h4>{item.title}</h4>
               <p>{item.desc}</p>
             </div>
 
-            {/* 💰 CURRENCY INTEGRATION */}
             <div className="reward-value">
-
-              {item.value.fixed && (
-                <span>
-                  {currency}{item.value.fixed}
-                </span>
-              )}
-
-              {item.value.min && item.value.max && (
-                <span>
-                  {currency}{item.value.min} - {currency}{item.value.max}
-                </span>
-              )}
-
-              {!item.value.fixed && !item.value.min && item.value.max && (
-                <span>
-                  Up to {currency}{item.value.max}
-                </span>
-              )}
-
+              {item.value.split("$").join(currency.symbol)}
             </div>
-
           </div>
         ))}
       </div>
 
       {/* CLAIM BUTTON */}
-      <button className="claim-btn">
-        Claim Available Rewards
-      </button>
-
+      <button className="claim-btn">Claim Available Rewards</button>
     </div>
   );
 };
