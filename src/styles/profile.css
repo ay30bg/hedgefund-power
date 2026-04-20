@@ -114,22 +114,7 @@
     font-size: 13px;
 }
 
-.avatar-fallback {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0d8abc, #2563eb);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 20px;
-  text-transform: uppercase;
-}
-
 /* ACTION BUTTONS */
-
 .profile-actions {
     display: flex;
     gap: 10px;
