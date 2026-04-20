@@ -11,7 +11,7 @@ import Header from "./components/Header";
 import BottomNavbar from "./components/BottomNavbar";
 import ScrollToTop from "./components/ScrollToTop";
 
-// ✅ ADD THIS
+import { CurrencyProvider } from "./context/CurrencyContext";
 import { BalanceProvider } from "./context/BalanceContext";
 
 // Pages
@@ -72,12 +72,13 @@ function Layout() {
 
 function App() {
   return (
-    // ✅ WRAPPED HERE
     <BalanceProvider>
+     <CurrencyProvider>
       <Router>
         <ScrollToTop />
         <Layout />
       </Router>
+     </CurrencyProvider>
     </BalanceProvider>
   );
 }
