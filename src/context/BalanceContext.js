@@ -1,43 +1,43 @@
-// // import React, { createContext, useContext, useState } from "react";
-
-// // const BalanceContext = createContext();
-
-// // export const BalanceProvider = ({ children }) => {
-// //   const [balance, setBalance] = useState(12800);
-
-// //   const updateBalance = (newBalance) => {
-// //     setBalance(newBalance);
-// //   };
-
-// //   return (
-// //     <BalanceContext.Provider value={{ balance, setBalance: updateBalance }}>
-// //       {children}
-// //     </BalanceContext.Provider>
-// //   );
-// // };
-
-// // export const useBalance = () => useContext(BalanceContext);
-
-
-// import React, { createContext, useContext, useEffect, useState } from "react";
+// import React, {
+//   createContext,
+//   useContext,
+//   useEffect,
+//   useState,
+//   useCallback
+// } from "react";
 // import axios from "axios";
 
 // const BalanceContext = createContext();
 
 // const API_URL = process.env.REACT_APP_API_URL;
-// const USER_ID = localStorage.getItem("userId"); // or auth context
 
 // export const BalanceProvider = ({ children }) => {
 //   const [balance, setBalance] = useState(0);
 //   const [loading, setLoading] = useState(true);
 
+//   // ✅ make userId reactive instead of static localStorage read
+//   const [userId, setUserId] = useState(null);
+
+//   // ================= INIT USER ID =================
+//   useEffect(() => {
+//     const storedUserId = localStorage.getItem("userId");
+
+//     if (storedUserId && storedUserId !== "null") {
+//       setUserId(storedUserId);
+//     } else {
+//       setUserId(null);
+//     }
+//   }, []);
+
 //   // ================= FETCH BALANCE =================
-//   const fetchBalance = async () => {
+//   const fetchBalance = useCallback(async () => {
+//     if (!userId) return;
+
 //     try {
 //       setLoading(true);
 
 //       const res = await axios.get(
-//         `${API_URL}/api/balance/${USER_ID}`
+//         `${API_URL}/api/balance/${userId}`
 //       );
 
 //       setBalance(res.data.balance);
@@ -46,26 +46,33 @@
 //     } finally {
 //       setLoading(false);
 //     }
-//   };
+//   }, [userId]);
 
 //   // ================= UPDATE BALANCE =================
-//   const updateBalance = async (newBalance) => {
-//     try {
-//       setBalance(newBalance); // optimistic update
+//   const updateBalance = useCallback(
+//     async (newBalance) => {
+//       if (!userId) return;
 
-//       await axios.put(
-//         `${API_URL}/api/balance/${USER_ID}`,
-//         { amount: newBalance }
-//       );
-//     } catch (err) {
-//       console.error("Error updating balance:", err.message);
-//     }
-//   };
+//       try {
+//         setBalance(newBalance);
 
-//   // ================= INIT =================
+//         await axios.put(
+//           `${API_URL}/api/balance/${userId}`,
+//           { amount: newBalance }
+//         );
+//       } catch (err) {
+//         console.error("Error updating balance:", err.message);
+//       }
+//     },
+//     [userId]
+//   );
+
+//   // ================= AUTO FETCH ON LOGIN =================
 //   useEffect(() => {
-//     if (USER_ID) fetchBalance();
-//   }, []);
+//     if (userId) {
+//       fetchBalance();
+//     }
+//   }, [userId, fetchBalance]);
 
 //   return (
 //     <BalanceContext.Provider
@@ -87,20 +94,16 @@ import React, {
   createContext,
   useContext,
   useEffect,
-  useState,
-  useCallback
+  useState
 } from "react";
 import axios from "axios";
 
 const BalanceContext = createContext();
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 export const BalanceProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  // ✅ make userId reactive instead of static localStorage read
+  const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(null);
 
   // ================= INIT USER ID =================
@@ -109,20 +112,18 @@ export const BalanceProvider = ({ children }) => {
 
     if (storedUserId && storedUserId !== "null") {
       setUserId(storedUserId);
-    } else {
-      setUserId(null);
     }
   }, []);
 
   // ================= FETCH BALANCE =================
-  const fetchBalance = useCallback(async () => {
-    if (!userId) return;
+  const fetchBalance = async (id) => {
+    if (!id) return;
 
     try {
       setLoading(true);
 
       const res = await axios.get(
-        `${API_URL}/api/balance/${userId}`
+        `${API_URL}/api/balance/${id}`
       );
 
       setBalance(res.data.balance);
@@ -131,33 +132,30 @@ export const BalanceProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [userId]);
+  };
 
   // ================= UPDATE BALANCE =================
-  const updateBalance = useCallback(
-    async (newBalance) => {
-      if (!userId) return;
+  const updateBalance = async (newBalance) => {
+    if (!userId) return;
 
-      try {
-        setBalance(newBalance);
+    try {
+      setBalance(newBalance);
 
-        await axios.put(
-          `${API_URL}/api/balance/${userId}`,
-          { amount: newBalance }
-        );
-      } catch (err) {
-        console.error("Error updating balance:", err.message);
-      }
-    },
-    [userId]
-  );
+      await axios.put(
+        `${API_URL}/api/balance/${userId}`,
+        { amount: newBalance }
+      );
+    } catch (err) {
+      console.error("Error updating balance:", err.message);
+    }
+  };
 
-  // ================= AUTO FETCH ON LOGIN =================
+  // ================= AUTO FETCH =================
   useEffect(() => {
     if (userId) {
-      fetchBalance();
+      fetchBalance(userId);
     }
-  }, [userId, fetchBalance]);
+  }, [userId]);
 
   return (
     <BalanceContext.Provider
@@ -165,7 +163,7 @@ export const BalanceProvider = ({ children }) => {
         balance,
         setBalance: updateBalance,
         loading,
-        refreshBalance: fetchBalance
+        refreshBalance: () => fetchBalance(userId)
       }}
     >
       {children}
