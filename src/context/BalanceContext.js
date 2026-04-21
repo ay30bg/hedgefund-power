@@ -83,7 +83,7 @@
 
 // export const useBalance = () => useContext(BalanceContext);
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import axios from "axios";
 
 const BalanceContext = createContext();
@@ -94,23 +94,17 @@ export const BalanceProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // ================= GET USER ID SAFELY =================
-  const getUserId = () => localStorage.getItem("userId");
+  const USER_ID = localStorage.getItem("userId");
 
   // ================= FETCH BALANCE =================
-  const fetchBalance = async () => {
+  const fetchBalance = useCallback(async () => {
+    if (!USER_ID) return;
+
     try {
-      const userId = getUserId();
-
-      if (!userId) {
-        console.warn("No userId found — skipping fetchBalance");
-        return;
-      }
-
       setLoading(true);
 
       const res = await axios.get(
-        `${API_URL}/api/balance/${userId}`
+        `${API_URL}/api/balance/${USER_ID}`
       );
 
       setBalance(res.data.balance);
@@ -119,23 +113,16 @@ export const BalanceProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [USER_ID]);
 
   // ================= UPDATE BALANCE =================
   const updateBalance = async (newBalance) => {
     try {
-      const userId = getUserId();
-
-      if (!userId) {
-        console.warn("No userId found — skipping updateBalance");
-        return;
-      }
-
-      setBalance(newBalance); // optimistic update
+      setBalance(newBalance);
 
       await axios.put(
-        `${API_URL}/api/balance/${userId}`,
-        { balance: newBalance } // ⚠️ FIXED FIELD NAME
+        `${API_URL}/api/balance/${USER_ID}`,
+        { amount: newBalance }
       );
     } catch (err) {
       console.error("Error updating balance:", err.message);
@@ -145,7 +132,7 @@ export const BalanceProvider = ({ children }) => {
   // ================= INIT =================
   useEffect(() => {
     fetchBalance();
-  }, []);
+  }, [fetchBalance]);
 
   return (
     <BalanceContext.Provider
