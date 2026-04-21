@@ -83,7 +83,13 @@
 
 // export const useBalance = () => useContext(BalanceContext);
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback
+} from "react";
 import axios from "axios";
 
 const BalanceContext = createContext();
@@ -94,17 +100,29 @@ export const BalanceProvider = ({ children }) => {
   const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const USER_ID = localStorage.getItem("userId");
+  // ✅ make userId reactive instead of static localStorage read
+  const [userId, setUserId] = useState(null);
+
+  // ================= INIT USER ID =================
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("userId");
+
+    if (storedUserId && storedUserId !== "null") {
+      setUserId(storedUserId);
+    } else {
+      setUserId(null);
+    }
+  }, []);
 
   // ================= FETCH BALANCE =================
   const fetchBalance = useCallback(async () => {
-    if (!USER_ID) return;
+    if (!userId) return;
 
     try {
       setLoading(true);
 
       const res = await axios.get(
-        `${API_URL}/api/balance/${USER_ID}`
+        `${API_URL}/api/balance/${userId}`
       );
 
       setBalance(res.data.balance);
@@ -113,26 +131,33 @@ export const BalanceProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, [USER_ID]);
+  }, [userId]);
 
   // ================= UPDATE BALANCE =================
-  const updateBalance = async (newBalance) => {
-    try {
-      setBalance(newBalance);
+  const updateBalance = useCallback(
+    async (newBalance) => {
+      if (!userId) return;
 
-      await axios.put(
-        `${API_URL}/api/balance/${USER_ID}`,
-        { amount: newBalance }
-      );
-    } catch (err) {
-      console.error("Error updating balance:", err.message);
-    }
-  };
+      try {
+        setBalance(newBalance);
 
-  // ================= INIT =================
+        await axios.put(
+          `${API_URL}/api/balance/${userId}`,
+          { amount: newBalance }
+        );
+      } catch (err) {
+        console.error("Error updating balance:", err.message);
+      }
+    },
+    [userId]
+  );
+
+  // ================= AUTO FETCH ON LOGIN =================
   useEffect(() => {
-    fetchBalance();
-  }, [fetchBalance]);
+    if (userId) {
+      fetchBalance();
+    }
+  }, [userId, fetchBalance]);
 
   return (
     <BalanceContext.Provider
