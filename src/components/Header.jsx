@@ -97,24 +97,26 @@ const Header = () => {
     if (selected) changeCurrency(selected);
   };
 
-  // ================================
-  // 🔥 ANIMATED BALANCE STATE
-  // ================================
+  // =========================
+  // 🔥 ANIMATED BALANCE
+  // =========================
   const [displayBalance, setDisplayBalance] = useState(0);
 
   const targetBalance = balance * currency.rate;
 
   useEffect(() => {
-    let start = 0;
     let startTime = null;
-    const duration = 600; // animation speed (ms)
+    const duration = 600;
+
+    const startValue = displayBalance;
 
     const animate = (timestamp) => {
       if (!startTime) startTime = timestamp;
 
       const progress = Math.min((timestamp - startTime) / duration, 1);
 
-      const value = start + (targetBalance - start) * progress;
+      const value =
+        startValue + (targetBalance - startValue) * progress;
 
       setDisplayBalance(value);
 
@@ -124,7 +126,7 @@ const Header = () => {
     };
 
     requestAnimationFrame(animate);
-  }, [balance, currency]);
+  }, [targetBalance]);
 
   return (
     <header className="header">
@@ -138,10 +140,12 @@ const Header = () => {
       <div className="header-right">
         <div className="balance-widget">
 
+          {/* Currency Symbol */}
           <span className="currency-symbol">
             {currency.symbol}
           </span>
 
+          {/* Animated Balance */}
           <span className="amount">
             {displayBalance.toLocaleString(undefined, {
               maximumFractionDigits: 2
@@ -150,6 +154,7 @@ const Header = () => {
 
           <span className="balance-widget-divider">|</span>
 
+          {/* Currency Selector */}
           <select
             className="currency-select-inline"
             value={currency.symbol}
