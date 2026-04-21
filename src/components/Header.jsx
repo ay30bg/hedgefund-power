@@ -3,11 +3,13 @@
 // import logo from "../assets/logo.png";
 
 // import { useBalance } from "../context/BalanceContext";
-// import { useCurrency } from "../context/CurrencyContext"; // ✅ GLOBAL
+// import { useCurrency } from "../context/CurrencyContext";
 
 // const Header = () => {
 //   const { balance } = useBalance();
-//   const { currency, setCurrency } = useCurrency();
+
+//   // ✅ FIX: use correct function name
+//   const { currency, changeCurrency } = useCurrency();
 
 //   const currencies = [
 //     { code: "USD", symbol: "$", label: "USD", rate: 1 },
@@ -16,9 +18,12 @@
 //     { code: "EUR", symbol: "€", label: "EUR", rate: 0.92 }
 //   ];
 
+//   // ✅ FIX: call changeCurrency (not setCurrency)
 //   const handleChange = (symbol) => {
 //     const selected = currencies.find(c => c.symbol === symbol);
-//     setCurrency(selected);
+//     if (selected) {
+//       changeCurrency(selected);
+//     }
 //   };
 
 //   return (
@@ -69,8 +74,7 @@
 
 // export default Header;
 
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/header.css";
 import logo from "../assets/logo.png";
 
@@ -79,8 +83,6 @@ import { useCurrency } from "../context/CurrencyContext";
 
 const Header = () => {
   const { balance } = useBalance();
-
-  // ✅ FIX: use correct function name
   const { currency, changeCurrency } = useCurrency();
 
   const currencies = [
@@ -90,13 +92,39 @@ const Header = () => {
     { code: "EUR", symbol: "€", label: "EUR", rate: 0.92 }
   ];
 
-  // ✅ FIX: call changeCurrency (not setCurrency)
   const handleChange = (symbol) => {
     const selected = currencies.find(c => c.symbol === symbol);
-    if (selected) {
-      changeCurrency(selected);
-    }
+    if (selected) changeCurrency(selected);
   };
+
+  // ================================
+  // 🔥 ANIMATED BALANCE STATE
+  // ================================
+  const [displayBalance, setDisplayBalance] = useState(0);
+
+  const targetBalance = balance * currency.rate;
+
+  useEffect(() => {
+    let start = 0;
+    let startTime = null;
+    const duration = 600; // animation speed (ms)
+
+    const animate = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+
+      const value = start + (targetBalance - start) * progress;
+
+      setDisplayBalance(value);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [balance, currency]);
 
   return (
     <header className="header">
@@ -110,21 +138,18 @@ const Header = () => {
       <div className="header-right">
         <div className="balance-widget">
 
-          {/* Currency Symbol */}
           <span className="currency-symbol">
             {currency.symbol}
           </span>
 
-          {/* Converted Balance */}
           <span className="amount">
-            {(balance * currency.rate).toLocaleString(undefined, {
+            {displayBalance.toLocaleString(undefined, {
               maximumFractionDigits: 2
             })}
           </span>
 
           <span className="balance-widget-divider">|</span>
 
-          {/* Currency Selector */}
           <select
             className="currency-select-inline"
             value={currency.symbol}
