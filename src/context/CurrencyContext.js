@@ -107,20 +107,21 @@ export const CurrencyProvider = ({ children }) => {
       try {
         const token = localStorage.getItem("token");
 
-        // ❌ If no token → fallback to localStorage
+        // fallback if no token
         if (!token) {
           const saved = localStorage.getItem("currency");
-          if (saved) {
-            setCurrency(JSON.parse(saved));
-          }
+          if (saved) setCurrency(JSON.parse(saved));
           return;
         }
 
-        const res = await axios.get(`${API_URL}/api/user/preferences`, {
-          headers: {
-            Authorization: `Bearer ${token}`
+        const res = await axios.get(
+          `${API_URL}/api/user/preferences`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
           }
-        });
+        );
 
         if (res.data?.currency) {
           setCurrency(res.data.currency);
@@ -130,13 +131,10 @@ export const CurrencyProvider = ({ children }) => {
           );
         }
       } catch (err) {
-        console.warn("Using local currency (offline/backend failed)");
+        console.warn("Using local currency (backend failed)");
 
-        // fallback to local
         const saved = localStorage.getItem("currency");
-        if (saved) {
-          setCurrency(JSON.parse(saved));
-        }
+        if (saved) setCurrency(JSON.parse(saved));
       }
     };
 
@@ -147,17 +145,16 @@ export const CurrencyProvider = ({ children }) => {
   const changeCurrency = async (newCurrency) => {
     setCurrency(newCurrency);
 
-    // save locally immediately
+    // always save locally first (optimistic update)
     localStorage.setItem("currency", JSON.stringify(newCurrency));
 
     try {
       const token = localStorage.getItem("token");
 
-      // ❌ If no token → skip backend sync
       if (!token) return;
 
-      await axios.post(
-        `${API_URL}/api/user/preferences`,
+      await axios.patch(
+        `${API_URL}/api/user/preferences/currency`,
         { currency: newCurrency },
         {
           headers: {
@@ -166,7 +163,10 @@ export const CurrencyProvider = ({ children }) => {
         }
       );
     } catch (err) {
-      console.error("Failed to sync currency to backend", err.message);
+      console.error(
+        "Failed to sync currency to backend",
+        err.message
+      );
     }
   };
 
