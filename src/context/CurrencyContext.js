@@ -60,7 +60,7 @@ export const CurrencyProvider = ({ children }) => {
     const fetchCurrency = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/user/preferences`
+          `${process.env.REACT_APP_API_URL}/api/user/preferences`
         );
 
         if (res.data?.currency) {
