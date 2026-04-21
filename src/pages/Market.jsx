@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../styles/market.css";
 
 import { useCurrency } from "../context/CurrencyContext";
-import { useBalance } from "../context/BalanceContext"; // ✅ IMPORT
+import { useBalance } from "../context/BalanceContext"; 
 
 import pp1 from "../assets/pp1 1.png";
 import pp4 from "../assets/pp4 1.png";
