@@ -92,7 +92,13 @@
 // export const useCurrency = () => useContext(CurrencyContext);
 
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef
+} from "react";
 import axios from "axios";
 
 const CurrencyContext = createContext();
@@ -104,7 +110,7 @@ const DEFAULT_CURRENCY = {
   rate: 1
 };
 
-// ================= GET INITIAL (NO FLICKER) =================
+// ================= INITIAL LOAD (NO FLICKER) =================
 const getInitialCurrency = () => {
   try {
     const saved = localStorage.getItem("currency");
@@ -116,6 +122,9 @@ const getInitialCurrency = () => {
 
 export const CurrencyProvider = ({ children }) => {
   const [currency, setCurrency] = useState(getInitialCurrency);
+
+  // ✅ track last known currency (prevents effect loops)
+  const prevCurrencyRef = useRef(currency);
 
   const API_URL = process.env.REACT_APP_API_URL;
 
@@ -137,17 +146,21 @@ export const CurrencyProvider = ({ children }) => {
 
         if (res.data?.currency) {
           const backendCurrency = res.data.currency;
+          const prev = prevCurrencyRef.current;
 
-          // only update if different (prevents unnecessary re-renders)
+          // ✅ only update if different
           if (
-            backendCurrency.code !== currency.code ||
-            backendCurrency.rate !== currency.rate
+            backendCurrency.code !== prev.code ||
+            backendCurrency.rate !== prev.rate
           ) {
             setCurrency(backendCurrency);
             localStorage.setItem(
               "currency",
               JSON.stringify(backendCurrency)
             );
+
+            // update ref AFTER change
+            prevCurrencyRef.current = backendCurrency;
           }
         }
       } catch (err) {
@@ -156,13 +169,16 @@ export const CurrencyProvider = ({ children }) => {
     };
 
     syncCurrency();
-  }, [API_URL]); // intentionally NOT depending on currency
+  }, [API_URL]); // ✅ no ESLint warning now
 
   // ================= CHANGE CURRENCY =================
   const changeCurrency = async (newCurrency) => {
     // optimistic update
     setCurrency(newCurrency);
     localStorage.setItem("currency", JSON.stringify(newCurrency));
+
+    // keep ref in sync
+    prevCurrencyRef.current = newCurrency;
 
     try {
       const token = localStorage.getItem("token");
@@ -178,7 +194,10 @@ export const CurrencyProvider = ({ children }) => {
         }
       );
     } catch (err) {
-      console.error("Failed to sync currency to backend:", err.message);
+      console.error(
+        "Failed to sync currency to backend:",
+        err.message
+      );
     }
   };
 
