@@ -47,7 +47,7 @@ export const CurrencyProvider = ({ children }) => {
     localStorage.setItem("currency", JSON.stringify(newCurrency));
 
     try {
-      await axios.patch(`${process.env.REACT_APP_API_URL}/user/preferences`, {
+      await axios.patch(`${process.env.REACT_APP_API_URL}/api/user/preferences`, {
         currency: newCurrency
       });
     } catch (err) {
