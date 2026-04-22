@@ -195,6 +195,68 @@
     color: #eee;
 }
 
+/* ================= SKELETON ================= */
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s infinite;
+  border-radius: 10px;
+}
+
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* skeleton layout */
+.skeleton-card {
+  padding: 15px;
+}
+
+.machine-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 12px;
+}
+
+.line {
+  height: 10px;
+  margin-bottom: 6px;
+}
+
+.line.short {
+  width: 70px;
+}
+
+.line.tiny {
+  width: 45px;
+}
+
+.box {
+  height: 40px;
+  width: 48%;
+  border-radius: 10px;
+}
+
+.badge {
+  width: 70px;
+  height: 20px;
+  border-radius: 20px;
+}
+
+.progress {
+  height: 8px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.button {
+  height: 35px;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
 /* ---------- Mobile ---------- */
 
 @media (max-width:768px) {
