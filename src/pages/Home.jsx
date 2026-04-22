@@ -292,7 +292,6 @@ import React, { useEffect, useState } from "react";
 import "../styles/home.css";
 
 import { useCurrency } from "../context/CurrencyContext";
-
 import { plans } from "./InvestHub";
 
 import {
@@ -308,6 +307,10 @@ const DashboardHomepage = () => {
 
   const [activities, setActivities] = useState([]);
   const [marketShift, setMarketShift] = useState(0);
+
+  const [machines, setMachines] = useState([]);
+  const [loadingMachines, setLoadingMachines] = useState(true);
+
   const [chartData, setChartData] = useState([
     { day: "Mon", profit: 120 },
     { day: "Tue", profit: 210 },
@@ -318,30 +321,28 @@ const DashboardHomepage = () => {
     { day: "Sun", profit: 350 },
   ]);
 
-  // ✅ USER MACHINES FROM BACKEND
-  const [userMachines, setUserMachines] = useState([]);
-
-  // ===== FETCH USER MACHINES =====
+  // ✅ FETCH MACHINES FROM BACKEND
   useEffect(() => {
-    const fetchUserMachines = async () => {
+    const fetchMachines = async () => {
       try {
-        const userId = localStorage.getItem("userId");
-
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/market/${userId}`
+          `${process.env.REACT_APP_API_URL}/api/machines`
         );
-
         const data = await res.json();
 
         if (res.ok) {
-          setUserMachines(data.machines);
+          setMachines(data.machines);
+        } else {
+          console.error(data.message);
         }
       } catch (err) {
-        console.error("Failed to fetch user machines:", err);
+        console.error("Error fetching machines:", err);
+      } finally {
+        setLoadingMachines(false);
       }
     };
 
-    fetchUserMachines();
+    fetchMachines();
   }, []);
 
   // ===== LIVE ACTIVITY =====
@@ -365,7 +366,7 @@ const DashboardHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // ===== MARKET SHIFT =====
+  // ===== MARKET FLUCTUATION =====
   useEffect(() => {
     const interval = setInterval(() => {
       setMarketShift(Math.random() * 10 - 5);
@@ -374,7 +375,7 @@ const DashboardHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // ===== CHART =====
+  // ===== CHART UPDATE =====
   useEffect(() => {
     const interval = setInterval(() => {
       setChartData((prev) =>
@@ -392,23 +393,31 @@ const DashboardHomepage = () => {
   }, []);
 
   // ===== INSIGHTS =====
-  const topPlan = plans.reduce((prev, current) =>
-    current.percent > prev.percent ? current : prev
-  );
+  const topPlan =
+    plans.length > 0
+      ? plans.reduce((prev, current) =>
+          current.percent > prev.percent ? current : prev
+        )
+      : null;
 
-  const mostActivePlan = plans.reduce((prev, current) =>
-    current.days < prev.days ? current : prev
-  );
+  const mostActivePlan =
+    plans.length > 0
+      ? plans.reduce((prev, current) =>
+          current.days < prev.days ? current : prev
+        )
+      : null;
 
   const bestMachine =
-    userMachines.length > 0
-      ? userMachines.reduce((prev, curr) =>
-          curr.profit > prev.profit ? curr : prev
+    machines.length > 0
+      ? machines.reduce((prev, current) =>
+          current.profit > prev.profit ? current : prev
         )
       : null;
 
   const avgROI =
-    plans.reduce((sum, p) => sum + p.percent, 0) / plans.length;
+    plans.length > 0
+      ? plans.reduce((sum, p) => sum + p.percent, 0) / plans.length
+      : 0;
 
   let marketStatus = "Stable";
   let marketNote = "Moderate returns";
@@ -421,58 +430,78 @@ const DashboardHomepage = () => {
     marketNote = "Low risk • Stable";
   }
 
-  const currencyFormat = (val) =>
-    `${currency.symbol}${(val * currency.rate).toLocaleString()}`;
-
   return (
     <div className="dashboard">
 
       {/* OVERVIEW */}
       <div className="overview-card">
         <div className="overview-item">
-          <p>Total Invested</p>
-          <h2>{currencyFormat(8200)}</h2>
+          <p className="label">Total Invested</p>
+          <h2>
+            {currency.symbol}
+            {(8200 * currency.rate).toLocaleString()}
+          </h2>
         </div>
 
         <div className="overview-item">
-          <p>Total Profit</p>
-          <h2 className="positive">{currencyFormat(4250)}</h2>
+          <p className="label">Total Profit</p>
+          <h2 className="positive">
+            +{currency.symbol}
+            {(4250 * currency.rate).toLocaleString()}
+          </h2>
         </div>
 
         <div className="overview-item">
-          <p>Total Withdrawal</p>
-          <h2>{currencyFormat(2590)}</h2>
+          <p className="label">Total Withdrawal</p>
+          <h2>
+            {currency.symbol}
+            {(2590 * currency.rate).toLocaleString()}
+          </h2>
         </div>
 
         <div className="overview-item">
-          <p>ROI (Avg)</p>
+          <p className="label">ROI (Avg)</p>
           <h2>{avgROI.toFixed(1)}%</h2>
         </div>
       </div>
 
       {/* INSIGHTS */}
       <div className="insights">
-
         <div className="insight-card">
-          <p>Top Plan</p>
-          <h3>{topPlan.name}</h3>
+          <p className="label">Top Performing Plan</p>
+          <h3>{topPlan?.name || "N/A"}</h3>
+          <span className="positive">
+            {topPlan
+              ? `+${(topPlan.percent + marketShift).toFixed(1)}%`
+              : "--"}
+          </span>
         </div>
 
         <div className="insight-card">
-          <p>Most Active</p>
-          <h3>{mostActivePlan.name}</h3>
+          <p className="label">Most Active</p>
+          <h3>{mostActivePlan?.name || "N/A"}</h3>
+          <span>{mostActivePlan?.days || "--"} days</span>
         </div>
 
         <div className="insight-card">
-          <p>Best Machine</p>
-          <h3>{bestMachine ? bestMachine.name : "No machines yet"}</h3>
+          <p className="label">Best Machine</p>
+          <h3>{bestMachine?.name || "N/A"}</h3>
+          <span className="positive">
+            {bestMachine
+              ? `${currency.symbol}${(
+                  bestMachine.profit *
+                  24 *
+                  currency.rate
+                ).toFixed(2)} / day`
+              : "--"}
+          </span>
         </div>
 
         <div className="insight-card">
-          <p>Market</p>
+          <p className="label">Market Status</p>
           <h3>{marketStatus}</h3>
+          <span>{marketNote}</span>
         </div>
-
       </div>
 
       {/* GRID */}
@@ -486,7 +515,13 @@ const DashboardHomepage = () => {
             <LineChart data={chartData}>
               <XAxis dataKey="day" />
               <Tooltip />
-              <Line dataKey="profit" stroke="#d6a85a" strokeWidth={3} />
+              <Line
+                type="monotone"
+                dataKey="profit"
+                stroke="#d6a85a"
+                strokeWidth={3}
+                dot={false}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -495,27 +530,95 @@ const DashboardHomepage = () => {
         <div className="card">
           <h3>Live Activity</h3>
 
-          {activities.map((item) => (
-            <div key={item.id}>
-              {item.name} -{" "}
-              {item.type === "deposit" ? "+" : "-"}
-              {currencyFormat(item.amount)}
+          <div className="activity-ticker">
+            <div className="activity-track">
+              {activities.concat(activities).map((item, index) => (
+                <div key={index} className="activity-row">
+                  <span className="time">
+                    {new Date(item.id).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+
+                  <span className="name">{item.name}</span>
+
+                  <span
+                    className={
+                      item.type === "deposit"
+                        ? "amount positive"
+                        : "amount negative"
+                    }
+                  >
+                    {item.type === "deposit" ? "+" : "-"}
+                    {currency.symbol}
+                    {(item.amount * currency.rate).toLocaleString()}
+                  </span>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+        </div>
+
+        {/* PROGRESS */}
+        <div className="card">
+          <h3>Portfolio Strength</h3>
+
+          <div className="progress">
+            <p>ROI Power</p>
+            <div className="bar">
+              <div style={{ width: `${Math.min(avgROI / 10, 100)}%` }} />
+            </div>
+          </div>
+
+          <div className="progress">
+            <p>Machine Efficiency</p>
+            <div className="bar">
+              <div style={{ width: "75%" }} />
+            </div>
+          </div>
+
+          <div className="progress">
+            <p>Risk Level</p>
+            <div className="bar danger">
+              <div style={{ width: `${Math.min(avgROI / 8, 100)}%` }} />
+            </div>
+          </div>
         </div>
 
         {/* PORTFOLIO */}
         <div className="card">
-          <h3>Portfolio</h3>
+          <h3>Asset Portfolio</h3>
 
-          <p>Machines Owned: {userMachines.length}</p>
+          <div className="plan">
+            <p>Investment Plans</p>
+            <span className="positive">{plans.length} Active</span>
+          </div>
 
-          <p>
-            Best Daily Yield:{" "}
-            {bestMachine
-              ? currencyFormat(bestMachine.profit * 24)
-              : currencyFormat(0)}
-          </p>
+          <div className="plan">
+            <p>Mining Machines</p>
+            <span className="positive">
+              {loadingMachines ? "..." : machines.length}
+            </span>
+          </div>
+
+          <div className="plan">
+            <p>Best Daily Yield</p>
+            <span className="positive">
+              {bestMachine
+                ? `${currency.symbol}${(
+                    bestMachine.profit *
+                    24 *
+                    currency.rate
+                  ).toFixed(2)}`
+                : "--"}
+            </span>
+          </div>
+
+          <div className="plan">
+            <p>Total ROI Power</p>
+            <span>{marketStatus}</span>
+          </div>
         </div>
 
       </div>
