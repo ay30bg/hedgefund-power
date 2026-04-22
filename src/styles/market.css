@@ -219,3 +219,59 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+/* ================= SKELETON ================= */
+.purchase-loading {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: pulse 1.5s infinite;
+  border-radius: 10px;
+}
+
+@keyframes pulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* machine skeleton pieces */
+.skeleton-card {
+  padding: 15px;
+}
+
+.machine-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+}
+
+.line {
+  height: 10px;
+  margin-bottom: 6px;
+}
+
+.line.short {
+  width: 60px;
+}
+
+.line.tiny {
+  width: 40px;
+}
+
+.box {
+  height: 50px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.button {
+  height: 40px;
+  width: 48%;
+  border-radius: 8px;
+}
