@@ -413,12 +413,23 @@ import axios from "axios";
 
 export default function Portfolio() {
   const [activeTab, setActiveTab] = useState("investments");
+
   const [investments, setInvestments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [machines, setMachines] = useState([]);
+
+  const [loadingInvestments, setLoadingInvestments] = useState(true);
+  const [loadingMachines, setLoadingMachines] = useState(true);
 
   const token = localStorage.getItem("token");
 
-  /* ---------------- FETCH INVESTMENTS ---------------- */
+  /* ================= LIVE REFRESH ================= */
+  const [, forceUpdate] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => forceUpdate((n) => n + 1), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  /* ================= FETCH INVESTMENTS ================= */
   useEffect(() => {
     const fetchInvestments = async () => {
       try {
@@ -433,23 +444,40 @@ export default function Portfolio() {
 
         setInvestments(res.data.investments || []);
       } catch (err) {
-        console.error("Fetch investments error:", err);
+        console.error("Investments error:", err);
       } finally {
-        setLoading(false);
+        setLoadingInvestments(false);
       }
     };
 
     fetchInvestments();
   }, [token]);
 
-  /* -------- Live Refresh -------- */
-  const [, forceUpdate] = useState(0);
+  /* ================= FETCH MACHINES ================= */
   useEffect(() => {
-    const interval = setInterval(() => forceUpdate((n) => n + 1), 1000);
-    return () => clearInterval(interval);
-  }, []);
+    const fetchMachines = async () => {
+      try {
+        const res = await axios.get(
+          "https://hedgefund-backend.vercel.app/api/machines/user",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-  /* ---------------- STATUS ---------------- */
+        setMachines(res.data.machines || []);
+      } catch (err) {
+        console.error("Machines error:", err);
+      } finally {
+        setLoadingMachines(false);
+      }
+    };
+
+    fetchMachines();
+  }, [token]);
+
+  /* ================= HELPERS ================= */
   const getStatus = (start, days) => {
     const now = new Date();
     const startDate = new Date(start);
@@ -471,9 +499,11 @@ export default function Portfolio() {
     return Math.min(Math.max((current / total) * 100, 0), 100);
   };
 
+  /* ================= UI ================= */
   return (
     <div className="portfolio-page">
-      {/* -------- Tabs -------- */}
+
+      {/* ================= TABS ================= */}
       <div className="portfolio-tabs">
         <button
           className={`portfolio-tab ${
@@ -494,15 +524,17 @@ export default function Portfolio() {
         </button>
       </div>
 
-      {/* -------- Investments -------- */}
+      {/* ================= INVESTMENTS ================= */}
       {activeTab === "investments" && (
         <section className="investments-section">
-          {loading ? (
+
+          {loadingInvestments ? (
             <p>Loading investments...</p>
           ) : investments.length === 0 ? (
             <p>No investments yet</p>
           ) : (
             <div className="invest-cards">
+
               {investments.map((inv) => {
                 const status = getStatus(inv.startDate, inv.days);
                 const progress = getProgress(inv.startDate, inv.days);
@@ -515,14 +547,9 @@ export default function Portfolio() {
                 return (
                   <div className="invest-card" key={inv._id}>
                     <div className="invest-header">
-                      <img
-                        src="/images/gold-bar-stack.png"
-                        alt={inv.plan}
-                      />
-
                       <div>
                         <h3>{inv.plan}</h3>
-                        <span>{inv.days} Day(s)</span>
+                        <span>{inv.days} Days</span>
                       </div>
 
                       <span className={`status-badge ${status}`}>
@@ -554,7 +581,7 @@ export default function Portfolio() {
                     </div>
 
                     <p className="invest-dates">
-                      {new Date(inv.startDate).toLocaleString()} -{" "}
+                      {new Date(inv.startDate).toLocaleString()} →{" "}
                       {endDate.toLocaleString()}
                     </p>
 
@@ -566,10 +593,79 @@ export default function Portfolio() {
                   </div>
                 );
               })}
+
             </div>
           )}
+
         </section>
       )}
+
+      {/* ================= MACHINES ================= */}
+      {activeTab === "machines" && (
+        <section className="machines-section">
+
+          {loadingMachines ? (
+            <p>Loading machines...</p>
+          ) : machines.length === 0 ? (
+            <p>No machines purchased yet</p>
+          ) : (
+            <div className="machine-cards">
+
+              {machines.map((m) => {
+                const status = getStatus(m.startDate, m.duration);
+                const progress = getProgress(m.startDate, m.duration);
+
+                return (
+                  <div className="machine-card" key={m._id}>
+                    <div className="machine-header">
+                      <div>
+                        <h3>{m.machine?.name || "Machine"}</h3>
+                        <span className="tag">Level {m.level}</span>
+                      </div>
+
+                      <span className={`status-badge ${status}`}>
+                        {status === "running"
+                          ? "Running"
+                          : "Claimable"}
+                      </span>
+                    </div>
+
+                    <div className="machine-info">
+                      <div>
+                        <span>Profit / Hour</span>
+                        <strong>${m.profitPerHour}</strong>
+                      </div>
+
+                      <div>
+                        <span>Daily Profit</span>
+                        <strong>
+                          ${(m.profitPerHour * 24).toFixed(4)}
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="progress-bar">
+                      <div
+                        className="progress-fill"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+
+                    {status === "claimable" && (
+                      <button className="claim-btn">
+                        Claim Profit
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+
+            </div>
+          )}
+
+        </section>
+      )}
+
     </div>
   );
 }
