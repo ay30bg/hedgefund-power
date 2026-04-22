@@ -747,7 +747,7 @@ export default function InvestHub() {
 
             <div className="plan-header">
               <img
-                src={`${process.env.REACT_APP_API_URL}${plan.img}`}
+                src={`${process.env.REACT_APP_API_URL}${plan.image}`}
                 alt="plan"
               />
 
