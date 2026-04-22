@@ -480,11 +480,11 @@ export default function InvestHub() {
             </div>
 
             <div className="plan-actions">
-              <button onClick={() => openDetailsModal(plan)}>
+              <button onClick={() => openDetailsModal(plan)} className="plan-details">
                 Details
               </button>
 
-              <button onClick={() => openInvestModal(plan)}>
+              <button onClick={() => openInvestModal(plan)} className="plan-invest">
                 Invest
               </button>
             </div>
@@ -511,11 +511,11 @@ export default function InvestHub() {
             <button onClick={() => {
               setShowDetailsModal(false);
               openInvestModal(selectedPlan);
-            }}>
+            }} className="details-invest">
               Invest Now
             </button>
 
-            <button onClick={closeModal}>Close</button>
+            <button onClick={closeModal} className="details-close">Close</button>
 
           </div>
         </div>
