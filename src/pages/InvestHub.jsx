@@ -301,12 +301,6 @@ import "../styles/investHub.css";
 import { useCurrency } from "../context/CurrencyContext";
 import { useBalance } from "../context/BalanceContext";
 
-import goldCoin from "../assets/gold-coins.png";
-import goldBar from "../assets/gold-bar.png";
-import goldBarStack from "../assets/gold-bar-stack.png";
-import goldBarStacked from "../assets/gold-bar-stacked.png";
-import goldVault from "../assets/gold-vault.png";
-
 export default function InvestHub() {
   const { currency } = useCurrency();
   const { setBalance } = useBalance();
@@ -322,16 +316,7 @@ export default function InvestHub() {
   const [loading, setLoading] = useState(false);
   const [liveROI, setLiveROI] = useState({});
 
-  // ✅ IMAGE MAP
-  const imageMap = {
-    goldCoin,
-    goldBar,
-    goldBarStack,
-    goldBarStacked,
-    goldVault
-  };
-
-  // ✅ FETCH PLANS
+  // ================= FETCH PLANS =================
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -344,7 +329,7 @@ export default function InvestHub() {
           setPlans(data.plans);
         }
       } catch (err) {
-        console.error("Failed to fetch plans:", err);
+        console.error(err);
       } finally {
         setLoadingPlans(false);
       }
@@ -353,7 +338,7 @@ export default function InvestHub() {
     fetchPlans();
   }, []);
 
-  // ✅ LIVE ROI (FIXED)
+  // ================= LIVE ROI =================
   useEffect(() => {
     if (!plans.length) return;
 
@@ -378,24 +363,6 @@ export default function InvestHub() {
 
   const getROI = (plan) => liveROI[plan.name] ?? plan.percent;
 
-  const openInvestModal = (plan) => {
-    setSelectedPlan(plan);
-    setAmount("");
-    setShowInvestModal(true);
-  };
-
-  const openDetailsModal = (plan) => {
-    setSelectedPlan(plan);
-    setShowDetailsModal(true);
-  };
-
-  const closeModal = () => {
-    setShowInvestModal(false);
-    setShowDetailsModal(false);
-    setSelectedPlan(null);
-    setAmount("");
-  };
-
   const numAmount = parseFloat(amount) || 0;
 
   const expectedIncome =
@@ -408,7 +375,7 @@ export default function InvestHub() {
       maximumFractionDigits: 2
     })}`;
 
-  // ✅ INVEST
+  // ================= INVEST =================
   const handleInvest = async () => {
     if (!selectedPlan || !numAmount) return;
 
@@ -429,7 +396,7 @@ export default function InvestHub() {
             Authorization: `Bearer ${localStorage.getItem("token")}`
           },
           body: JSON.stringify({
-            plan: selectedPlan.name, // backend will validate
+            plan: selectedPlan.name,
             amount: numAmount
           })
         }
@@ -450,10 +417,28 @@ export default function InvestHub() {
       closeModal();
     } catch (err) {
       console.error(err);
-      alert("Network error. Try again.");
+      alert("Network error");
     } finally {
       setLoading(false);
     }
+  };
+
+  const openInvestModal = (plan) => {
+    setSelectedPlan(plan);
+    setAmount("");
+    setShowInvestModal(true);
+  };
+
+  const openDetailsModal = (plan) => {
+    setSelectedPlan(plan);
+    setShowDetailsModal(true);
+  };
+
+  const closeModal = () => {
+    setShowInvestModal(false);
+    setShowDetailsModal(false);
+    setSelectedPlan(null);
+    setAmount("");
   };
 
   if (loadingPlans) {
@@ -462,13 +447,19 @@ export default function InvestHub() {
 
   return (
     <div className="invest-container">
+
       {plans.map((plan) => {
         const roi = getROI(plan);
 
         return (
           <div className="plan-card" key={plan._id}>
+
+            {/* ✅ DIRECT BACKEND IMAGE */}
             <div className="plan-header">
-              <img src={imageMap[plan.image]} alt="plan" />
+              <img
+                src={`${process.env.REACT_APP_API_URL}${plan.image}`}
+                alt={plan.name}
+              />
 
               <div className="plan-name">
                 <h3>{plan.name}</h3>
@@ -489,20 +480,15 @@ export default function InvestHub() {
             </div>
 
             <div className="plan-actions">
-              <button
-                className="plan-details"
-                onClick={() => openDetailsModal(plan)}
-              >
+              <button onClick={() => openDetailsModal(plan)}>
                 Details
               </button>
 
-              <button
-                className="plan-invest"
-                onClick={() => openInvestModal(plan)}
-              >
+              <button onClick={() => openInvestModal(plan)}>
                 Invest
               </button>
             </div>
+
           </div>
         );
       })}
@@ -511,41 +497,26 @@ export default function InvestHub() {
       {showDetailsModal && selectedPlan && (
         <div className="invest-overlay">
           <div className="details-modal">
-            <img src={imageMap[selectedPlan.image]} alt="" />
+
+            <img
+              src={`${process.env.REACT_APP_API_URL}${selectedPlan.image}`}
+              alt=""
+            />
+
             <h2>{selectedPlan.name}</h2>
 
-            <div className="details-grid">
-              <div>
-                <span>{getROI(selectedPlan).toFixed(1)}%</span>
-                <p>Total ROI</p>
-              </div>
+            <p>Total ROI: {getROI(selectedPlan).toFixed(1)}%</p>
+            <p>Days: {selectedPlan.days}</p>
 
-              <div>
-                <span>{selectedPlan.days}</span>
-                <p>Duration</p>
-              </div>
-
-              <div>
-                <span>
-                  {(getROI(selectedPlan) / selectedPlan.days).toFixed(2)}%
-                </span>
-                <p>Daily ROI</p>
-              </div>
-            </div>
-
-            <button
-              className="details-invest"
-              onClick={() => {
-                setShowDetailsModal(false);
-                openInvestModal(selectedPlan);
-              }}
-            >
+            <button onClick={() => {
+              setShowDetailsModal(false);
+              openInvestModal(selectedPlan);
+            }}>
               Invest Now
             </button>
 
-            <button className="details-close" onClick={closeModal}>
-              Close
-            </button>
+            <button onClick={closeModal}>Close</button>
+
           </div>
         </div>
       )}
@@ -554,9 +525,8 @@ export default function InvestHub() {
       {showInvestModal && selectedPlan && (
         <div className="invest-overlay">
           <div className="invest-modal">
-            <h3>Invest ({selectedPlan.days} Days)</h3>
 
-            <label>Deposit Amount (USD)</label>
+            <h3>Invest ({selectedPlan.days} Days)</h3>
 
             <input
               type="number"
@@ -566,26 +536,25 @@ export default function InvestHub() {
             />
 
             {amount && (
-              <p className="converted">
-                ≈ <span>{format(numAmount)}</span>
+              <p>
+                ≈ {format(numAmount)}
               </p>
             )}
 
-            <div className="expected-income">
-              Expected Income:
-              <b> ${expectedIncome.toFixed(2)} </b>
-            </div>
+            <p>
+              Expected: ${expectedIncome.toFixed(2)}
+            </p>
 
-            <div className="modal-actions">
-              <button onClick={closeModal}>Cancel</button>
+            <button onClick={closeModal}>Cancel</button>
 
-              <button onClick={handleInvest} disabled={loading}>
-                {loading ? "Processing..." : "Confirm Investment"}
-              </button>
-            </div>
+            <button onClick={handleInvest} disabled={loading}>
+              {loading ? "Processing..." : "Confirm"}
+            </button>
+
           </div>
         </div>
       )}
+
     </div>
   );
 }
