@@ -260,9 +260,6 @@ import "../styles/portfolio.css";
 
 import { useCurrency } from "../context/CurrencyContext";
 
-import goldImg from "../assets/gold-coins.png";
-import goldBarStack from "../assets/gold-bar-stack.png";
-
 import pp1 from "../assets/pp1 1.png";
 import pp4 from "../assets/pp4 1.png";
 import pp5 from "../assets/pp5 1.png";
@@ -284,7 +281,7 @@ const machineImages = {
   "Spark Power Pumping Machine": pp11,
 };
 
-/* ---------------- Status Functions ---------------- */
+/* ---------------- Status Helpers ---------------- */
 const getStatus = (start, end) => {
   const now = new Date();
   const startDate = new Date(start);
@@ -316,13 +313,13 @@ export default function Portfolio() {
 
   const [, forceUpdate] = useState(0);
 
-  // ⏱️ UI refresh
+  // ⏱ refresh UI every second
   useEffect(() => {
     const interval = setInterval(() => forceUpdate(n => n + 1), 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // 🔐 FIXED: JWT-based fetch (NO userId)
+  // 🔐 SECURE FETCH (JWT ONLY)
   useEffect(() => {
     const fetchMachines = async () => {
       try {
@@ -355,6 +352,7 @@ export default function Portfolio() {
     fetchMachines();
   }, []);
 
+  // 💱 FORMAT CURRENCY
   const format = (value) =>
     `${currency.symbol}${(value * currency.rate).toLocaleString(undefined, {
       maximumFractionDigits: 2,
