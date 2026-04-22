@@ -329,7 +329,7 @@ export default function InvestHub() {
           setPlans(data.plans);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch plans:", err);
       } finally {
         setLoadingPlans(false);
       }
@@ -362,6 +362,24 @@ export default function InvestHub() {
   }, [plans]);
 
   const getROI = (plan) => liveROI[plan.name] ?? plan.percent;
+
+  const openInvestModal = (plan) => {
+    setSelectedPlan(plan);
+    setAmount("");
+    setShowInvestModal(true);
+  };
+
+  const openDetailsModal = (plan) => {
+    setSelectedPlan(plan);
+    setShowDetailsModal(true);
+  };
+
+  const closeModal = () => {
+    setShowInvestModal(false);
+    setShowDetailsModal(false);
+    setSelectedPlan(null);
+    setAmount("");
+  };
 
   const numAmount = parseFloat(amount) || 0;
 
@@ -417,30 +435,13 @@ export default function InvestHub() {
       closeModal();
     } catch (err) {
       console.error(err);
-      alert("Network error");
+      alert("Network error. Try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const openInvestModal = (plan) => {
-    setSelectedPlan(plan);
-    setAmount("");
-    setShowInvestModal(true);
-  };
-
-  const openDetailsModal = (plan) => {
-    setSelectedPlan(plan);
-    setShowDetailsModal(true);
-  };
-
-  const closeModal = () => {
-    setShowInvestModal(false);
-    setShowDetailsModal(false);
-    setSelectedPlan(null);
-    setAmount("");
-  };
-
+  // ================= LOADING =================
   if (loadingPlans) {
     return <div className="invest-container">Loading plans...</div>;
   }
@@ -448,14 +449,16 @@ export default function InvestHub() {
   return (
     <div className="invest-container">
 
+      {/* PLANS */}
       {plans.map((plan) => {
         const roi = getROI(plan);
 
         return (
           <div className="plan-card" key={plan._id}>
 
-            {/* ✅ DIRECT BACKEND IMAGE */}
             <div className="plan-header">
+
+              {/* ✅ OPTION B IMAGE */}
               <img
                 src={`${process.env.REACT_APP_API_URL}${plan.image}`}
                 alt={plan.name}
@@ -465,9 +468,11 @@ export default function InvestHub() {
                 <h3>{plan.name}</h3>
                 <span className="plan-tag">Investment Plan</span>
               </div>
+
             </div>
 
             <div className="plan-info">
+
               <div>
                 <span className="plan-value">+{roi.toFixed(1)}%</span>
                 <p>Total Return</p>
@@ -477,16 +482,25 @@ export default function InvestHub() {
                 <span className="plan-value">{plan.days}</span>
                 <p>Days</p>
               </div>
+
             </div>
 
             <div className="plan-actions">
-              <button onClick={() => openDetailsModal(plan)} className="plan-details">
+
+              <button
+                className="plan-details"
+                onClick={() => openDetailsModal(plan)}
+              >
                 Details
               </button>
 
-              <button onClick={() => openInvestModal(plan)} className="plan-invest">
+              <button
+                className="plan-invest"
+                onClick={() => openInvestModal(plan)}
+              >
                 Invest
               </button>
+
             </div>
 
           </div>
@@ -500,22 +514,45 @@ export default function InvestHub() {
 
             <img
               src={`${process.env.REACT_APP_API_URL}${selectedPlan.image}`}
-              alt=""
+              alt={selectedPlan.name}
             />
 
             <h2>{selectedPlan.name}</h2>
 
-            <p>Total ROI: {getROI(selectedPlan).toFixed(1)}%</p>
-            <p>Days: {selectedPlan.days}</p>
+            <div className="details-grid">
 
-            <button onClick={() => {
-              setShowDetailsModal(false);
-              openInvestModal(selectedPlan);
-            }} className="details-invest">
+              <div>
+                <span>{getROI(selectedPlan).toFixed(1)}%</span>
+                <p>Total ROI</p>
+              </div>
+
+              <div>
+                <span>{selectedPlan.days}</span>
+                <p>Duration</p>
+              </div>
+
+              <div>
+                <span>
+                  {(getROI(selectedPlan) / selectedPlan.days).toFixed(2)}%
+                </span>
+                <p>Daily ROI</p>
+              </div>
+
+            </div>
+
+            <button
+              className="details-invest"
+              onClick={() => {
+                setShowDetailsModal(false);
+                openInvestModal(selectedPlan);
+              }}
+            >
               Invest Now
             </button>
 
-            <button onClick={closeModal} className="details-close">Close</button>
+            <button className="details-close" onClick={closeModal}>
+              Close
+            </button>
 
           </div>
         </div>
@@ -528,6 +565,8 @@ export default function InvestHub() {
 
             <h3>Invest ({selectedPlan.days} Days)</h3>
 
+            <label>Deposit Amount (USD)</label>
+
             <input
               type="number"
               placeholder="Minimum $10"
@@ -536,20 +575,31 @@ export default function InvestHub() {
             />
 
             {amount && (
-              <p>
-                ≈ {format(numAmount)}
+              <p className="converted">
+                ≈ <span className="converted-value">{format(numAmount)}</span>
               </p>
             )}
 
-            <p>
-              Expected: ${expectedIncome.toFixed(2)}
-            </p>
+            <div className="expected-income">
+              Expected Income:
+              <b> ${expectedIncome.toFixed(2)} </b>
+            </div>
 
-            <button onClick={closeModal}>Cancel</button>
+            <div className="modal-actions">
 
-            <button onClick={handleInvest} disabled={loading}>
-              {loading ? "Processing..." : "Confirm"}
-            </button>
+              <button className="modal-cancel" onClick={closeModal}>
+                Cancel
+              </button>
+
+              <button
+                className="modal-confirm"
+                onClick={handleInvest}
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Confirm Investment"}
+              </button>
+
+            </div>
 
           </div>
         </div>
