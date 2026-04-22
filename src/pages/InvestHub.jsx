@@ -799,7 +799,7 @@ export default function InvestHub() {
           <div className="details-modal">
 
             <img
-              src={`${process.env.REACT_APP_API_URL}${selectedPlan.img}`}
+              src={`${process.env.REACT_APP_API_URL}${selectedPlan.image}`}
               alt=""
             />
 
