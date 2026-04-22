@@ -327,6 +327,8 @@ export default function InvestHub() {
 
         if (res.ok) {
           setPlans(data.plans);
+        } else {
+          console.error("Failed to load plans:", data);
         }
       } catch (err) {
         console.error("Failed to fetch plans:", err);
@@ -389,9 +391,12 @@ export default function InvestHub() {
       : 0;
 
   const format = (value) =>
-    `${currency.symbol}${Number(value * currency.rate).toLocaleString(undefined, {
-      maximumFractionDigits: 2
-    })}`;
+    `${currency.symbol}${Number(value * currency.rate).toLocaleString(
+      undefined,
+      {
+        maximumFractionDigits: 2
+      }
+    )}`;
 
   // ================= INVEST =================
   const handleInvest = async () => {
@@ -405,17 +410,21 @@ export default function InvestHub() {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem("token");
+
       const res = await fetch(
         `${process.env.REACT_APP_API_URL}/api/invest/invest`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`
+            Authorization: token ? `Bearer ${token}` : ""
           },
           body: JSON.stringify({
             plan: selectedPlan.name,
-            amount: numAmount
+            amount: numAmount,
+            roi: selectedPlan.percent,
+            days: selectedPlan.days
           })
         }
       );
@@ -423,6 +432,7 @@ export default function InvestHub() {
       const data = await res.json();
 
       if (!res.ok) {
+        console.error("Invest error response:", data);
         alert(data.message || "Investment failed");
         return;
       }
@@ -434,7 +444,7 @@ export default function InvestHub() {
       alert("Investment successful!");
       closeModal();
     } catch (err) {
-      console.error(err);
+      console.error("Network error:", err);
       alert("Network error. Try again.");
     } finally {
       setLoading(false);
@@ -458,7 +468,6 @@ export default function InvestHub() {
 
             <div className="plan-header">
 
-              {/* ✅ OPTION B IMAGE */}
               <img
                 src={`${process.env.REACT_APP_API_URL}${plan.image}`}
                 alt={plan.name}
@@ -487,17 +496,11 @@ export default function InvestHub() {
 
             <div className="plan-actions">
 
-              <button
-                className="plan-details"
-                onClick={() => openDetailsModal(plan)}
-              >
+              <button onClick={() => openDetailsModal(plan)}>
                 Details
               </button>
 
-              <button
-                className="plan-invest"
-                onClick={() => openInvestModal(plan)}
-              >
+              <button onClick={() => openInvestModal(plan)}>
                 Invest
               </button>
 
@@ -507,65 +510,12 @@ export default function InvestHub() {
         );
       })}
 
-      {/* DETAILS MODAL */}
-      {showDetailsModal && selectedPlan && (
-        <div className="invest-overlay">
-          <div className="details-modal">
-
-            <img
-              src={`${process.env.REACT_APP_API_URL}${selectedPlan.image}`}
-              alt={selectedPlan.name}
-            />
-
-            <h2>{selectedPlan.name}</h2>
-
-            <div className="details-grid">
-
-              <div>
-                <span>{getROI(selectedPlan).toFixed(1)}%</span>
-                <p>Total ROI</p>
-              </div>
-
-              <div>
-                <span>{selectedPlan.days}</span>
-                <p>Duration</p>
-              </div>
-
-              <div>
-                <span>
-                  {(getROI(selectedPlan) / selectedPlan.days).toFixed(2)}%
-                </span>
-                <p>Daily ROI</p>
-              </div>
-
-            </div>
-
-            <button
-              className="details-invest"
-              onClick={() => {
-                setShowDetailsModal(false);
-                openInvestModal(selectedPlan);
-              }}
-            >
-              Invest Now
-            </button>
-
-            <button className="details-close" onClick={closeModal}>
-              Close
-            </button>
-
-          </div>
-        </div>
-      )}
-
       {/* INVEST MODAL */}
       {showInvestModal && selectedPlan && (
         <div className="invest-overlay">
           <div className="invest-modal">
 
             <h3>Invest ({selectedPlan.days} Days)</h3>
-
-            <label>Deposit Amount (USD)</label>
 
             <input
               type="number"
@@ -574,28 +524,17 @@ export default function InvestHub() {
               onChange={(e) => setAmount(e.target.value)}
             />
 
-            {amount && (
-              <p className="converted">
-                ≈ <span className="converted-value">{format(numAmount)}</span>
-              </p>
-            )}
-
-            <div className="expected-income">
-              Expected Income:
-              <b> ${expectedIncome.toFixed(2)} </b>
-            </div>
+            <p>
+              Expected Income: <b>${expectedIncome.toFixed(2)}</b>
+            </p>
 
             <div className="modal-actions">
 
-              <button className="modal-cancel" onClick={closeModal}>
+              <button onClick={closeModal}>
                 Cancel
               </button>
 
-              <button
-                className="modal-confirm"
-                onClick={handleInvest}
-                disabled={loading}
-              >
+              <button onClick={handleInvest} disabled={loading}>
                 {loading ? "Processing..." : "Confirm Investment"}
               </button>
 
