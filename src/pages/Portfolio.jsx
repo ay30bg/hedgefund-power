@@ -458,7 +458,7 @@ export default function Portfolio() {
     const fetchMachines = async () => {
       try {
         const res = await axios.get(
-          "https://hedgefund-backend.vercel.app/api/machines/user",
+          "https://hedgefund-backend.vercel.app/api/machines",
           {
             headers: {
               Authorization: `Bearer ${token}`,
