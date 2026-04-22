@@ -20,10 +20,23 @@
 //   // ================= FETCH MACHINES =================
 //   useEffect(() => {
 //     const fetchMachines = async () => {
+//       const controller = new AbortController();
+
 //       try {
 //         const res = await fetch(
-//           `${process.env.REACT_APP_API_URL}/api/machines`
+//           `${process.env.REACT_APP_API_URL}/api/machines`,
+//           {
+//             credentials: "include",
+//             signal: controller.signal,
+//           }
 //         );
+
+//         // 🔐 Handle session expiry
+//         if (res.status === 401) {
+//           alert("Session expired. Please login again.");
+//           window.location.href = "/login";
+//           return;
+//         }
 
 //         const data = await res.json();
 
@@ -33,10 +46,14 @@
 //           console.error(data.message);
 //         }
 //       } catch (err) {
-//         console.error("Error fetching machines:", err);
+//         if (err.name !== "AbortError") {
+//           console.error("Error fetching machines:", err);
+//         }
 //       } finally {
 //         setLoadingMachines(false);
 //       }
+
+//       return () => controller.abort();
 //     };
 
 //     fetchMachines();
@@ -64,6 +81,7 @@
 //   };
 
 //   const closeModal = () => {
+//     if (loading) return; // prevent closing while processing
 //     setShowDetails(false);
 //     setShowBuy(false);
 //     setSelectedMachine(null);
@@ -71,26 +89,37 @@
 
 //   // ================= SECURE BUY =================
 //   const handleBuy = async () => {
-//     if (!selectedMachine) return;
+//     if (!selectedMachine || loading) return;
 
 //     setLoading(true);
 
-//     try {
-//       const token = localStorage.getItem("token");
+//     const controller = new AbortController();
+//     const timeout = setTimeout(() => controller.abort(), 10000);
 
+//     try {
 //       const res = await fetch(
 //         `${process.env.REACT_APP_API_URL}/api/market`,
 //         {
 //           method: "POST",
+//           credentials: "include", // ✅ cookie-based auth
 //           headers: {
 //             "Content-Type": "application/json",
-//             Authorization: `Bearer ${token}`,
 //           },
 //           body: JSON.stringify({
-//             machineId: selectedMachine._id, // ✅ ONLY ID SENT
+//             machineId: selectedMachine._id,
 //           }),
+//           signal: controller.signal,
 //         }
 //       );
+
+//       clearTimeout(timeout);
+
+//       // 🔐 Handle session expiry
+//       if (res.status === 401) {
+//         alert("Session expired. Please login again.");
+//         window.location.href = "/login";
+//         return;
+//       }
 
 //       const data = await res.json();
 
@@ -99,14 +128,19 @@
 //         return;
 //       }
 
-//       // balance comes ONLY from backend (authoritative)
+//       // ✅ Backend is source of truth
 //       setBalance(data.balance);
 
 //       alert("Machine purchased successfully!");
 //       closeModal();
+
 //     } catch (error) {
-//       console.error("Purchase error:", error);
-//       alert("Something went wrong");
+//       if (error.name === "AbortError") {
+//         alert("Request timed out. Try again.");
+//       } else {
+//         console.error("Purchase error:", error);
+//         alert("Something went wrong");
+//       }
 //     } finally {
 //       setLoading(false);
 //     }
@@ -131,7 +165,7 @@
 //           <div className="machine-header">
 //             <img
 //               src={`${process.env.REACT_APP_API_URL}/${machine.img}`}
-//               alt="machine"
+//               alt={machine.name}
 //             />
 
 //             <div className="name-tag">
@@ -162,7 +196,7 @@
 
 //             <button
 //               className="buy"
-//               disabled={balance < machine.price}
+//               disabled={balance < machine.price || loading}
 //               onClick={() => openBuy(machine)}
 //             >
 //               Buy
@@ -179,7 +213,7 @@
 
 //             <img
 //               src={`${process.env.REACT_APP_API_URL}/${selectedMachine.img}`}
-//               alt=""
+//               alt={selectedMachine.name}
 //             />
 
 //             <h2>{selectedMachine.name}</h2>
@@ -231,7 +265,7 @@
 
 //             <img
 //               src={`${process.env.REACT_APP_API_URL}/${selectedMachine.img}`}
-//               alt=""
+//               alt={selectedMachine.name}
 //             />
 
 //             <h2>Confirm Purchase</h2>
@@ -301,6 +335,8 @@ export default function PurchaseHall() {
 
   const [loading, setLoading] = useState(false);
 
+  const token = localStorage.getItem("token");
+
   // ================= FETCH MACHINES =================
   useEffect(() => {
     const fetchMachines = async () => {
@@ -310,25 +346,29 @@ export default function PurchaseHall() {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/machines`,
           {
-            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`, // ✅ FIXED
+            },
             signal: controller.signal,
           }
         );
 
-        // 🔐 Handle session expiry
+        const data = await res.json();
+
+        // ✅ Handle auth properly
         if (res.status === 401) {
           alert("Session expired. Please login again.");
           window.location.href = "/login";
           return;
         }
 
-        const data = await res.json();
-
-        if (res.ok) {
-          setMachines(data.machines);
-        } else {
+        if (!res.ok) {
           console.error(data.message);
+          return;
         }
+
+        setMachines(data.machines);
+
       } catch (err) {
         if (err.name !== "AbortError") {
           console.error("Error fetching machines:", err);
@@ -341,7 +381,7 @@ export default function PurchaseHall() {
     };
 
     fetchMachines();
-  }, []);
+  }, [token]);
 
   // ================= FORMAT CURRENCY =================
   const format = (value) => {
@@ -365,7 +405,7 @@ export default function PurchaseHall() {
   };
 
   const closeModal = () => {
-    if (loading) return; // prevent closing while processing
+    if (loading) return;
     setShowDetails(false);
     setShowBuy(false);
     setSelectedMachine(null);
@@ -385,9 +425,9 @@ export default function PurchaseHall() {
         `${process.env.REACT_APP_API_URL}/api/market`,
         {
           method: "POST",
-          credentials: "include", // ✅ cookie-based auth
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ FIXED
           },
           body: JSON.stringify({
             machineId: selectedMachine._id,
@@ -398,21 +438,30 @@ export default function PurchaseHall() {
 
       clearTimeout(timeout);
 
-      // 🔐 Handle session expiry
-      if (res.status === 401) {
-        alert("Session expired. Please login again.");
-        window.location.href = "/login";
-        return;
-      }
-
       const data = await res.json();
 
+      // ✅ Handle auth ONLY when truly invalid
+      if (res.status === 401) {
+        if (
+          data.message?.toLowerCase().includes("token") ||
+          data.message?.toLowerCase().includes("unauthorized")
+        ) {
+          alert("Session expired. Please login again.");
+          window.location.href = "/login";
+          return;
+        } else {
+          alert(data.message || "Request failed");
+          return;
+        }
+      }
+
+      // ✅ Handle normal errors (NO logout)
       if (!res.ok) {
         alert(data.message || "Purchase failed");
         return;
       }
 
-      // ✅ Backend is source of truth
+      // ✅ Success
       setBalance(data.balance);
 
       alert("Machine purchased successfully!");
@@ -490,7 +539,7 @@ export default function PurchaseHall() {
         </div>
       ))}
 
-      {/* ================= DETAILS MODAL ================= */}
+      {/* DETAILS MODAL */}
       {showDetails && selectedMachine && (
         <div className="modal-overlay">
           <div className="details-modal">
@@ -542,7 +591,7 @@ export default function PurchaseHall() {
         </div>
       )}
 
-      {/* ================= BUY MODAL ================= */}
+      {/* BUY MODAL */}
       {showBuy && selectedMachine && (
         <div className="modal-overlay">
           <div className="details-modal">
