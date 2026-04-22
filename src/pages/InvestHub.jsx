@@ -317,7 +317,9 @@ export const plans = [
 
 export default function InvestHub() {
   const { currency } = useCurrency();
-  const { balance, setBalance } = useBalance();
+
+  // ✅ FIXED: removed unused "balance"
+  const { setBalance } = useBalance();
 
   const [showInvestModal, setShowInvestModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -413,11 +415,10 @@ export default function InvestHub() {
 
       if (!res.ok) {
         alert(data.message || "Investment failed");
-        setLoading(false);
         return;
       }
 
-      // ✅ sync balance from backend
+      // ✅ update global balance from backend
       if (data.newBalance !== undefined) {
         setBalance(data.newBalance);
       }
