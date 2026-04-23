@@ -762,13 +762,7 @@ export default function Portfolio() {
   const [machines, setMachines] = useState([]);
   const [investments, setInvestments] = useState([]);
 
-  const [loading, setLoading] = useState(true);
-  const [loadingInvestments, setLoadingInvestments] = useState(true);
-
   const [, forceUpdate] = useState(0);
-
-  // 👇 keeps last known UI size for skeleton
-  const [prevInvestCount, setPrevInvestCount] = useState(3);
 
   /* live refresh */
   useEffect(() => {
@@ -795,9 +789,7 @@ export default function Portfolio() {
 
         setMachines(data.machines || []);
       } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+        console.error("Fetch machines error:", err);
       }
     };
 
@@ -821,16 +813,9 @@ export default function Portfolio() {
 
         if (!res.ok) return console.error(data.message);
 
-        const list = data.investments || [];
-
-        setInvestments(list);
-
-        // 👇 store last known count for skeleton UI
-        setPrevInvestCount(list.length || 3);
+        setInvestments(data.investments || []);
       } catch (err) {
-        console.error(err);
-      } finally {
-        setLoadingInvestments(false);
+        console.error("Fetch investments error:", err);
       }
     };
 
@@ -867,44 +852,7 @@ export default function Portfolio() {
         <section className="investments-section">
           <div className="invest-cards">
 
-            {loadingInvestments ? (
-              Array.from({ length: prevInvestCount || 3 }).map((_, i) => (
-                <div className="invest-card skeleton-card" key={i}>
-
-                  {/* HEADER */}
-                  <div className="invest-header">
-                    <div className="skeleton-avatar" />
-
-                    <div className="name-tag">
-                      <div className="skeleton-line title" />
-                      <div className="skeleton-line small" />
-                    </div>
-
-                    <div className="skeleton-pill" />
-                  </div>
-
-                  {/* INFO */}
-                  <div className="invest-info">
-                    <div className="info-block">
-                      <div className="skeleton-line small" />
-                      <div className="skeleton-line medium" />
-                    </div>
-
-                    <div className="info-block">
-                      <div className="skeleton-line small" />
-                      <div className="skeleton-line medium" />
-                    </div>
-                  </div>
-
-                  {/* PROGRESS */}
-                  <div className="skeleton-progress" />
-
-                  {/* FOOTER */}
-                  <div className="skeleton-line full" />
-
-                </div>
-              ))
-            ) : investments.length === 0 ? (
+            {investments.length === 0 ? (
               <p>No investments yet</p>
             ) : (
               investments.map((inv) => {
@@ -974,9 +922,7 @@ export default function Portfolio() {
         <section className="machines-section">
           <div className="machine-cards">
 
-            {loading ? (
-              <p>Loading machines...</p>
-            ) : machines.length === 0 ? (
+            {machines.length === 0 ? (
               <p>No machines purchased yet</p>
             ) : (
               machines.map((machine) => {
