@@ -300,32 +300,70 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        {/* 📈 PROGRESS CARD */}
-        <div className="card">
-          <h3>Portfolio Strength</h3>
+      {/* 📊 PORTFOLIO STRENGTH (GAUGE STYLE) */}
+<div className="card">
+  <h3>Portfolio Strength</h3>
 
-          <div className="progress">
-            <p>ROI Power</p>
-            <div className="bar">
-              <div style={{ width: `${Math.min(avgROI / 10, 100)}%` }} />
-            </div>
-          </div>
+  <div className="gauge-grid">
 
-          <div className="progress">
-            <p>Machine Efficiency</p>
-            <div className="bar">
-              <div style={{ width: "75%" }} />
-            </div>
-          </div>
-
-          <div className="progress">
-            <p>Risk Level</p>
-            <div className="bar danger">
-              <div style={{ width: `${Math.min(avgROI / 8, 100)}%` }} />
-            </div>
-          </div>
+    {/* ROI GAUGE */}
+    <div className="gauge">
+      <div
+        className="circle"
+        style={{
+          background: `conic-gradient(
+            #d6a85a ${Math.min(avgROI / 5, 100)}%,
+            rgba(255,255,255,0.08) 0%
+          )`,
+        }}
+      >
+        <div className="inner">
+          <h2>{avgROI.toFixed(0)}%</h2>
         </div>
+      </div>
+      <p>ROI Power</p>
+    </div>
 
+    {/* MACHINE EFFICIENCY */}
+    <div className="gauge">
+      <div
+        className="circle"
+        style={{
+          background: `conic-gradient(
+            #4caf50 75%,
+            rgba(255,255,255,0.08) 0%
+          )`,
+        }}
+      >
+        <div className="inner">
+          <h2>75%</h2>
+        </div>
+      </div>
+      <p>Efficiency</p>
+    </div>
+
+    {/* RISK */}
+    <div className="gauge">
+      <div
+        className="circle"
+        style={{
+          background: `conic-gradient(
+            #ff4d4f ${Math.min(avgROI / 3, 100)}%,
+            rgba(255,255,255,0.08) 0%
+          )`,
+        }}
+      >
+        <div className="inner">
+          <h2>
+            {avgROI > 500 ? "H" : avgROI < 100 ? "L" : "M"}
+          </h2>
+        </div>
+      </div>
+      <p>Risk Level</p>
+    </div>
+
+  </div>
+</div>
 
         {/* PORTFOLIO */}
         <div className="card">
