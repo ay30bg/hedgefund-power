@@ -430,12 +430,12 @@ const DashboardHomepage = () => {
 
   const [machines, setMachines] = useState([]);
   const [plans, setPlans] = useState([]);
-
-  const [portfolio, setPortfolio] = useState(null);
-  const [loadingPortfolio, setLoadingPortfolio] = useState(true);
-
   const [loadingPlans, setLoadingPlans] = useState(true);
   const [loadingMachines, setLoadingMachines] = useState(true);
+
+  // ✅ NEW STATE (portfolio)
+  const [portfolio, setPortfolio] = useState(null);
+  const [loadingPortfolio, setLoadingPortfolio] = useState(true);
 
   const [chartData, setChartData] = useState([
     { day: "Mon", profit: 120 },
@@ -447,7 +447,7 @@ const DashboardHomepage = () => {
     { day: "Sun", profit: 350 },
   ]);
 
-  // ================= MACHINES =================
+  // ================= FETCH MACHINES =================
   useEffect(() => {
     const fetchMachines = async () => {
       try {
@@ -456,9 +456,11 @@ const DashboardHomepage = () => {
         );
         const data = await res.json();
 
-        if (res.ok) setMachines(data.machines);
+        if (res.ok) {
+          setMachines(data.machines);
+        }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching machines:", err);
       } finally {
         setLoadingMachines(false);
       }
@@ -467,7 +469,7 @@ const DashboardHomepage = () => {
     fetchMachines();
   }, []);
 
-  // ================= PLANS =================
+  // ================= FETCH PLANS =================
   useEffect(() => {
     const fetchPlans = async () => {
       try {
@@ -476,9 +478,11 @@ const DashboardHomepage = () => {
         );
         const data = await res.json();
 
-        if (res.ok) setPlans(data.plans);
+        if (res.ok) {
+          setPlans(data.plans);
+        }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching plans:", err);
       } finally {
         setLoadingPlans(false);
       }
@@ -487,7 +491,7 @@ const DashboardHomepage = () => {
     fetchPlans();
   }, []);
 
-  // ================= PORTFOLIO (NEW BACKEND) =================
+  // ================= FETCH PORTFOLIO =================
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
@@ -496,9 +500,11 @@ const DashboardHomepage = () => {
         );
         const data = await res.json();
 
-        if (res.ok) setPortfolio(data.portfolio);
+        if (res.ok) {
+          setPortfolio(data.portfolio);
+        }
       } catch (err) {
-        console.error("Portfolio error:", err);
+        console.error("Error fetching portfolio:", err);
       } finally {
         setLoadingPortfolio(false);
       }
@@ -554,6 +560,60 @@ const DashboardHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // ================= INSIGHTS =================
+  const topPlan =
+    plans.length > 0
+      ? plans.reduce((prev, curr) =>
+          curr.percent > prev.percent ? curr : prev
+        )
+      : null;
+
+  const mostActivePlan =
+    plans.length > 0
+      ? plans.reduce((prev, curr) =>
+          curr.days < prev.days ? curr : prev
+        )
+      : null;
+
+  const bestMachine =
+    machines.length > 0
+      ? machines.reduce((prev, curr) =>
+          curr.profit > prev.profit ? curr : prev
+        )
+      : null;
+
+  const avgROI =
+    plans.length > 0
+      ? plans.reduce((sum, p) => sum + p.percent, 0) / plans.length
+      : 0;
+
+  let marketStatus = "Stable";
+  let marketNote = "Moderate returns";
+
+  if (avgROI > 500) {
+    marketStatus = "High Growth";
+    marketNote = "High ROI • High risk";
+  } else if (avgROI < 100) {
+    marketStatus = "Low Yield";
+    marketNote = "Low risk • Stable";
+  }
+
+  // ✅ SAFE FALLBACKS
+  const roiPower = portfolio?.strength?.roiPower ?? avgROI;
+  const efficiency = portfolio?.strength?.efficiency ?? 75;
+  const riskLevel = portfolio?.strength?.riskLevel ?? "Medium";
+
+  const plansCount = portfolio?.assetSummary?.plansCount ?? plans.length;
+  const machinesCount =
+    portfolio?.assetSummary?.machinesCount ?? machines.length;
+
+  const bestDailyYield =
+    portfolio?.assetSummary?.bestDailyYield ??
+    (bestMachine ? bestMachine.profit * 24 : 0);
+
+  const marketStatusSafe = portfolio?.market?.status ?? marketStatus;
+  const marketNoteSafe = portfolio?.market?.note ?? marketNote;
+
   // ================= LOADING =================
   if (loadingPlans || loadingMachines || loadingPortfolio) {
     return <div className="dashboard">Loading dashboard...</div>;
@@ -561,46 +621,82 @@ const DashboardHomepage = () => {
 
   return (
     <div className="dashboard">
-
       {/* ================= OVERVIEW ================= */}
       <div className="overview-card">
         <div className="overview-item">
-          <p>Total Invested</p>
-          <h2>{currency.symbol}8,200</h2>
+          <p className="label">Total Invested</p>
+          <h2>
+            {currency.symbol}
+            {(8200 * currency.rate).toLocaleString()}
+          </h2>
         </div>
 
         <div className="overview-item">
-          <p>Total Profit</p>
-          <h2 className="positive">{currency.symbol}4,250</h2>
+          <p className="label">Total Profit</p>
+          <h2 className="positive">
+            +{currency.symbol}
+            {(4250 * currency.rate).toLocaleString()}
+          </h2>
         </div>
 
         <div className="overview-item">
-          <p>Total Withdrawal</p>
-          <h2>{currency.symbol}2,590</h2>
+          <p className="label">Total Withdrawal</p>
+          <h2>
+            {currency.symbol}
+            {(2590 * currency.rate).toLocaleString()}
+          </h2>
         </div>
 
         <div className="overview-item">
-          <p>ROI (Avg)</p>
-          <h2>{portfolio?.strength?.roiPower || 0}%</h2>
+          <p className="label">ROI (Avg)</p>
+          <h2>{roiPower.toFixed(1)}%</h2>
         </div>
       </div>
 
       {/* ================= INSIGHTS ================= */}
       <div className="insights">
         <div className="insight-card">
-          <p>Market Status</p>
-          <h3>{portfolio?.market?.status}</h3>
-          <span>{portfolio?.market?.note}</span>
+          <p className="label">Top Performing Plan</p>
+          <h3>{topPlan?.name || "N/A"}</h3>
+          <span className="positive">
+            {topPlan
+              ? `+${(topPlan.percent + marketShift).toFixed(1)}%`
+              : "--"}
+          </span>
+        </div>
+
+        <div className="insight-card">
+          <p className="label">Most Active</p>
+          <h3>{mostActivePlan?.name || "N/A"}</h3>
+          <span>{mostActivePlan?.days || "--"} days</span>
+        </div>
+
+        <div className="insight-card">
+          <p className="label">Best Machine</p>
+          <h3>{bestMachine?.name || "N/A"}</h3>
+          <span className="positive">
+            {bestMachine
+              ? `${currency.symbol}${(
+                  bestMachine.profit *
+                  24 *
+                  currency.rate
+                ).toFixed(2)} / day`
+              : "--"}
+          </span>
+        </div>
+
+        <div className="insight-card">
+          <p className="label">Market Status</p>
+          <h3>{marketStatusSafe}</h3>
+          <span>{marketNoteSafe}</span>
         </div>
       </div>
 
       {/* ================= GRID ================= */}
       <div className="grid">
-
         {/* CHART */}
         <div className="card">
           <h3>Earnings Overview</h3>
-
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={chartData}>
               <XAxis dataKey="day" />
@@ -616,53 +712,128 @@ const DashboardHomepage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* ================= PORTFOLIO ================= */}
+        {/* ACTIVITY */}
+        <div className="card">
+          <h3>Live Activity</h3>
+          <div className="activity-ticker">
+            <div className="activity-track">
+              {activities.concat(activities).map((item, index) => (
+                <div key={index} className="activity-row">
+                  <span className="time">
+                    {new Date(item.id).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                  <span className="name">{item.name}</span>
+                  <span
+                    className={
+                      item.type === "deposit"
+                        ? "amount positive"
+                        : "amount negative"
+                    }
+                  >
+                    {item.type === "deposit" ? "+" : "-"}
+                    {currency.symbol}
+                    {(item.amount * currency.rate).toLocaleString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* PORTFOLIO STRENGTH */}
+        <div className="card">
+          <h3>Portfolio Strength</h3>
+
+          <div className="gauge-grid">
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#d6a85a ${Math.min(
+                    roiPower,
+                    100
+                  )}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{roiPower.toFixed(0)}%</h2>
+                </div>
+              </div>
+              <p>ROI Power</p>
+            </div>
+
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#4caf50 ${efficiency}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{efficiency}%</h2>
+                </div>
+              </div>
+              <p>Efficiency</p>
+            </div>
+
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#ff4d4f ${
+                    riskLevel === "High"
+                      ? 90
+                      : riskLevel === "Medium"
+                      ? 60
+                      : 30
+                  }%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>
+                    {riskLevel === "High"
+                      ? "H"
+                      : riskLevel === "Low"
+                      ? "L"
+                      : "M"}
+                  </h2>
+                </div>
+              </div>
+              <p>Risk Level</p>
+            </div>
+          </div>
+        </div>
+
+        {/* ASSET PORTFOLIO */}
         <div className="card">
           <h3>Asset Portfolio</h3>
 
           <div className="plan">
             <p>Investment Plans</p>
-            <span>{portfolio?.assetSummary?.plansCount}</span>
+            <span className="positive">{plansCount} Active</span>
           </div>
 
           <div className="plan">
             <p>Mining Machines</p>
-            <span>{portfolio?.assetSummary?.machinesCount}</span>
+            <span className="positive">{machinesCount}</span>
           </div>
 
           <div className="plan">
             <p>Best Daily Yield</p>
-            <span>
-              {portfolio?.assetSummary?.bestDailyYield}
+            <span className="positive">
+              {currency.symbol}
+              {(bestDailyYield * currency.rate).toFixed(2)}
             </span>
           </div>
 
           <div className="plan">
-            <p>Top Machine</p>
-            <span>{portfolio?.assetSummary?.bestMachineName}</span>
+            <p>Total ROI Power</p>
+            <span>{marketStatusSafe}</span>
           </div>
         </div>
-
-        {/* ================= STRENGTH ================= */}
-        <div className="card">
-          <h3>Portfolio Strength</h3>
-
-          <div className="plan">
-            <p>ROI Power</p>
-            <span>{portfolio?.strength?.roiPower}%</span>
-          </div>
-
-          <div className="plan">
-            <p>Efficiency</p>
-            <span>{portfolio?.strength?.efficiency}%</span>
-          </div>
-
-          <div className="plan">
-            <p>Risk Level</p>
-            <span>{portfolio?.strength?.riskLevel}</span>
-          </div>
-        </div>
-
       </div>
     </div>
   );
