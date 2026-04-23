@@ -1038,6 +1038,8 @@ const machineImages = {
 
 /* ---------------- Status Helpers ---------------- */
 const getStatus = (start, end) => {
+  if (!start || !end) return "waiting";
+
   const now = new Date();
   const startDate = new Date(start);
   const endDate = new Date(end);
@@ -1048,6 +1050,8 @@ const getStatus = (start, end) => {
 };
 
 const getProgress = (start, end) => {
+  if (!start || !end) return 0;
+
   const now = new Date();
   const startDate = new Date(start);
   const endDate = new Date(end);
@@ -1085,7 +1089,7 @@ export default function Portfolio() {
 
   const [, forceUpdate] = useState(0);
 
-  // ⏱ refresh UI every second
+  // ⏱ live UI refresh
   useEffect(() => {
     const interval = setInterval(() => forceUpdate((n) => n + 1), 1000);
     return () => clearInterval(interval);
@@ -1146,26 +1150,7 @@ export default function Portfolio() {
           return;
         }
 
-        console.log("INVESTMENTS DATA:", data.investments);
-
-        // ✅ safer mapping
-        const mapped = (data.investments || []).map((inv) => ({
-          id: inv._id,
-          name: inv.name,
-          deposit: inv.amount,
-          revenue:
-            inv.profit ||
-            inv.totalProfit ||
-            inv.expectedProfit ||
-            inv.revenue ||
-            0,
-          days: inv.days,
-          start: inv.startDate,
-          end: inv.endDate,
-          img: inv.days > 10 ? goldBarStack : goldImg,
-        }));
-
-        setInvestments(mapped);
+        setInvestments(data.investments || []);
       } catch (err) {
         console.error("Fetch investments error:", err);
       } finally {
@@ -1213,13 +1198,17 @@ export default function Portfolio() {
               <p>No investments yet</p>
             ) : (
               investments.map((inv) => {
-                const status = getStatus(inv.start, inv.end);
-                const progress = getProgress(inv.start, inv.end);
+                const status = getStatus(inv.startDate, inv.endDate);
+                const progress = getProgress(inv.startDate, inv.endDate);
 
                 return (
-                  <div className="invest-card" key={inv.id}>
+                  <div className="invest-card" key={inv._id}>
                     <div className="invest-header">
-                      <img src={inv.img} alt={inv.name} />
+                      <img
+                        src={inv.days > 10 ? goldBarStack : goldImg}
+                        alt={inv.name}
+                      />
+
                       <div>
                         <h3>{inv.name}</h3>
                         <span>{inv.days} Day(s)</span>
@@ -1237,11 +1226,12 @@ export default function Portfolio() {
                     <div className="invest-info">
                       <div>
                         <span>Deposit</span>
-                        <strong>{format(inv.deposit)}</strong>
+                        <strong>{format(inv.amount)}</strong>
                       </div>
+
                       <div>
-                        <span>Revenue</span>
-                        <strong>{format(inv.revenue)}</strong>
+                        <span>Total Profit</span>
+                        <strong>{format(inv.profit)}</strong>
                       </div>
                     </div>
 
@@ -1253,8 +1243,8 @@ export default function Portfolio() {
                     </div>
 
                     <p className="invest-dates">
-                      {formatDateTime(inv.start)} -{" "}
-                      {formatDateTime(inv.end)}
+                      {formatDateTime(inv.startDate)} -{" "}
+                      {formatDateTime(inv.endDate)}
                     </p>
 
                     {status === "claimable" && (
