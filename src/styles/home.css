@@ -403,6 +403,7 @@
 .inner h2 {
   font-size: 16px;
   margin: 0;
+   color: #aaa;
 }
 
 .gauge p {
