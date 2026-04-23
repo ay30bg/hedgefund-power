@@ -103,7 +103,7 @@ export default function InvestHub() {
 
     try {
       const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/invest/invest`,
+        `${process.env.REACT_APP_API_URL}/api/invest`,
         {
           method: "POST",
           headers: {
