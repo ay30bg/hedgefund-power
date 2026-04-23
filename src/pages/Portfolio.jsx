@@ -515,7 +515,7 @@ export default function Portfolio() {
         const token = localStorage.getItem("token");
 
         const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/investments/user`,
+          `${process.env.REACT_APP_API_URL}/api/invest/user`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
