@@ -357,14 +357,14 @@ const machineImages = {
 
 /* ---------------- Status Helpers ---------------- */
 const getStatus = (start, end) => {
-  if (!start || !end) return "running"; // treat waiting as running
+  if (!start || !end) return "running";
 
   const now = new Date();
   const startDate = new Date(start);
   const endDate = new Date(end);
 
   if (now >= endDate) return "claimable";
-  return "running"; // everything else is running
+  return "running";
 };
 
 const getProgress = (start, end) => {
@@ -407,7 +407,7 @@ export default function Portfolio() {
 
   const [, forceUpdate] = useState(0);
 
-  // ⏱ live UI refresh
+  // ⏱ Live UI refresh
   useEffect(() => {
     const interval = setInterval(() => forceUpdate((n) => n + 1), 1000);
     return () => clearInterval(interval);
