@@ -300,6 +300,33 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
+        {/* 📈 PROGRESS CARD */}
+        <div className="card">
+          <h3>Portfolio Strength</h3>
+
+          <div className="progress">
+            <p>ROI Power</p>
+            <div className="bar">
+              <div style={{ width: `${Math.min(avgROI / 10, 100)}%` }} />
+            </div>
+          </div>
+
+          <div className="progress">
+            <p>Machine Efficiency</p>
+            <div className="bar">
+              <div style={{ width: "75%" }} />
+            </div>
+          </div>
+
+          <div className="progress">
+            <p>Risk Level</p>
+            <div className="bar danger">
+              <div style={{ width: `${Math.min(avgROI / 8, 100)}%` }} />
+            </div>
+          </div>
+        </div>
+
+
         {/* PORTFOLIO */}
         <div className="card">
           <h3>Asset Portfolio</h3>
