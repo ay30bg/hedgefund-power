@@ -767,6 +767,9 @@ export default function Portfolio() {
 
   const [, forceUpdate] = useState(0);
 
+  // 👇 keeps last known UI size for skeleton
+  const [prevInvestCount, setPrevInvestCount] = useState(3);
+
   /* live refresh */
   useEffect(() => {
     const interval = setInterval(() => forceUpdate((n) => n + 1), 1000);
@@ -818,7 +821,12 @@ export default function Portfolio() {
 
         if (!res.ok) return console.error(data.message);
 
-        setInvestments(data.investments || []);
+        const list = data.investments || [];
+
+        setInvestments(list);
+
+        // 👇 store last known count for skeleton UI
+        setPrevInvestCount(list.length || 3);
       } catch (err) {
         console.error(err);
       } finally {
@@ -860,7 +868,7 @@ export default function Portfolio() {
           <div className="invest-cards">
 
             {loadingInvestments ? (
-              Array.from({ length: 3 }).map((_, i) => (
+              Array.from({ length: prevInvestCount || 3 }).map((_, i) => (
                 <div className="invest-card skeleton-card" key={i}>
 
                   {/* HEADER */}
