@@ -871,27 +871,58 @@ const DashboardHomepage = () => {
     { day: "Sun", profit: 350 },
   ]);
 
-  // ================= FETCH PORTFOLIO =================
+  // // ================= FETCH PORTFOLIO =================
+  // useEffect(() => {
+  //   const fetchPortfolio = async () => {
+  //     try {
+  //       const res = await fetch(
+  //         `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`
+  //       );
+  //       const data = await res.json();
+
+  //       if (res.ok) {
+  //         setPortfolio(data.portfolio);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching portfolio:", err);
+  //     } finally {
+  //       setLoadingPortfolio(false);
+  //     }
+  //   };
+
+  //   fetchPortfolio();
+  // }, []);
+
   useEffect(() => {
-    const fetchPortfolio = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`
-        );
-        const data = await res.json();
+  const fetchPortfolio = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-        if (res.ok) {
-          setPortfolio(data.portfolio);
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (err) {
-        console.error("Error fetching portfolio:", err);
-      } finally {
-        setLoadingPortfolio(false);
-      }
-    };
+      );
 
-    fetchPortfolio();
-  }, []);
+      const data = await res.json();
+
+      if (res.ok) {
+        setPortfolio(data.portfolio);
+      } else {
+        console.error("Portfolio error:", data);
+      }
+    } catch (err) {
+      console.error("Error fetching portfolio:", err);
+    } finally {
+      setLoadingPortfolio(false);
+    }
+  };
+
+  fetchPortfolio();
+}, []);
 
   // ================= LIVE ACTIVITY =================
   useEffect(() => {
