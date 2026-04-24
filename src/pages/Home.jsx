@@ -871,29 +871,8 @@ const DashboardHomepage = () => {
     { day: "Sun", profit: 350 },
   ]);
 
-  // // ================= FETCH PORTFOLIO =================
-  // useEffect(() => {
-  //   const fetchPortfolio = async () => {
-  //     try {
-  //       const res = await fetch(
-  //         `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`
-  //       );
-  //       const data = await res.json();
-
-  //       if (res.ok) {
-  //         setPortfolio(data.portfolio);
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching portfolio:", err);
-  //     } finally {
-  //       setLoadingPortfolio(false);
-  //     }
-  //   };
-
-  //   fetchPortfolio();
-  // }, []);
-
-  useEffect(() => {
+// ================= FETCH PORTFOLIO =================
+ useEffect(() => {
   const fetchPortfolio = async () => {
     try {
       const token = localStorage.getItem("token");
