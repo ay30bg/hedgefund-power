@@ -297,47 +297,60 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-  {/* SMART RECOMMENDATION */}
-<div className="card smart-card">
-  <div className="smart-header">
-    <h3>Smart Recommendation</h3>
-    <span className="ai-badge">AI</span>
+ {/* SMART RECOMMENDATION (AI STYLE UPGRADED) */}
+<div className="card smart-card-ai">
+  
+  {/* animated glow background */}
+  <div className="ai-glow"></div>
+
+  <div className="smart-header-ai">
+    <div className="ai-title">
+      <span className="ai-dot"></span>
+      AI Insight Engine
+    </div>
+
+    <div className="ai-status">
+      ● Live
+    </div>
   </div>
 
-  <div className="smart-body">
+  <div className="smart-body-ai">
 
-    <div className="smart-icon">
+    <div className="ai-avatar">
+      <div className="pulse-ring"></div>
       🤖
     </div>
 
-    <div className="smart-content">
-      <p>
+    <div className="ai-content">
+
+      <div className="ai-thinking">
+        <span></span><span></span><span></span>
+        <p>Analyzing portfolio signals...</p>
+      </div>
+
+      <p className="ai-text">
         {efficiency < 50
-          ? <>Your portfolio efficiency is <b>low</b>. Consider adding <b>high-yield machines</b> to boost returns.</>
+          ? <>Efficiency is below optimal threshold. Recommend reallocating capital to <b>higher-yield assets</b> to improve output stability.</>
           : riskLevel === "High"
-          ? <>Your risk level is <b>high</b>. Balance with <b>stable plans</b> to protect capital.</>
+          ? <>Risk exposure is elevated. Suggest introducing <b>stable low-volatility plans</b> to rebalance portfolio structure.</>
           : plansCount === 0
-          ? <>You have no active plans. Start investing to generate <b>consistent income</b>.</>
+          ? <>No active investment plans detected. Initiate a starter allocation to enable <b>compounding growth cycles</b>.</>
           : machinesCount === 0
-          ? <>No machines detected. Add one to unlock <b>passive hourly earnings</b>.</>
-          : <>Your portfolio is <b>well balanced</b>. Maintain this strategy for steady growth.</>}
+          ? <>No machine-level assets found. Deploy mining units to activate <b>passive income streams</b>.</>
+          : <>Portfolio structure is within optimal parameters. Maintain current strategy for <b>steady compounded growth</b>.</>}
       </p>
 
-      <div
-        className={`smart-tag ${
-          efficiency < 50 || riskLevel === "High"
-            ? "negative"
-            : "positive"
-        }`}
-      >
+      <div className={`ai-tag ${
+        efficiency < 50 || riskLevel === "High" ? "danger" : "safe"
+      }`}>
         {efficiency < 50
-          ? "Improve Efficiency"
+          ? "Rebalance Required"
           : riskLevel === "High"
-          ? "Reduce Risk"
-          : "Stable Growth"}
+          ? "Risk Alert"
+          : "System Stable"}
       </div>
-    </div>
 
+    </div>
   </div>
 </div>
         
