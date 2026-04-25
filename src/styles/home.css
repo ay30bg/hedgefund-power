@@ -415,24 +415,22 @@
 .smart-card-ai {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(214, 168, 90, 0.15);
-  background: linear-gradient(135deg, rgba(20,20,20,0.9), rgba(10,10,10,0.95));
+
+  background: #ffffff; /* match other cards */
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  color: #111;
 }
 
-/* glowing animated background */
+/* remove dark glow, replace with soft AI tint */
 .ai-glow {
   position: absolute;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(214,168,90,0.25), transparent 70%);
-  top: -100px;
-  right: -100px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(214,168,90,0.12), transparent 70%);
+  top: -80px;
+  right: -80px;
   animation: floatGlow 6s ease-in-out infinite;
-}
-
-@keyframes floatGlow {
-  0%, 100% { transform: translate(0,0); opacity: 0.5; }
-  50% { transform: translate(-20px, 20px); opacity: 0.8; }
 }
 
 /* header */
@@ -451,6 +449,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  font-weight: 600;
 }
 
 .ai-dot {
@@ -458,15 +457,16 @@
   height: 8px;
   background: #4caf50;
   border-radius: 50%;
-  box-shadow: 0 0 10px #4caf50;
+  box-shadow: 0 0 8px #4caf50;
 }
 
 .ai-status {
   font-size: 10px;
   color: #4caf50;
   padding: 3px 8px;
-  border: 1px solid rgba(76, 175, 80, 0.3);
+  border: 1px solid rgba(76, 175, 80, 0.25);
   border-radius: 20px;
+  background: rgba(76, 175, 80, 0.05);
 }
 
 /* body */
@@ -477,11 +477,11 @@
   z-index: 2;
 }
 
-/* AI avatar */
+/* avatar */
 .ai-avatar {
   position: relative;
-  font-size: 24px;
-  padding: 12px;
+  font-size: 22px;
+  padding: 10px;
   border-radius: 12px;
   background: rgba(214, 168, 90, 0.08);
 }
@@ -491,7 +491,7 @@
   position: absolute;
   width: 40px;
   height: 40px;
-  border: 1px solid rgba(214, 168, 90, 0.4);
+  border: 1px solid rgba(214, 168, 90, 0.35);
   border-radius: 50%;
   top: 50%;
   left: 50%;
@@ -499,19 +499,14 @@
   animation: pulse 1.8s infinite;
 }
 
-@keyframes pulse {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
-}
-
-/* thinking animation */
+/* thinking dots */
 .ai-thinking {
   display: flex;
   align-items: center;
   gap: 4px;
   margin-bottom: 8px;
   font-size: 11px;
-  color: #aaa;
+  color: #777;
 }
 
 .ai-thinking span {
@@ -534,7 +529,7 @@
 .ai-text {
   font-size: 13px;
   line-height: 1.6;
-  color: #e5e5e5;
+  color: #333;
 }
 
 .ai-text b {
@@ -552,13 +547,13 @@
 }
 
 .ai-tag.safe {
-  background: rgba(76, 175, 80, 0.15);
-  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+  color: #2e7d32;
 }
 
 .ai-tag.danger {
-  background: rgba(255, 77, 79, 0.15);
-  color: #ff4d4f;
+  background: rgba(255, 77, 79, 0.1);
+  color: #c62828;
 }
 
 /* =========================
