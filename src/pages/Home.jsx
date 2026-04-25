@@ -297,35 +297,48 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-      {/* SMART RECOMMENDATION */}
-<div className="card">
-  <h3>Smart Recommendation</h3>
+  {/* SMART RECOMMENDATION */}
+<div className="card smart-card">
+  <div className="smart-header">
+    <h3>Smart Recommendation</h3>
+    <span className="ai-badge">AI</span>
+  </div>
 
-  <p className="recommendation">
-    {efficiency < 50
-      ? "Your portfolio efficiency is low. Consider adding high-yield machines to improve daily returns."
-      : riskLevel === "High"
-      ? "Your portfolio risk is high. Consider balancing with stable investment plans."
-      : plansCount === 0
-      ? "You have no active plans. Start investing to generate consistent returns."
-      : machinesCount === 0
-      ? "You have no machines. Buying one can generate steady passive income."
-      : "Your portfolio is well balanced. Maintain your strategy for stable growth."}
-  </p>
+  <div className="smart-body">
 
-  <span
-    className={
-      efficiency < 50 || riskLevel === "High"
-        ? "negative"
-        : "positive"
-    }
-  >
-    {efficiency < 50
-      ? "Improve Efficiency"
-      : riskLevel === "High"
-      ? "Reduce Risk"
-      : "+ Stable Growth"}
-  </span>
+    <div className="smart-icon">
+      🤖
+    </div>
+
+    <div className="smart-content">
+      <p>
+        {efficiency < 50
+          ? <>Your portfolio efficiency is <b>low</b>. Consider adding <b>high-yield machines</b> to boost returns.</>
+          : riskLevel === "High"
+          ? <>Your risk level is <b>high</b>. Balance with <b>stable plans</b> to protect capital.</>
+          : plansCount === 0
+          ? <>You have no active plans. Start investing to generate <b>consistent income</b>.</>
+          : machinesCount === 0
+          ? <>No machines detected. Add one to unlock <b>passive hourly earnings</b>.</>
+          : <>Your portfolio is <b>well balanced</b>. Maintain this strategy for steady growth.</>}
+      </p>
+
+      <div
+        className={`smart-tag ${
+          efficiency < 50 || riskLevel === "High"
+            ? "negative"
+            : "positive"
+        }`}
+      >
+        {efficiency < 50
+          ? "Improve Efficiency"
+          : riskLevel === "High"
+          ? "Reduce Risk"
+          : "Stable Growth"}
+      </div>
+    </div>
+
+  </div>
 </div>
         
       </div>
