@@ -298,7 +298,7 @@ const DashboardHomepage = () => {
         </div>
 
         {/* ASSET PORTFOLIO */}
-        <div className="card">
+        {/* <div className="card">
           <h3>Asset Portfolio</h3>
 
           <div className="plan">
@@ -327,6 +327,6 @@ const DashboardHomepage = () => {
       </div>
     </div>
   );
-};
+}; */}
 
 export default DashboardHomepage;
