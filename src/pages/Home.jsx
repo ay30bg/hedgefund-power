@@ -297,7 +297,7 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        /* {/* ASSET PORTFOLIO */}
+         {/* ASSET PORTFOLIO */}
          {/* <div className="card">
           <h3>Asset Portfolio</h3>
 
