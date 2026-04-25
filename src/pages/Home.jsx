@@ -297,8 +297,8 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        {/* ASSET PORTFOLIO */}
-        {/* <div className="card">
+        /* {/* ASSET PORTFOLIO */}
+         {/* <div className="card">
           <h3>Asset Portfolio</h3>
 
           <div className="plan">
@@ -323,10 +323,10 @@ const DashboardHomepage = () => {
             <p>Total ROI Power</p>
             <span>{marketStatus}</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
-}; */}
+}; 
 
 export default DashboardHomepage;
