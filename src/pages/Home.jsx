@@ -297,45 +297,35 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        {/* PERFORMANCE SUMMARY */}
+      {/* SMART RECOMMENDATION */}
 <div className="card">
-  <h3>Performance Summary</h3>
+  <h3>Smart Recommendation</h3>
 
-  <div className="plan">
-    <p>Est. Daily Earnings</p>
-    <span className="positive">
-      {currency.symbol}
-      {(bestDailyYield * currency.rate).toFixed(2)}
-    </span>
-  </div>
+  <p className="recommendation">
+    {efficiency < 50
+      ? "Your portfolio efficiency is low. Consider adding high-yield machines to improve daily returns."
+      : riskLevel === "High"
+      ? "Your portfolio risk is high. Consider balancing with stable investment plans."
+      : plansCount === 0
+      ? "You have no active plans. Start investing to generate consistent returns."
+      : machinesCount === 0
+      ? "You have no machines. Buying one can generate steady passive income."
+      : "Your portfolio is well balanced. Maintain your strategy for stable growth."}
+  </p>
 
-  <div className="plan">
-    <p>Est. Monthly Earnings</p>
-    <span className="positive">
-      {currency.symbol}
-      {(bestDailyYield * 30 * currency.rate).toFixed(2)}
-    </span>
-  </div>
-
-  <div className="plan">
-    <p>Efficiency Score</p>
-    <span>{efficiency}%</span>
-  </div>
-
-  <div className="plan">
-    <p>Risk Indicator</p>
-    <span
-      className={
-        riskLevel === "High"
-          ? "negative"
-          : riskLevel === "Medium"
-          ? ""
-          : "positive"
-      }
-    >
-      {riskLevel}
-    </span>
-  </div>
+  <span
+    className={
+      efficiency < 50 || riskLevel === "High"
+        ? "negative"
+        : "positive"
+    }
+  >
+    {efficiency < 50
+      ? "Improve Efficiency"
+      : riskLevel === "High"
+      ? "Reduce Risk"
+      : "+ Stable Growth"}
+  </span>
 </div>
         
       </div>
