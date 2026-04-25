@@ -297,33 +297,47 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-         {/* ASSET PORTFOLIO */}
-         {/* <div className="card">
-          <h3>Asset Portfolio</h3>
+        {/* PERFORMANCE SUMMARY */}
+<div className="card">
+  <h3>Performance Summary</h3>
 
-          <div className="plan">
-            <p>Investment Plans</p>
-            <span className="positive">{plansCount} Active</span>
-          </div>
+  <div className="plan">
+    <p>Est. Daily Earnings</p>
+    <span className="positive">
+      {currency.symbol}
+      {(bestDailyYield * currency.rate).toFixed(2)}
+    </span>
+  </div>
 
-          <div className="plan">
-            <p>Mining Machines</p>
-            <span className="positive">{machinesCount}</span>
-          </div>
+  <div className="plan">
+    <p>Est. Monthly Earnings</p>
+    <span className="positive">
+      {currency.symbol}
+      {(bestDailyYield * 30 * currency.rate).toFixed(2)}
+    </span>
+  </div>
 
-          <div className="plan">
-            <p>Best Daily Yield</p>
-            <span className="positive">
-              {currency.symbol}
-              {(bestDailyYield * currency.rate).toFixed(2)}
-            </span>
-          </div>
+  <div className="plan">
+    <p>Efficiency Score</p>
+    <span>{efficiency}%</span>
+  </div>
 
-          <div className="plan">
-            <p>Total ROI Power</p>
-            <span>{marketStatus}</span>
-          </div>
-        </div> */}
+  <div className="plan">
+    <p>Risk Indicator</p>
+    <span
+      className={
+        riskLevel === "High"
+          ? "negative"
+          : riskLevel === "Medium"
+          ? ""
+          : "positive"
+      }
+    >
+      {riskLevel}
+    </span>
+  </div>
+</div>
+        
       </div>
     </div>
   );
