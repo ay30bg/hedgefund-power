@@ -456,6 +456,11 @@ const DashboardHomepage = () => {
     return "69" + Math.random().toString(16).slice(2, 6);
   };
 
+   // ================= MASK ID (last 2 chars hidden) =================
+  const maskId = (id) => {
+    return id.slice(0, 4) + "**";
+  };
+
   // ================= TIME FORMAT =================
   const formatTimeAgo = (timestamp) => {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
@@ -680,7 +685,7 @@ const DashboardHomepage = () => {
                     {formatTimeAgo(item.createdAt)}
                   </span>
 
-                  <span className="name">{item.id}</span>
+                  <span className="name">{maskId(item.id)}</span>
 
                   <span
                     className={
