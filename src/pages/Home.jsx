@@ -507,7 +507,7 @@ const DashboardHomepage = () => {
   const marketStatus = portfolio?.market?.status ?? "Stable";
   const marketNote = portfolio?.market?.note ?? "";
 
-  // ================= TREND (VISUAL SIGNAL) =================
+  // ================= TREND =================
   const trend =
     efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
 
@@ -522,19 +522,19 @@ const DashboardHomepage = () => {
       <div className="overview-card">
         <div className="overview-item">
           <p className="label">Total Invested</p>
-          <h2>{currency.symbol}{(0).toLocaleString()}</h2>
+          <h2>{currency.symbol}{(0 * currency.rate).toLocaleString()}</h2>
         </div>
 
         <div className="overview-item">
           <p className="label">Total Profit</p>
           <h2 className="positive">
-            +{currency.symbol}{(0).toLocaleString()}
+            +{currency.symbol}{(0 * currency.rate).toLocaleString()}
           </h2>
         </div>
 
         <div className="overview-item">
           <p className="label">Total Withdrawal</p>
-          <h2>{currency.symbol}{(0).toLocaleString()}</h2>
+          <h2>{currency.symbol}{(0 * currency.rate).toLocaleString()}</h2>
         </div>
 
         <div className="overview-item">
@@ -548,11 +548,13 @@ const DashboardHomepage = () => {
         <div className="insight-card">
           <p className="label">Active Plans</p>
           <h3>{plansCount}</h3>
+          <span>Currently running</span>
         </div>
 
         <div className="insight-card">
           <p className="label">Active Machines</p>
           <h3>{machinesCount}</h3>
+          <span>Mining in progress</span>
         </div>
 
         <div className="insight-card">
@@ -573,6 +575,63 @@ const DashboardHomepage = () => {
 
       {/* ================= GRID ================= */}
       <div className="grid">
+
+        {/* CHART */}
+        <div className="card">
+          <h3>Earnings Overview</h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <LineChart data={chartData}>
+              <XAxis dataKey="day" />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="profit"
+                stroke="#d6a85a"
+                strokeWidth={3}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* ACTIVITY */}
+        <div className="card">
+          <h3>Live Activity</h3>
+          <div className="activity-ticker">
+            <div className="activity-track">
+              {activities.concat(activities).map((item, index) => (
+                <div key={index} className="activity-row">
+                  <span className="time">
+                    {new Date(item.id).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                  <span className="name">{item.name}</span>
+                  <span
+                    className={
+                      item.type === "deposit"
+                        ? "amount positive"
+                        : "amount negative"
+                    }
+                  >
+                    {item.type === "deposit" ? "+" : "-"}
+                    {currency.symbol}
+                    {(item.amount * currency.rate).toLocaleString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* PORTFOLIO STRENGTH */}
+        <div className="card">
+          <h3>Portfolio Strength</h3>
+          <div className="gauge-grid">
+            {/* (unchanged gauges) */}
+          </div>
+        </div>
 
         {/* SMART AI */}
         <div className="card smart-card-ai">
