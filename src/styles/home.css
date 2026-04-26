@@ -110,6 +110,15 @@
   border-radius: 12px;
 }
 
+/* Desktop tuning */
+@media (min-width: 1024px) {
+  .skeleton.gauge {
+    height: 60px;
+    width: 60px;
+    margin: 50px auto;
+  }
+}
+
 /* =========================
    Overview Card (Premium Light)
 ========================= */
