@@ -92,10 +92,10 @@
 }
 
 .skeleton.gauge {
-  height: 90px;
-  width: 90px;
+  height: 80px;
+  width: 80px;
   border-radius: 50%;
-  margin: 10px auto;
+  margin: 8px auto;
 }
 
 .skeleton.ai-header {
