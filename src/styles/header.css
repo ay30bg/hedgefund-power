@@ -23,7 +23,7 @@
 /* Logo */
 .logo {
     margin-top: 20px;
-    height: 200%;
+    height: 150%;
     width: auto;
     object-fit: contain;
 }
@@ -114,7 +114,7 @@
     .logo {
         margin-top: 20px;
         margin-left: -20px;
-        height: 150%;
+        height: 100%;
         /* slightly smaller */
     }
 
