@@ -114,6 +114,7 @@
   .skeleton.gauge {
     height: 60px;
     width: 60px;
+    margin: 20px auto;
   }
 }
 /* =========================
