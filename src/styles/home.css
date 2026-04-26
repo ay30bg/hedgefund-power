@@ -113,8 +113,8 @@
 /* Desktop tuning */
 @media (min-width: 1024px) {
   .skeleton.gauge {
-    height: 60px;
-    width: 60px;
+    height: 80px;
+    width: 80px;
     margin: 50px auto;
   }
 }
