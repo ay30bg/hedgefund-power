@@ -381,7 +381,8 @@ const DashboardHomepage = () => {
   const [portfolio, setPortfolio] = useState(null);
   const [loadingPortfolio, setLoadingPortfolio] = useState(true);
 
-  const [aiLoading, setAiLoading] = useState(true); // ✅ NEW
+  const [aiLoading, setAiLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState("");
 
   const [chartData, setChartData] = useState([
     { day: "Mon", profit: 120 },
@@ -430,7 +431,7 @@ const DashboardHomepage = () => {
     if (!loadingPortfolio) {
       setAiLoading(true);
 
-      const delay = Math.random() * 1200 + 1800; // 1.8s – 3s realistic
+      const delay = Math.random() * 1200 + 1800;
 
       const timer = setTimeout(() => {
         setAiLoading(false);
@@ -439,6 +440,19 @@ const DashboardHomepage = () => {
       return () => clearTimeout(timer);
     }
   }, [loadingPortfolio, portfolio]);
+
+  // ================= TIME CONTEXT =================
+  useEffect(() => {
+    if (!aiLoading) {
+      const now = new Date();
+      setLastUpdated(
+        now.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
+    }
+  }, [aiLoading]);
 
   // ================= LIVE ACTIVITY =================
   useEffect(() => {
@@ -493,6 +507,10 @@ const DashboardHomepage = () => {
   const marketStatus = portfolio?.market?.status ?? "Stable";
   const marketNote = portfolio?.market?.note ?? "";
 
+  // ================= TREND (VISUAL SIGNAL) =================
+  const trend =
+    efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
+
   // ================= LOADING =================
   if (loadingPortfolio) {
     return <div className="dashboard">Loading dashboard...</div>;
@@ -504,19 +522,19 @@ const DashboardHomepage = () => {
       <div className="overview-card">
         <div className="overview-item">
           <p className="label">Total Invested</p>
-          <h2>{currency.symbol}{(0 * currency.rate).toLocaleString()}</h2>
+          <h2>{currency.symbol}{(0).toLocaleString()}</h2>
         </div>
 
         <div className="overview-item">
           <p className="label">Total Profit</p>
           <h2 className="positive">
-            +{currency.symbol}{(0 * currency.rate).toLocaleString()}
+            +{currency.symbol}{(0).toLocaleString()}
           </h2>
         </div>
 
         <div className="overview-item">
           <p className="label">Total Withdrawal</p>
-          <h2>{currency.symbol}{(0 * currency.rate).toLocaleString()}</h2>
+          <h2>{currency.symbol}{(0).toLocaleString()}</h2>
         </div>
 
         <div className="overview-item">
@@ -530,13 +548,11 @@ const DashboardHomepage = () => {
         <div className="insight-card">
           <p className="label">Active Plans</p>
           <h3>{plansCount}</h3>
-          <span>Currently running</span>
         </div>
 
         <div className="insight-card">
           <p className="label">Active Machines</p>
           <h3>{machinesCount}</h3>
-          <span>Mining in progress</span>
         </div>
 
         <div className="insight-card">
@@ -557,115 +573,8 @@ const DashboardHomepage = () => {
 
       {/* ================= GRID ================= */}
       <div className="grid">
-        {/* CHART */}
-        <div className="card">
-          <h3>Earnings Overview</h3>
-          <ResponsiveContainer width="100%" height={180}>
-            <LineChart data={chartData}>
-              <XAxis dataKey="day" />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="profit"
-                stroke="#d6a85a"
-                strokeWidth={3}
-                dot={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
 
-        {/* ACTIVITY */}
-        <div className="card">
-          <h3>Live Activity</h3>
-          <div className="activity-ticker">
-            <div className="activity-track">
-              {activities.concat(activities).map((item, index) => (
-                <div key={index} className="activity-row">
-                  <span className="time">
-                    {new Date(item.id).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                  <span className="name">{item.name}</span>
-                  <span
-                    className={
-                      item.type === "deposit"
-                        ? "amount positive"
-                        : "amount negative"
-                    }
-                  >
-                    {item.type === "deposit" ? "+" : "-"}
-                    {currency.symbol}
-                    {(item.amount * currency.rate).toLocaleString()}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* PORTFOLIO STRENGTH */}
-        <div className="card">
-          <h3>Portfolio Strength</h3>
-          <div className="gauge-grid">
-            <div className="gauge">
-              <div
-                className="circle"
-                style={{
-                  background: `conic-gradient(#d6a85a ${Math.min(
-                    roiPower,
-                    100
-                  )}%, rgba(255,255,255,0.08) 0%)`,
-                }}
-              >
-                <div className="inner">
-                  <h2>{roiPower.toFixed(0)}%</h2>
-                </div>
-              </div>
-              <p>ROI Power</p>
-            </div>
-
-            <div className="gauge">
-              <div
-                className="circle"
-                style={{
-                  background: `conic-gradient(#4caf50 ${efficiency}%, rgba(255,255,255,0.08) 0%)`,
-                }}
-              >
-                <div className="inner">
-                  <h2>{efficiency}%</h2>
-                </div>
-              </div>
-              <p>Efficiency</p>
-            </div>
-
-            <div className="gauge">
-              <div
-                className="circle"
-                style={{
-                  background: `conic-gradient(#ff4d4f ${
-                    riskLevel === "High" ? 90 : riskLevel === "Medium" ? 60 : 30
-                  }%, rgba(255,255,255,0.08) 0%)`,
-                }}
-              >
-                <div className="inner">
-                  <h2>
-                    {riskLevel === "High"
-                      ? "H"
-                      : riskLevel === "Low"
-                      ? "L"
-                      : "M"}
-                  </h2>
-                </div>
-              </div>
-              <p>Risk Level</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ================= SMART AI ================= */}
+        {/* SMART AI */}
         <div className="card smart-card-ai">
           <div className="ai-glow"></div>
 
@@ -687,20 +596,46 @@ const DashboardHomepage = () => {
               {aiLoading ? (
                 <div className="ai-thinking">
                   <span></span><span></span><span></span>
-                  <p>Analyzing portfolio signals...</p>
+                  <p>Scanning portfolio signals...</p>
                 </div>
               ) : (
                 <>
+                  <p className="ai-system-text">
+                    {trend === "down"
+                      ? "Signal detected: performance decline."
+                      : trend === "up"
+                      ? "Optimization signal: growth trend active."
+                      : "System stable: monitoring portfolio."}
+                  </p>
+
                   <p className="ai-text fade-in">
                     {efficiency < 50
-                      ? <>Efficiency is low. Reallocate into <b>higher-yield assets</b>.</>
+                      ? <>Efficiency at <b>{efficiency}%</b>. Below optimal.</>
                       : riskLevel === "High"
-                      ? <>High risk detected. Add <b>stable plans</b> to balance.</>
+                      ? <>High risk exposure detected.</>
                       : plansCount === 0
-                      ? <>Start investing to activate <b>growth cycles</b>.</>
+                      ? <>No active plans found.</>
                       : machinesCount === 0
-                      ? <>Deploy machines for <b>passive income</b>.</>
-                      : <>Portfolio is optimized. Maintain for <b>steady growth</b>.</>}
+                      ? <>No machine assets detected.</>
+                      : <>Portfolio operating optimally.</>}
+                  </p>
+
+                  <div className={`ai-trend ${trend}`}>
+                    {trend === "down" && "↓ Performance dropping"}
+                    {trend === "up" && "↑ Performance improving"}
+                    {trend === "stable" && "→ Stable performance"}
+                  </div>
+
+                  <p className="ai-sub">
+                    {efficiency < 50
+                      ? "Reallocation recommended."
+                      : riskLevel === "High"
+                      ? "Reduce exposure."
+                      : plansCount === 0
+                      ? "Start investing."
+                      : machinesCount === 0
+                      ? "Deploy machines."
+                      : "Maintain strategy."}
                   </p>
 
                   <div className={`ai-tag ${
@@ -709,16 +644,21 @@ const DashboardHomepage = () => {
                       : "safe"
                   }`}>
                     {efficiency < 50
-                      ? "Rebalance Required"
+                      ? "Optimization Needed"
                       : riskLevel === "High"
                       ? "Risk Alert"
                       : "System Stable"}
                   </div>
+
+                  <p className="ai-time">
+                    Updated at {lastUpdated} • Live analysis
+                  </p>
                 </>
               )}
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
