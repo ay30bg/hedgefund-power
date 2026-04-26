@@ -453,7 +453,7 @@ const DashboardHomepage = () => {
 
   // ================= ID GENERATOR (69e811 style) =================
   const generateId = () => {
-    return "69" + Math.random().toString(16).slice(2, 8);
+    return "69" + Math.random().toString(16).slice(2, 6);
   };
 
   // ================= TIME FORMAT =================
