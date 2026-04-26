@@ -498,16 +498,14 @@ const DashboardHomepage = () => {
     fetchPortfolio();
   }, []);
 
-  // ================= AI THINKING FLOW =================
+  // ================= AI LOADING =================
   useEffect(() => {
     if (!loadingPortfolio) {
       setAiLoading(true);
 
-      const delay = Math.random() * 1200 + 1800;
-
       const timer = setTimeout(() => {
         setAiLoading(false);
-      }, delay);
+      }, Math.random() * 1200 + 1800);
 
       return () => clearTimeout(timer);
     }
@@ -516,9 +514,8 @@ const DashboardHomepage = () => {
   // ================= LAST UPDATED =================
   useEffect(() => {
     if (!aiLoading) {
-      const now = new Date();
       setLastUpdated(
-        now.toLocaleTimeString([], {
+        new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         })
@@ -526,7 +523,7 @@ const DashboardHomepage = () => {
     }
   }, [aiLoading]);
 
-  // ================= LIVE ACTIVITY (FIXED + PERSISTENT) =================
+  // ================= LIVE ACTIVITY =================
   useEffect(() => {
     const saved = localStorage.getItem("activities");
 
@@ -539,7 +536,7 @@ const DashboardHomepage = () => {
       const amount = Math.floor(Math.random() * 2000) + 100;
 
       const newActivity = {
-        id: generateId(), // ✅ 69e811 style
+        id: generateId(),
         type,
         amount,
         createdAt: Date.now(),
@@ -572,7 +569,7 @@ const DashboardHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // ================= PORTFOLIO VALUES (UNCHANGED) =================
+  // ================= PORTFOLIO VALUES =================
   const roiPower = portfolio?.strength?.roiPower ?? 0;
   const efficiency = portfolio?.strength?.efficiency ?? 0;
   const riskLevel = portfolio?.strength?.riskLevel ?? "Low";
@@ -585,6 +582,7 @@ const DashboardHomepage = () => {
     portfolio?.assetSummary?.bestMachineName ?? "N/A";
 
   const marketStatus = portfolio?.market?.status ?? "Stable";
+  const marketNote = portfolio?.market?.note ?? "";
 
   const trend =
     efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
@@ -597,42 +595,61 @@ const DashboardHomepage = () => {
   return (
     <div className="dashboard">
 
-      {/* ================= OVERVIEW (UNCHANGED) ================= */}
+      {/* ================= OVERVIEW ================= */}
       <div className="overview-card">
         <div className="overview-item">
-          <p className="label">Total Invested</p>
-          <h2>
-            {currency.symbol}
-            {(0 * currency.rate).toLocaleString()}
-          </h2>
+          <p>Total Invested</p>
+          <h2>{currency.symbol}{0}</h2>
         </div>
 
         <div className="overview-item">
-          <p className="label">Total Profit</p>
-          <h2 className="positive">
-            +{currency.symbol}
-            {(0 * currency.rate).toLocaleString()}
-          </h2>
+          <p>Total Profit</p>
+          <h2 className="positive">{currency.symbol}{0}</h2>
         </div>
 
         <div className="overview-item">
-          <p className="label">Total Withdrawal</p>
-          <h2>
-            {currency.symbol}
-            {(0 * currency.rate).toLocaleString()}
-          </h2>
+          <p>Total Withdrawal</p>
+          <h2>{currency.symbol}{0}</h2>
         </div>
 
         <div className="overview-item">
-          <p className="label">ROI (Avg)</p>
+          <p>ROI (Avg)</p>
           <h2>{roiPower.toFixed(1)}%</h2>
+        </div>
+      </div>
+
+      {/* ================= INSIGHTS ================= */}
+      <div className="insights">
+        <div className="insight-card">
+          <p>Active Plans</p>
+          <h3>{plansCount}</h3>
+        </div>
+
+        <div className="insight-card">
+          <p>Active Machines</p>
+          <h3>{machinesCount}</h3>
+        </div>
+
+        <div className="insight-card">
+          <p>Best Machine</p>
+          <h3>{bestMachineName}</h3>
+          <span>
+            {currency.symbol}
+            {(bestDailyYield * currency.rate).toFixed(2)} / day
+          </span>
+        </div>
+
+        <div className="insight-card">
+          <p>Market Status</p>
+          <h3>{marketStatus}</h3>
+          <span>{marketNote}</span>
         </div>
       </div>
 
       {/* ================= GRID ================= */}
       <div className="grid">
 
-        {/* CHART (UNCHANGED) */}
+        {/* CHART */}
         <div className="card">
           <h3>Earnings Overview</h3>
           <ResponsiveContainer width="100%" height={180}>
@@ -650,7 +667,7 @@ const DashboardHomepage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* ================= LIVE ACTIVITY (FIXED ONLY) ================= */}
+        {/* LIVE ACTIVITY */}
         <div className="card">
           <h3>Live Activity</h3>
 
@@ -674,7 +691,7 @@ const DashboardHomepage = () => {
                   >
                     {item.type === "deposit" ? "+" : "-"}
                     {currency.symbol}
-                    {(item.amount * currency.rate).toLocaleString()}
+                    {item.amount}
                   </span>
 
                 </div>
@@ -683,7 +700,7 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        {/* ================= PORTFOLIO (UNCHANGED STRUCTURE) ================= */}
+        {/* PORTFOLIO STRENGTH */}
         <div className="card">
           <h3>Portfolio Strength</h3>
 
@@ -692,7 +709,7 @@ const DashboardHomepage = () => {
           <p>Risk Level: {riskLevel}</p>
         </div>
 
-        {/* ================= AI (UNCHANGED LOGIC) ================= */}
+        {/* AI ENGINE */}
         <div className="card smart-card-ai">
           <h3>AI Insight Engine</h3>
 
