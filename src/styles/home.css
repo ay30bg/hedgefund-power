@@ -95,7 +95,8 @@
   height: 80px;
   width: 80px;
   border-radius: 50%;
-  margin: 10px auto;
+  flex: 0 0 80px;
+  aspect-ratio: 1 / 1;
 }
 
 .skeleton.ai-header {
@@ -436,11 +437,20 @@
   background: #ef4444;
 }
 
-.gauge-grid {
+/* .gauge-grid {
   display: flex;
   justify-content: space-between;
   gap: 12px;
   margin-top: 15px;
+} */
+
+.gauge-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+
+  flex-wrap: wrap;
 }
 
 .gauge {
