@@ -95,7 +95,7 @@
   height: 80px;
   width: 80px;
   border-radius: 50%;
-  margin: 8px auto;
+  margin: 10px auto;
 }
 
 .skeleton.ai-header {
@@ -109,6 +109,13 @@
   border-radius: 12px;
 }
 
+/* Desktop tuning */
+@media (min-width: 1024px) {
+  .skeleton.gauge {
+    height: 60px;
+    width: 60px;
+  }
+}
 /* =========================
    Overview Card (Premium Light)
 ========================= */
