@@ -45,7 +45,7 @@ function Layout() {
 
       <main className={isAuthPage ? "login-main" : "main-content"}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/market" element={<Market />} />
           <Route path="/investhub" element={<InvestHub />} />
           <Route path="/profile" element={<Profile />} />
@@ -58,7 +58,7 @@ function Layout() {
           <Route path="/invite" element={<Invite />} />
           <Route path="/portfolio" element={<Portfolio />} />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
