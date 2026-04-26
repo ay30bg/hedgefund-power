@@ -9,7 +9,7 @@ const BottomNavbar = () => {
   const location = useLocation(); // for active link styling
 
   const navItems = [
-    { path: "/", label: "Home", icon: <AiFillHome /> },
+    { path: "/home", label: "Home", icon: <AiFillHome /> },
     { path: "/market", label: "Market", icon: <AiOutlineLineChart /> }, 
     { path: "/investhub", label: "InvestHub", icon: <GiWallet /> },
     { path: "/portfolio", label: "Portfolio", icon: <FaBriefcase  /> },
