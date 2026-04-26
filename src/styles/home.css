@@ -48,6 +48,66 @@
   cursor: pointer;
 }
 
+/* SKELETON LOADING */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.12) 37%,
+    rgba(255, 255, 255, 0.06) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.2s ease infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.skeleton.line {
+  height: 12px;
+  margin: 6px 0;
+}
+
+.skeleton.short { width: 40%; }
+.skeleton.medium { width: 60%; }
+.skeleton.long { width: 85%; }
+
+.skeleton.chart {
+  height: 180px;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+.skeleton.activity-row {
+  height: 18px;
+  margin: 10px 0;
+  border-radius: 6px;
+}
+
+.skeleton.gauge {
+  height: 90px;
+  width: 90px;
+  border-radius: 50%;
+}
+
+.skeleton.ai-header {
+  height: 20px;
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.skeleton.ai-body {
+  height: 140px;
+  border-radius: 12px;
+}
+
 /* =========================
    Overview Card (Premium Light)
 ========================= */
