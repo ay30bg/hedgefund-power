@@ -626,10 +626,66 @@ const DashboardHomepage = () => {
         </div>
 
         {/* PORTFOLIO STRENGTH */}
-        <div className="card">
+         <div className="card">
           <h3>Portfolio Strength</h3>
+
           <div className="gauge-grid">
-            {/* (unchanged gauges) */}
+             <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#d6a85a ${Math.min(
+                    roiPower,
+                    100
+                  )}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{roiPower.toFixed(0)}%</h2>
+                </div>
+              </div>
+              <p>ROI Power</p>
+            </div>
+
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#4caf50 ${efficiency}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{efficiency}%</h2>
+                </div>
+              </div>
+              <p>Efficiency</p>
+            </div>
+
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#ff4d4f ${
+                    riskLevel === "High"
+                      ? 90
+                      : riskLevel === "Medium"
+                      ? 60
+                      : 30
+                  }%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>
+                    {riskLevel === "High"
+                      ? "H"
+                      : riskLevel === "Low"
+                      ? "L"
+                      : "M"}
+                  </h2>
+                </div>
+              </div>
+              <p>Risk Level</p>
+            </div>
           </div>
         </div>
 
