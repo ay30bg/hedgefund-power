@@ -624,32 +624,34 @@ const DashboardHomepage = () => {
       </div>
 
       {/* ================= INSIGHTS ================= */}
-      <div className="insights">
-        <div className="insight-card">
-          <p>Active Plans</p>
-          <h3>{plansCount}</h3>
-        </div>
+            <div className="insights">
+         <div className="insight-card">
+           <p className="label">Active Plans</p>
+           <h3>{plansCount}</h3>
+           <span>Currently running</span>
+       </div>
 
         <div className="insight-card">
-          <p>Active Machines</p>
-          <h3>{machinesCount}</h3>
+         <p className="label">Active Machines</p>
+         <h3>{machinesCount}</h3>
+         <span>Mining in progress</span>
         </div>
 
-        <div className="insight-card">
-          <p>Best Machine</p>
-          <h3>{bestMachineName}</h3>
-          <span>
-            {currency.symbol}
-            {(bestDailyYield * currency.rate).toFixed(2)} / day
-          </span>
-        </div>
+         <div className="insight-card">
+           <p className="label">Best Machine</p>
+           <h3>{bestMachineName}</h3>
+          <span className="positive">
+             {currency.symbol}
+             {(bestDailyYield * currency.rate).toFixed(2)} / day
+           </span>
+         </div>
 
-        <div className="insight-card">
-          <p>Market Status</p>
-          <h3>{marketStatus}</h3>
+         <div className="insight-card">
+           <p className="label">Market Status</p>
+           <h3>{marketStatus}</h3>
           <span>{marketNote}</span>
-        </div>
-      </div>
+         </div>
+       </div> 
 
       {/* ================= GRID ================= */}
       <div className="grid">
