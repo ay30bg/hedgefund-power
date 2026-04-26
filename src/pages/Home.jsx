@@ -700,27 +700,153 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        {/* PORTFOLIO STRENGTH */}
-        <div className="card">
+         {/* PORTFOLIO STRENGTH */}
+          <div className="card">
           <h3>Portfolio Strength</h3>
 
-          <p>ROI Power: {roiPower.toFixed(0)}%</p>
-          <p>Efficiency: {efficiency}%</p>
-          <p>Risk Level: {riskLevel}</p>
+           <div className="gauge-grid">
+              <div className="gauge">
+               <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#d6a85a ${Math.min(
+                    roiPower,
+                    100
+                  )}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{roiPower.toFixed(0)}%</h2>
+                </div>
+              </div>
+              <p>ROI Power</p>
+            </div>
+
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#4caf50 ${efficiency}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{efficiency}%</h2>
+                </div>
+              </div>
+              <p>Efficiency</p>
+            </div>
+
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#ff4d4f ${
+                    riskLevel === "High"
+                      ? 90
+                      : riskLevel === "Medium"
+                      ? 60
+                      : 30
+                  }%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>
+                    {riskLevel === "High"
+                      ? "H"
+                      : riskLevel === "Low"
+                      ? "L"
+                      : "M"}
+                  </h2>
+                </div>
+              </div>
+              <p>Risk Level</p>
+            </div>
+          </div>
         </div>
 
-        {/* AI ENGINE */}
+        {/* SMART AI */}
         <div className="card smart-card-ai">
-          <h3>AI Insight Engine</h3>
+          <div className="ai-glow"></div>
 
-          {aiLoading ? (
-            <p>Scanning portfolio signals...</p>
-          ) : (
-            <>
-              <p>{trend} trend detected</p>
-              <p>Updated at {lastUpdated}</p>
-            </>
-          )}
+          <div className="smart-header-ai">
+            <div className="ai-title">
+              <span className="ai-dot"></span>
+              AI Insight Engine
+            </div>
+            <div className="ai-status">● Live</div>
+          </div>
+
+          <div className="smart-body-ai">
+            <div className="ai-avatar">
+              <div className="pulse-ring"></div>
+              🤖
+            </div>
+
+            <div className="ai-content">
+              {aiLoading ? (
+                <div className="ai-thinking">
+                  <span></span><span></span><span></span>
+                  <p>Scanning portfolio signals...</p>
+                </div>
+              ) : (
+                <>
+                  <p className="ai-system-text">
+                    {trend === "down"
+                      ? "Signal detected: performance decline."
+                      : trend === "up"
+                      ? "Optimization signal: growth trend active."
+                      : "System stable: monitoring portfolio."}
+                  </p>
+
+                  <p className="ai-text fade-in">
+                    {efficiency < 50
+                      ? <>Efficiency at <b>{efficiency}%</b>. Below optimal.</>
+                      : riskLevel === "High"
+                      ? <>High risk exposure detected.</>
+                      : plansCount === 0
+                      ? <>No active plans found.</>
+                      : machinesCount === 0
+                      ? <>No machine assets detected.</>
+                      : <>Portfolio operating optimally.</>}
+                  </p>
+
+                  <div className={`ai-trend ${trend}`}>
+                    {trend === "down" && "↓ Performance dropping"}
+                    {trend === "up" && "↑ Performance improving"}
+                    {trend === "stable" && "→ Stable performance"}
+                  </div>
+
+                  <p className="ai-sub">
+                    {efficiency < 50
+                      ? "Reallocation recommended."
+                      : riskLevel === "High"
+                      ? "Reduce exposure."
+                      : plansCount === 0
+                      ? "Start investing."
+                      : machinesCount === 0
+                      ? "Deploy machines."
+                      : "Maintain strategy."}
+                  </p>
+
+                  <div className={`ai-tag ${
+                    efficiency < 50 || riskLevel === "High"
+                      ? "danger"
+                      : "safe"
+                  }`}>
+                    {efficiency < 50
+                      ? "Optimization Needed"
+                      : riskLevel === "High"
+                      ? "Risk Alert"
+                      : "System Stable"}
+                  </div>
+
+                  <p className="ai-time">
+                    Updated at {lastUpdated} • Live analysis
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
         </div>
 
       </div>
