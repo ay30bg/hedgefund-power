@@ -77,11 +77,21 @@ export default function PurchaseHall() {
     setShowDetails(true);
   };
 
-  const openBuy = (machine) => {
-    setSelectedMachine(machine);
-    setShowBuy(true);
-  };
+  // const openBuy = (machine) => {
+  //   setSelectedMachine(machine);
+  //   setShowBuy(true);
+  // };
 
+const openBuy = (machine) => {
+  if (balance < machine.price) {
+    alert("Insufficient balance to purchase this machine.");
+    return;
+  }
+
+  setSelectedMachine(machine);
+  setShowBuy(true);
+};
+  
   const closeModal = () => {
     if (loading || buying) return;
     setShowDetails(false);
@@ -224,13 +234,18 @@ export default function PurchaseHall() {
               Details
             </button>
 
-            <button
-              className="buy"
-              disabled={balance < machine.price || buyingId === machine._id}
-              onClick={() => openBuy(machine)}
-            >
-              Buy
-            </button>
+           <button
+  className="buy"
+  disabled={
+    Number(balance) < Number(machine.price) ||
+    buyingId === machine._id
+  }
+  onClick={() => openBuy(machine)}
+>
+  {Number(balance) < Number(machine.price)
+    ? "Insufficient Balance"
+    : "Buy"}
+</button>
           </div>
 
         </div>
