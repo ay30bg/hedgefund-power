@@ -235,16 +235,13 @@ const openBuy = (machine) => {
             </button>
 
            <button
-  className="buy"
-  disabled={
-    Number(balance) < Number(machine.price) ||
-    buyingId === machine._id
-  }
+  className={`buy ${
+    balance < machine.price || buyingId === machine._id ? "disabled" : ""
+  }`}
+  disabled={balance < machine.price || buyingId === machine._id}
   onClick={() => openBuy(machine)}
 >
-  {Number(balance) < Number(machine.price)
-    ? "Insufficient Balance"
-    : "Buy"}
+  Buy
 </button>
           </div>
 
