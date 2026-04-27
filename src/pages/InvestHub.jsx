@@ -225,7 +225,7 @@ export default function InvestHub() {
                 Details
               </button>
 
-             <button
+             {/* <button
   className={`plan-invest ${
     loadingPlans ? "disabled" : ""
   }`}
@@ -234,6 +234,16 @@ export default function InvestHub() {
     if (loadingPlans) return;
     openInvestModal(plan);
   }}
+>
+  Invest
+</button> */}
+
+              <button
+  className={`plan-invest ${
+    loadingPlans || balance < 10 ? "disabled" : ""
+  }`}
+  disabled={loadingPlans || balance < 10}
+  onClick={() => openInvestModal(plan)}
 >
   Invest
 </button>
