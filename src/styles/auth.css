@@ -60,12 +60,14 @@
 .login-logo {
   width: 450px;
   height: auto;
+  margin-top: 50px;
   object-fit: contain;
 }
 
 .signup-logo {
   width: 450px;
   height: auto;
+  margin-top: -50px;
   object-fit: contain;
 }
 
