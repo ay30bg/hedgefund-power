@@ -195,66 +195,90 @@
     color: #eee;
 }
 
-/* ================= SKELETON ================= */
+/* ================= BASE ================= */
 .skeleton {
-  background: linear-gradient(90deg, #e2e8f0 25%, #f8fafc 50%, #e2e8f0 75%);
-  background-size: 200% 100%;
-  animation: pulse 1.5s infinite;
-  border-radius: 10px;
+  background: #e9e9e9;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes pulse {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+/* shimmer effect */
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  animation: shimmer 1.2s infinite;
 }
 
-/* skeleton layout */
-.skeleton-card {
-  padding: 15px;
+@keyframes shimmer {
+  100% {
+    transform: translateX(300%);
+  }
 }
 
-.machine-img {
-  width: 55px;
-  height: 55px;
+/* ================= ELEMENTS ================= */
+.skeleton-avatar {
+  width: 50px;
+  height: 50px;
   border-radius: 12px;
 }
 
-.line {
+.skeleton-text {
   height: 10px;
-  margin-bottom: 6px;
+  margin: 5px 0;
 }
 
-.line.short {
-  width: 70px;
+.skeleton-text.short {
+  width: 120px;
 }
 
-.line.tiny {
-  width: 45px;
+.skeleton-text.tiny {
+  width: 80px;
+  height: 8px;
 }
 
-.box {
+.skeleton-text.full {
+  width: 100%;
+  height: 12px;
+}
+
+.skeleton-box {
+  width: 100%;
   height: 40px;
-  width: 48%;
   border-radius: 10px;
 }
 
-.badge {
+.skeleton-badge {
   width: 70px;
   height: 20px;
   border-radius: 20px;
 }
 
-.progress {
-  height: 8px;
+.skeleton-bar {
   width: 100%;
+  height: 8px;
   border-radius: 10px;
 }
 
-.button {
-  height: 35px;
+.skeleton-button {
   width: 100%;
-  border-radius: 8px;
-  margin-top: 10px;
+  height: 40px;
+  border-radius: 12px;
+}
+
+/* optional wrapper animation */
+.skeleton-card {
+  opacity: 0.8;
 }
 
 /* ---------- Mobile ---------- */
