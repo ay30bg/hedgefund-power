@@ -6,7 +6,7 @@ import { useBalance } from "../context/BalanceContext";
 
 export default function InvestHub() {
   const { currency } = useCurrency();
-  const { balance, setBalance } = useBalance(); // ✅ FIXED HERE
+  const { balance, setBalance } = useBalance();
 
   const [plans, setPlans] = useState([]);
   const [loadingPlans, setLoadingPlans] = useState(true);
