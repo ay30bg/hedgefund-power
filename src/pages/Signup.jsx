@@ -206,7 +206,7 @@ function SignupPage() {
             Already have an account?{" "}
             <span
               style={{ cursor: "pointer" }}
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/")}
             >
               Log In
             </span>
