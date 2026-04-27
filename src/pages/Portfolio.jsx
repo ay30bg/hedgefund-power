@@ -1174,6 +1174,9 @@ export default function Portfolio() {
   const [loadingInvestments, setLoadingInvestments] = useState(true);
   const [loadingMachines, setLoadingMachines] = useState(true);
 
+  const [investSkeletonCount, setInvestSkeletonCount] = useState(3);
+  const [machineSkeletonCount, setMachineSkeletonCount] = useState(3);
+
   const [, forceUpdate] = useState(0);
 
   /* live refresh */
@@ -1195,7 +1198,12 @@ export default function Portfolio() {
       );
 
       const data = await res.json();
-      if (res.ok) setMachines(data.machines || []);
+
+      if (res.ok) {
+        const list = data.machines || [];
+        setMachines(list);
+        setMachineSkeletonCount(list.length || 3); // ✅ KEY FIX
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -1215,7 +1223,12 @@ export default function Portfolio() {
       );
 
       const data = await res.json();
-      if (res.ok) setInvestments(data.investments || []);
+
+      if (res.ok) {
+        const list = data.investments || [];
+        setInvestments(list);
+        setInvestSkeletonCount(list.length || 3); // ✅ KEY FIX
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -1294,10 +1307,6 @@ export default function Portfolio() {
     }
   };
 
-  /* ---------------- SKELETON COUNTS (FIX) ---------------- */
-  const INVEST_SKELETON_COUNT = Math.max(investments.length || 0, 3);
-  const MACHINE_SKELETON_COUNT = Math.max(machines.length || 0, 3);
-
   return (
     <div className="portfolio-page">
 
@@ -1325,7 +1334,7 @@ export default function Portfolio() {
           <div className="invest-cards">
 
             {loadingInvestments ? (
-              [...Array(INVEST_SKELETON_COUNT)].map((_, i) => (
+              [...Array(investSkeletonCount)].map((_, i) => (
                 <div className="invest-card skeleton-card" key={i}>
 
                   <div className="invest-header">
@@ -1424,7 +1433,7 @@ export default function Portfolio() {
           <div className="machine-cards">
 
             {loadingMachines ? (
-              [...Array(MACHINE_SKELETON_COUNT)].map((_, i) => (
+              [...Array(machineSkeletonCount)].map((_, i) => (
                 <div className="machine-card skeleton-card" key={i}>
 
                   <div className="machine-header">
