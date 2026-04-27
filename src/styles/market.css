@@ -220,6 +220,20 @@
     cursor: pointer;
 }
 
+.buy.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(0.4);
+  transform: none !important;
+}
+
+/* optional hover protection */
+.buy.disabled:hover {
+  background: inherit;
+  box-shadow: none;
+}
+
 /* ================= SKELETON ================= */
 .purchase-loading {
   display: flex;
