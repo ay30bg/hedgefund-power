@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import "../styles/auth.css";
-import logo from "../assets/logo2.png";
+import logo from "../assets/logo.png";
 
 function LoginPage() {
   const navigate = useNavigate();
