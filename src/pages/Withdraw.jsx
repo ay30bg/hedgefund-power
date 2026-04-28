@@ -141,7 +141,7 @@ const Withdraw = () => {
       setLoading(true);
 
       const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/withdrawals`,
+        `${process.env.REACT_APP_API_URL}/api/withdraw`,
         {
           method: "POST",
           headers: {
