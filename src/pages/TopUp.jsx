@@ -99,6 +99,8 @@ import "../styles/topup.css";
 import { FiArrowLeft, FiCopy } from "react-icons/fi";
 import { useCurrency } from "../context/CurrencyContext";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const TopUp = () => {
   const navigate = useNavigate();
   const { currency } = useCurrency();
@@ -116,18 +118,19 @@ const TopUp = () => {
   const createPayment = async () => {
     setError("");
 
-    if (!amount || amount < 10) {
+    if (!amount || Number(amount) < 10) {
       return setError("Minimum deposit is $10");
     }
 
     try {
       setLoading(true);
 
-      const res = await fetch("/api/payments/create", {
+      const res = await fetch(`${API_URL}/api/payments/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // important for auth cookie (if used)
         body: JSON.stringify({ amount }),
       });
 
@@ -153,17 +156,20 @@ const TopUp = () => {
     const interval = setInterval(async () => {
       try {
         const res = await fetch(
-          `/api/payments/status/${paymentData.payment_id}`
+          `${API_URL}/api/payments/status/${paymentData.payment_id}`,
+          {
+            credentials: "include",
+          }
         );
-        const data = await res.json();
 
+        const data = await res.json();
         setStatus(data.payment_status);
 
         if (data.payment_status === "finished") {
           clearInterval(interval);
         }
       } catch (err) {
-        console.error("Status check failed");
+        console.error("Status check failed", err);
       }
     }, 5000);
 
