@@ -140,18 +140,21 @@ const Withdraw = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/withdraw", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          amount: Number(amount),
-          walletAddress: wallet,
-          password,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/withdrawals`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            amount: Number(amount),
+            walletAddress: wallet,
+            password,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -159,9 +162,9 @@ const Withdraw = () => {
         throw new Error(data.message || "Withdrawal failed");
       }
 
-      alert("Withdrawal request submitted for admin approval");
+      alert("Withdrawal request submitted. Awaiting admin approval.");
 
-      // reset fields
+      // reset form
       setAmount("");
       setWallet("");
       setPassword("");
@@ -198,7 +201,8 @@ const Withdraw = () => {
 
         {amount && (
           <p className="converted">
-            ≈ <span className="converted-value">
+            ≈{" "}
+            <span className="converted-value">
               {formatLocal(amount)}
             </span>
           </p>
