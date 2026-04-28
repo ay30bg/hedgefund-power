@@ -304,9 +304,10 @@
 .wallet-select {
   width: 100%;
   margin-top: 12px;
+  margin-bottom: 15px;
   padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  border: 1px solid #ccc;
   background: #fff;
   font-size: 14px;
   color: #111827;
