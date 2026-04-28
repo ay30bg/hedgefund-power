@@ -566,14 +566,14 @@ const Profile = () => {
             />
 
             <select
-              value={network}
-              onChange={(e) => setNetwork(e.target.value)}
-              style={{ marginTop: "10px", width: "100%" }}
-            >
-              <option value="TRC20">TRC20</option>
-              <option value="ERC20">ERC20</option>
-              <option value="BEP20">BEP20</option>
-            </select>
+  className="wallet-select"
+  value={network}
+  onChange={(e) => setNetwork(e.target.value)}
+>
+  <option value="TRC20">TRC20 (Tron)</option>
+  <option value="ERC20">ERC20 (Ethereum)</option>
+  <option value="BEP20">BEP20 (BSC)</option>
+</select>
 
             <button className="main-btn" onClick={handleBindWallet}>
               Bind
