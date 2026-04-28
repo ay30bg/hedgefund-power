@@ -113,7 +113,7 @@ const TopUp = () => {
   const [error, setError] = useState("");
 
   // ==============================
-  // CREATE PAYMENT
+  // CREATE PAYMENT (JWT FIXED)
   // ==============================
   const createPayment = async () => {
     setError("");
@@ -125,12 +125,19 @@ const TopUp = () => {
     try {
       setLoading(true);
 
+      // ✅ GET TOKEN
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        throw new Error("User not authenticated. Please login again.");
+      }
+
       const res = await fetch(`${API_URL}/api/payments/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // ✅ FIXED
         },
-        credentials: "include", // important for auth cookie (if used)
         body: JSON.stringify({ amount }),
       });
 
@@ -155,10 +162,14 @@ const TopUp = () => {
 
     const interval = setInterval(async () => {
       try {
+        const token = localStorage.getItem("token");
+
         const res = await fetch(
           `${API_URL}/api/payments/status/${paymentData.payment_id}`,
           {
-            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
