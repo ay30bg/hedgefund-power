@@ -298,6 +298,8 @@
 
 // export default Profile;
 
+/* eslint-disable no-unused-vars */
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/profile.css";
@@ -332,7 +334,7 @@ const Profile = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [withdrawalPassword, setWithdrawalPassword] = useState("");
 
-  // NEW STATES
+  // NEW
   const [network, setNetwork] = useState("TRC20");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -356,8 +358,6 @@ const Profile = () => {
           if (data.user?.balance !== undefined) {
             setBalance(data.user.balance);
           }
-        } else {
-          console.log(data.message);
         }
       } catch (err) {
         console.error(err);
@@ -380,16 +380,13 @@ const Profile = () => {
         </div>
 
         <div className="skeleton asset-box"></div>
-        <div className="skeleton menu-item"></div>
-        <div className="skeleton menu-item"></div>
-        <div className="skeleton menu-item"></div>
       </div>
     );
   }
 
   // ================= BIND WALLET =================
   const handleBindWallet = async () => {
-    if (!walletAddress) return alert("Please enter wallet address");
+    if (!walletAddress) return alert("Enter wallet address");
 
     try {
       const res = await fetch(`${API}/api/user/bind-wallet`, {
@@ -417,7 +414,7 @@ const Profile = () => {
     }
   };
 
-  // ================= WITHDRAWAL PASSWORD =================
+  // ================= SET PASSWORD =================
   const handleSetWithdrawalPassword = async () => {
     if (!withdrawalPassword) return alert("Enter password");
 
@@ -456,7 +453,7 @@ const Profile = () => {
   return (
     <div className="profile-page">
 
-      {/* PROFILE */}
+      {/* USER */}
       <div className="profile-info">
         <div className="profile-left">
           <img
@@ -464,7 +461,7 @@ const Profile = () => {
               user.avatar ||
               `https://ui-avatars.com/api/?name=${encodeURIComponent(
                 user.email || "User"
-              )}&background=E2E8F0&color=475569&bold=true`
+              )}`
             }
             alt="avatar"
           />
@@ -526,11 +523,9 @@ const Profile = () => {
 
             <h3>Bind Wallet</h3>
 
-            {/* NETWORK */}
             <select
               value={network}
               onChange={(e) => setNetwork(e.target.value)}
-              style={{ width: "100%", marginBottom: "10px" }}
             >
               <option value="TRC20">TRC20</option>
               <option value="ERC20">ERC20</option>
@@ -564,7 +559,7 @@ const Profile = () => {
                 placeholder="Enter password"
                 value={withdrawalPassword}
                 onChange={(e) => setWithdrawalPassword(e.target.value)}
-                style={{ width: "100%", paddingRight: "50px" }}
+                style={{ width: "100%" }}
               />
 
               <span
@@ -573,7 +568,6 @@ const Profile = () => {
                   position: "absolute",
                   right: "10px",
                   top: "50%",
-                  transform: "translateY(-50%)",
                   cursor: "pointer"
                 }}
               >
