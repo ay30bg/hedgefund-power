@@ -521,6 +521,7 @@ const Profile = () => {
           <div>
             <h3>{user?.email?.split("@")[0] || "User"}</h3>
             <p>ID: {user._id?.slice(0, 6)}</p>
+          </div>
 
       {/* ACTION BUTTONS */}
       <div className="profile-actions">
