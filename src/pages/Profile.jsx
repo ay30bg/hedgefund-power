@@ -28,6 +28,7 @@ const Profile = () => {
 
   const [showBindWallet, setShowBindWallet] = useState(false);
   const [showWithdrawalPassword, setShowWithdrawalPassword] = useState(false);
+  const [confirmWithdrawalPassword, setConfirmWithdrawalPassword] = useState("");
 
   const [walletAddress, setWalletAddress] = useState("");
   const [network, setNetwork] = useState("USDT-TRC20");
@@ -117,31 +118,38 @@ const Profile = () => {
   };
 
   // ================= SET WITHDRAWAL PASSWORD =================
-  const handleSetWithdrawalPassword = async () => {
-    if (!withdrawalPassword) return alert("Please enter a password.");
+ const handleSetWithdrawalPassword = async () => {
+  if (!withdrawalPassword || !confirmWithdrawalPassword) {
+    return alert("Please fill both password fields.");
+  }
 
-    try {
-      const res = await fetch(`${API}/api/user/set-withdrawal-password`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`
-        },
-        body: JSON.stringify({ password: withdrawalPassword })
-      });
+  if (withdrawalPassword !== confirmWithdrawalPassword) {
+    return alert("Passwords do not match.");
+  }
 
-      const data = await res.json();
+  try {
+    const res = await fetch(`${API}/api/user/set-withdrawal-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({ password: withdrawalPassword })
+    });
 
-      if (!res.ok) return alert(data.message);
+    const data = await res.json();
 
-      alert("Withdrawal password set successfully");
+    if (!res.ok) return alert(data.message);
 
-      setShowWithdrawalPassword(false);
-      setWithdrawalPassword("");
-    } catch (err) {
-      alert("Server error");
-    }
-  };
+    alert("Withdrawal password set successfully");
+
+    setShowWithdrawalPassword(false);
+    setWithdrawalPassword("");
+    setConfirmWithdrawalPassword("");
+  } catch (err) {
+    alert("Server error");
+  }
+};
 
   // ================= LOGOUT =================
   const handleLogout = () => {
@@ -309,49 +317,57 @@ const Profile = () => {
         </div>
       )}
 
-      {/* WITHDRAW PASSWORD MODAL */}
       {showWithdrawalPassword && (
-        <div className="modal">
-          <div className="modal-content">
+  <div className="modal">
+    <div className="modal-content">
 
-            <h3>Set Withdrawal Password</h3>
+      <h3>Set Withdrawal Password</h3>
 
-            <input
-              type={showWithdrawalPwd ? "text" : "password"}
-              value={withdrawalPassword}
-              onChange={(e) => setWithdrawalPassword(e.target.value)}
-            />
+      {/* PASSWORD */}
+      <div className="password-input-wrapper">
+        <input
+          type={showWithdrawalPwd ? "text" : "password"}
+          placeholder="Enter password"
+          value={withdrawalPassword}
+          onChange={(e) => setWithdrawalPassword(e.target.value)}
+        />
 
-            <div className="password-input-wrapper">
-
-  <input
-    type={showWithdrawalPwd ? "text" : "password"}
-    placeholder="Enter withdrawal password"
-    value={withdrawalPassword}
-    onChange={(e) => setWithdrawalPassword(e.target.value)}
-  />
-
-  <div
-    className="eye-toggle"
-    onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}
-  >
-    {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
-  </div>
-
-</div>
-
-            <button onClick={handleSetWithdrawalPassword}>
-              Save Password
-            </button>
-
-            <button onClick={() => setShowWithdrawalPassword(false)}>
-              Cancel
-            </button>
-
-          </div>
+        <div
+          className="eye-toggle"
+          onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}
+        >
+          {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
         </div>
-      )}
+      </div>
 
+      {/* CONFIRM PASSWORD */}
+      <div className="password-input-wrapper">
+        <input
+          type={showWithdrawalPwd ? "text" : "password"}
+          placeholder="Confirm password"
+          value={confirmWithdrawalPassword}
+          onChange={(e) => setConfirmWithdrawalPassword(e.target.value)}
+        />
+
+        <div
+          className="eye-toggle"
+          onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}
+        >
+          {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
+        </div>
+      </div>
+
+      <button onClick={handleSetWithdrawalPassword}>
+        Save Password
+      </button>
+
+      <button onClick={() => setShowWithdrawalPassword(false)}>
+        Cancel
+      </button>
+
+    </div>
+  </div>
+)}
     </div>
   );
 };
