@@ -415,14 +415,14 @@ const Profile = () => {
   const [network, setNetwork] = useState("USDT-TRC20");
   const [walletPassword, setWalletPassword] = useState("");
 
+  // 🔐 TOGGLES (USED PROPERLY)
   const [showWalletPwd, setShowWalletPwd] = useState(false);
+  const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
 
-  // 🔐 WITHDRAWAL PASSWORD STATES (FIXED)
+  // 🔐 WITHDRAWAL PASSWORD STATES
   const [currentWithdrawalPassword, setCurrentWithdrawalPassword] = useState("");
   const [newWithdrawalPassword, setNewWithdrawalPassword] = useState("");
   const [confirmWithdrawalPassword, setConfirmWithdrawalPassword] = useState("");
-
-  const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
 
   const API = process.env.REACT_APP_API_URL;
 
@@ -446,8 +446,6 @@ const Profile = () => {
           if (data.user?.balance !== undefined) {
             setBalance(data.user.balance);
           }
-        } else {
-          console.log(data.message);
         }
       } catch (err) {
         console.error(err);
@@ -457,7 +455,7 @@ const Profile = () => {
     fetchUser();
   }, [API, setBalance]);
 
-  // ================= BIND / UPDATE WALLET =================
+  // ================= WALLET =================
   const handleBindWallet = async () => {
     if (!walletAddress) return alert("Please enter a wallet address.");
 
@@ -495,13 +493,12 @@ const Profile = () => {
       setWalletAddress("");
       setNetwork("USDT-TRC20");
       setWalletPassword("");
-
     } catch (err) {
       alert("Server error");
     }
   };
 
-  // ================= WITHDRAWAL PASSWORD =================
+  // ================= WITHDRAW PASSWORD =================
   const handleSetWithdrawalPassword = async () => {
     if (!newWithdrawalPassword || !confirmWithdrawalPassword) {
       return alert("Please fill all fields");
@@ -547,9 +544,7 @@ const Profile = () => {
     navigate("/");
   };
 
-  if (!user) {
-    return <div className="profile-loading">Loading...</div>;
-  }
+  if (!user) return <div>Loading...</div>;
 
   return (
     <div className="profile-page">
@@ -646,13 +641,29 @@ const Profile = () => {
               <option value="USDT-BEP20">USDT-BEP20</option>
             </select>
 
+            {/* WALLET PASSWORD WITH TOGGLE */}
             {isWalletBound && (
-              <input
-                type={showWalletPwd ? "text" : "password"}
-                placeholder="Withdrawal password"
-                value={walletPassword}
-                onChange={(e) => setWalletPassword(e.target.value)}
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  type={showWalletPwd ? "text" : "password"}
+                  placeholder="Withdrawal password"
+                  value={walletPassword}
+                  onChange={(e) => setWalletPassword(e.target.value)}
+                />
+
+                <span
+                  onClick={() => setShowWalletPwd(!showWalletPwd)}
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    cursor: "pointer"
+                  }}
+                >
+                  {showWalletPwd ? <FiEyeOff /> : <FiEye />}
+                </span>
+              </div>
             )}
 
             <button onClick={handleBindWallet}>
@@ -674,22 +685,40 @@ const Profile = () => {
 
             <h3>Withdrawal Security</h3>
 
-            <input
-              type="password"
-              placeholder="Current password (if changing)"
-              value={currentWithdrawalPassword}
-              onChange={(e) => setCurrentWithdrawalPassword(e.target.value)}
-            />
+            {/* CURRENT PASSWORD */}
+            <div style={{ position: "relative" }}>
+              <input
+                type={showWithdrawalPwd ? "text" : "password"}
+                placeholder="Current password"
+                value={currentWithdrawalPassword}
+                onChange={(e) => setCurrentWithdrawalPassword(e.target.value)}
+              />
 
+              <span
+                onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}
+                style={{
+                  position: "absolute",
+                  right: "10px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  cursor: "pointer"
+                }}
+              >
+                {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
+              </span>
+            </div>
+
+            {/* NEW PASSWORD */}
             <input
-              type="password"
+              type={showWithdrawalPwd ? "text" : "password"}
               placeholder="New password"
               value={newWithdrawalPassword}
               onChange={(e) => setNewWithdrawalPassword(e.target.value)}
             />
 
+            {/* CONFIRM PASSWORD */}
             <input
-              type="password"
+              type={showWithdrawalPwd ? "text" : "password"}
               placeholder="Confirm password"
               value={confirmWithdrawalPassword}
               onChange={(e) => setConfirmWithdrawalPassword(e.target.value)}
