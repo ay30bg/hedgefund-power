@@ -102,7 +102,7 @@ function SignupPage() {
       }
 
       alert("Signup successful!");
-      navigate("/login");
+      navigate("/");
 
     } catch (err) {
       console.error(err);
