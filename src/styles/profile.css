@@ -350,7 +350,7 @@
 .eye-toggle {
   position: absolute;
   right: 12px;
-  top: 30%;
+  top: 45%;
   transform: translateY(-50%);
 
   display: flex;
