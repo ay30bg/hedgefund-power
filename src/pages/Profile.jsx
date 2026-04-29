@@ -522,20 +522,6 @@ const Profile = () => {
             <h3>{user?.email?.split("@")[0] || "User"}</h3>
             <p>ID: {user._id?.slice(0, 6)}</p>
 
-            {/* 💡 SHOW WALLET */}
-            {user.walletAddress && (
-              <div className="wallet-display">
-                <p>{user.network}</p>
-                <p>
-                  {user.walletAddress.slice(0, 6)}...
-                  {user.walletAddress.slice(-4)}
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
       {/* ACTION BUTTONS */}
       <div className="profile-actions">
         <button className="topup" onClick={() => navigate("/topup")}>
