@@ -411,22 +411,23 @@ const Profile = () => {
   const [showBindWallet, setShowBindWallet] = useState(false);
   const [showWithdrawalPassword, setShowWithdrawalPassword] = useState(false);
 
-  const [walletAddress, setWalletAddress] = useState("");
-  const [network, setNetwork] = useState("USDT-TRC20");
-  const [walletPassword, setWalletPassword] = useState("");
-
-  // 🔐 TOGGLES (USED PROPERLY)
-  const [showWalletPwd, setShowWalletPwd] = useState(false);
-  const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
-
-  // 🔐 WITHDRAWAL PASSWORD STATES
   const [currentWithdrawalPassword, setCurrentWithdrawalPassword] = useState("");
   const [newWithdrawalPassword, setNewWithdrawalPassword] = useState("");
   const [confirmWithdrawalPassword, setConfirmWithdrawalPassword] = useState("");
 
+  const [walletAddress, setWalletAddress] = useState("");
+  const [network, setNetwork] = useState("USDT-TRC20");
+
+  const [walletPassword, setWalletPassword] = useState("");
+
+  const [showWalletPwd, setShowWalletPwd] = useState(false);
+  const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
   const API = process.env.REACT_APP_API_URL;
 
-  const isWalletBound = !!user?.walletAddress;
+  const isWalletBound = Boolean(user?.walletAddress?.trim());
 
   // ================= FETCH USER =================
   useEffect(() => {
@@ -446,6 +447,8 @@ const Profile = () => {
           if (data.user?.balance !== undefined) {
             setBalance(data.user.balance);
           }
+        } else {
+          console.log(data.message);
         }
       } catch (err) {
         console.error(err);
@@ -455,13 +458,15 @@ const Profile = () => {
     fetchUser();
   }, [API, setBalance]);
 
-  // ================= WALLET =================
+  // ================= BIND / UPDATE WALLET =================
   const handleBindWallet = async () => {
     if (!walletAddress) return alert("Please enter a wallet address.");
-
     if (isWalletBound && !walletPassword) {
       return alert("Enter withdrawal password to change wallet.");
     }
+
+    if (loading) return;
+    setLoading(true);
 
     try {
       const res = await fetch(`${API}/api/user/bind-wallet`, {
@@ -495,10 +500,12 @@ const Profile = () => {
       setWalletPassword("");
     } catch (err) {
       alert("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // ================= WITHDRAW PASSWORD =================
+  // ================= SET WITHDRAWAL PASSWORD =================
   const handleSetWithdrawalPassword = async () => {
     if (!newWithdrawalPassword || !confirmWithdrawalPassword) {
       return alert("Please fill all fields");
@@ -507,6 +514,9 @@ const Profile = () => {
     if (newWithdrawalPassword !== confirmWithdrawalPassword) {
       return alert("Passwords do not match");
     }
+
+    if (loading) return;
+    setLoading(true);
 
     try {
       const res = await fetch(`${API}/api/user/set-withdrawal-password`, {
@@ -534,6 +544,8 @@ const Profile = () => {
 
     } catch (err) {
       alert("Server error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -544,34 +556,54 @@ const Profile = () => {
     navigate("/");
   };
 
-  if (!user) return <div>Loading...</div>;
+  if (!user) {
+    return (
+      <div className="profile-loading">
+        <div className="loading-card">
+          <div className="skeleton avatar"></div>
+          <div className="loading-text">
+            <div className="skeleton line short"></div>
+            <div className="skeleton line long"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-page">
 
-      {/* PROFILE */}
+      {/* PROFILE INFO */}
       <div className="profile-info">
-        <img
-          src={
-            user.avatar ||
-            `https://ui-avatars.com/api/?name=${encodeURIComponent(user.email || "User")}`
-          }
-          alt="avatar"
-        />
+        <div className="profile-left">
+          <img
+            src={
+              user.avatar ||
+              `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                user.email || "User"
+              )}&background=E2E8F0&color=475569&bold=true&size=128`
+            }
+            alt="avatar"
+          />
 
-        <div>
-          <h3>{user?.email?.split("@")[0]}</h3>
-          <p>ID: {user._id?.slice(0, 6)}</p>
+          <div>
+            <h3>{user?.email?.split("@")[0] || "User"}</h3>
+            <p>ID: {user._id?.slice(0, 6)}</p>
+          </div>
         </div>
       </div>
 
-      {/* ACTIONS */}
+      {/* ACTION BUTTONS */}
       <div className="profile-actions">
-        <button onClick={() => navigate("/topup")}>Top-up</button>
-        <button onClick={() => navigate("/withdraw")}>Withdraw</button>
+        <button className="topup" onClick={() => navigate("/topup")}>
+          Top-up
+        </button>
+        <button className="withdraw" onClick={() => navigate("/withdraw")}>
+          Withdraw
+        </button>
       </div>
 
-      {/* BALANCE */}
+      {/* ASSET CARD */}
       <div className="asset-card">
         <div className="asset-header">
           <span>Total Assets</span>
@@ -580,48 +612,55 @@ const Profile = () => {
           </div>
         </div>
 
-        <h2>
+        <div className="asset-balance">
           {showBalance
             ? `${currency.symbol}${(balance * currency.rate).toLocaleString()}`
             : "****"}
-        </h2>
+        </div>
       </div>
 
       {/* MENU */}
       <div className="profile-menu">
 
-        <div onClick={() => navigate("/invite")}>
-          <FiShare2 /> Invite Friends
+        <div className="menu-item" onClick={() => navigate("/invite")}>
+          <FiShare2 />
+          <span>Invite Friends</span>
         </div>
 
-        <div onClick={() => navigate("/rewards")}>
-          <FiStar /> Rewards
+        <div className="menu-item" onClick={() => navigate("/rewards")}>
+          <FiStar />
+          <span>Rewards</span>
         </div>
 
-        <div onClick={() => setShowBindWallet(true)}>
-          <FiCreditCard /> {isWalletBound ? "Change Wallet" : "Bind Wallet"}
+        <div className="menu-item" onClick={() => setShowBindWallet(true)}>
+          <FiCreditCard />
+          <span>{isWalletBound ? "Change Wallet" : "Bind Wallet"}</span>
         </div>
 
-        <div onClick={() => setShowWithdrawalPassword(true)}>
-          <FiLock /> Withdrawal Password
+        <div className="menu-item" onClick={() => setShowWithdrawalPassword(true)}>
+          <FiLock />
+          <span>Set Withdrawal Password</span>
         </div>
 
-        <div onClick={() => navigate("/faq")}>
-          <FiHelpCircle /> FAQ
+        <div className="menu-item" onClick={() => navigate("/faq")}>
+          <FiHelpCircle />
+          <span>FAQ</span>
         </div>
 
-        <div onClick={() => navigate("/about")}>
-          <FiMessageSquare /> About
+        <div className="menu-item" onClick={() => navigate("/about")}>
+          <FiMessageSquare />
+          <span>About</span>
         </div>
-
       </div>
 
       {/* LOGOUT */}
-      <button onClick={handleLogout}>
-        <FiLogOut /> Sign Out
-      </button>
+      <div className="logout-section">
+        <button className="logout-btn" onClick={handleLogout}>
+          <FiLogOut /> Sign Out
+        </button>
+      </div>
 
-      {/* ================= WALLET MODAL ================= */}
+      {/* WALLET MODAL */}
       {showBindWallet && (
         <div className="modal">
           <div className="modal-content">
@@ -641,91 +680,67 @@ const Profile = () => {
               <option value="USDT-BEP20">USDT-BEP20</option>
             </select>
 
-            {/* WALLET PASSWORD WITH TOGGLE */}
             {isWalletBound && (
-              <div style={{ position: "relative" }}>
+              <div className="password-input-wrapper">
                 <input
                   type={showWalletPwd ? "text" : "password"}
                   placeholder="Withdrawal password"
                   value={walletPassword}
                   onChange={(e) => setWalletPassword(e.target.value)}
                 />
-
-                <span
-                  onClick={() => setShowWalletPwd(!showWalletPwd)}
-                  style={{
-                    position: "absolute",
-                    right: "10px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    cursor: "pointer"
-                  }}
-                >
+                <div onClick={() => setShowWalletPwd(!showWalletPwd)}>
                   {showWalletPwd ? <FiEyeOff /> : <FiEye />}
-                </span>
+                </div>
               </div>
             )}
 
-            <button onClick={handleBindWallet}>
-              {isWalletBound ? "Update Wallet" : "Bind Wallet"}
+            <button onClick={handleBindWallet} disabled={loading}>
+              {loading ? "Processing..." : isWalletBound ? "Update Wallet" : "Bind Wallet"}
             </button>
 
-            <button onClick={() => setShowBindWallet(false)}>
-              Cancel
-            </button>
+            <button onClick={() => setShowBindWallet(false)}>Cancel</button>
 
           </div>
         </div>
       )}
 
-      {/* ================= WITHDRAWAL PASSWORD MODAL ================= */}
+      {/* WITHDRAWAL PASSWORD MODAL */}
       {showWithdrawalPassword && (
         <div className="modal">
           <div className="modal-content">
 
             <h3>Withdrawal Security</h3>
 
-            {/* CURRENT PASSWORD */}
-            <div style={{ position: "relative" }}>
+            {user?.withdrawalPassword && (
               <input
-                type={showWithdrawalPwd ? "text" : "password"}
-                placeholder="Current password"
+                type="password"
+                placeholder="Current withdrawal password"
                 value={currentWithdrawalPassword}
                 onChange={(e) => setCurrentWithdrawalPassword(e.target.value)}
               />
+            )}
 
-              <span
-                onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}
-                style={{
-                  position: "absolute",
-                  right: "10px",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer"
-                }}
-              >
+            <div className="password-input-wrapper">
+              <input
+                type={showWithdrawalPwd ? "text" : "password"}
+                placeholder="New password"
+                value={newWithdrawalPassword}
+                onChange={(e) => setNewWithdrawalPassword(e.target.value)}
+              />
+              <div onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}>
                 {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
-              </span>
+              </div>
             </div>
 
-            {/* NEW PASSWORD */}
             <input
               type={showWithdrawalPwd ? "text" : "password"}
-              placeholder="New password"
-              value={newWithdrawalPassword}
-              onChange={(e) => setNewWithdrawalPassword(e.target.value)}
-            />
-
-            {/* CONFIRM PASSWORD */}
-            <input
-              type={showWithdrawalPwd ? "text" : "password"}
-              placeholder="Confirm password"
+              placeholder="Confirm new password"
               value={confirmWithdrawalPassword}
               onChange={(e) => setConfirmWithdrawalPassword(e.target.value)}
             />
 
-            <button onClick={handleSetWithdrawalPassword}>
-              Set Password
+            <button onClick={handleSetWithdrawalPassword} disabled={loading}>
+              {loading ? "Processing..." : user?.withdrawalPassword ? "Update Password" : "Set Password"}
             </button>
 
             <button onClick={() => setShowWithdrawalPassword(false)}>
