@@ -225,6 +225,8 @@ const Profile = () => {
           <div onClick={() => setShowBalance(!showBalance)}>
             {showBalance ? <FiEye /> : <FiEyeOff />}
           </div>
+
+          <span className="history">Transaction History ›</span>
         </div>
 
         <div className="asset-balance">
