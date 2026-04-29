@@ -1,4 +1,136 @@
-import React from "react";
+// import React from "react";
+// import { useNavigate } from "react-router-dom";
+// import "../styles/transaction.css";
+
+// import { useCurrency } from "../context/CurrencyContext";
+
+// import {
+//   FiArrowLeft,
+//   FiArrowDownLeft,
+//   FiArrowUpRight
+// } from "react-icons/fi";
+
+// const transactions = [
+//   {
+//     id: 1,
+//     type: "deposit",
+//     amount: 200,
+//     status: "success",
+//     date: "Apr 17, 2026",
+//   },
+//   {
+//     id: 2,
+//     type: "withdraw",
+//     amount: 150,
+//     status: "pending",
+//     date: "Apr 16, 2026",
+//   },
+//   {
+//     id: 3,
+//     type: "deposit",
+//     amount: 500,
+//     status: "failed",
+//     date: "Apr 15, 2026",
+//   },
+// ];
+
+// const TransactionHistory = () => {
+
+//   const navigate = useNavigate();
+//   const { currency } = useCurrency(); // ✅ GLOBAL
+
+//   // ===== FORMATTER =====
+//   const format = (value) =>
+//     `${currency.symbol}${(value * currency.rate).toLocaleString(undefined, {
+//       maximumFractionDigits: 2,
+//     })}`;
+
+//   const totalDeposits = transactions
+//     .filter(tx => tx.type === "deposit")
+//     .reduce((sum, tx) => sum + tx.amount, 0);
+
+//   const totalWithdrawals = transactions
+//     .filter(tx => tx.type === "withdraw")
+//     .reduce((sum, tx) => sum + tx.amount, 0);
+
+//   return (
+//     <div className="tx-page">
+
+//       {/* HEADER */}
+//       <div className="tx-header">
+//         <button className="back-btn" onClick={() => navigate(-1)}>
+//           <FiArrowLeft />
+//         </button>
+
+//         <h2>Transaction History</h2>
+//       </div>
+
+//       {/* SUMMARY */}
+//       <div className="tx-summary">
+
+//         <div className="summary-card deposits">
+//           <div className="label">Total Deposits</div>
+//           <div className="value">
+//             +{format(totalDeposits)}
+//           </div>
+//         </div>
+
+//         <div className="summary-card withdrawals">
+//           <div className="label">Total Withdrawals</div>
+//           <div className="value">
+//             -{format(totalWithdrawals)}
+//           </div>
+//         </div>
+
+//       </div>
+
+//       {/* LIST */}
+//       <div className="tx-list">
+
+//         {transactions.map((tx) => (
+//           <div className="tx-card" key={tx.id}>
+
+//             <div className="tx-left">
+//               <div className={`tx-icon ${tx.type}`}>
+//                 {tx.type === "deposit" ? (
+//                   <FiArrowDownLeft />
+//                 ) : (
+//                   <FiArrowUpRight />
+//                 )}
+//               </div>
+
+//               <div>
+//                 <p className="tx-type">
+//                   {tx.type === "deposit" ? "Deposit" : "Withdraw"}
+//                 </p>
+//                 <span className="tx-date">{tx.date}</span>
+//               </div>
+//             </div>
+
+//             <div className="tx-right">
+//               <p className={`tx-amount ${tx.type}`}>
+//                 {tx.type === "deposit" ? "+" : "-"}
+//                 {format(tx.amount)}
+//               </p>
+
+//               <span className={`tx-status ${tx.status}`}>
+//                 {tx.status}
+//               </span>
+//             </div>
+
+//           </div>
+//         ))}
+
+//       </div>
+
+//     </div>
+//   );
+// };
+
+// export default TransactionHistory;
+
+
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/transaction.css";
 
@@ -10,34 +142,49 @@ import {
   FiArrowUpRight
 } from "react-icons/fi";
 
-const transactions = [
-  {
-    id: 1,
-    type: "deposit",
-    amount: 200,
-    status: "success",
-    date: "Apr 17, 2026",
-  },
-  {
-    id: 2,
-    type: "withdraw",
-    amount: 150,
-    status: "pending",
-    date: "Apr 16, 2026",
-  },
-  {
-    id: 3,
-    type: "deposit",
-    amount: 500,
-    status: "failed",
-    date: "Apr 15, 2026",
-  },
-];
-
 const TransactionHistory = () => {
 
   const navigate = useNavigate();
-  const { currency } = useCurrency(); // ✅ GLOBAL
+  const { currency } = useCurrency();
+
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+
+  const API_URL = process.env.REACT_APP_API_URL;
+
+  // ===== FETCH FROM BACKEND =====
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const res = await fetch(
+          `${API_URL}/api/transactions/${userId}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch transactions");
+        }
+
+        const data = await res.json();
+        setTransactions(data);
+
+      } catch (err) {
+        console.error("Failed to fetch transactions:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId && API_URL) fetchTransactions();
+  }, [userId, API_URL, token]);
 
   // ===== FORMATTER =====
   const format = (value) =>
@@ -87,39 +234,47 @@ const TransactionHistory = () => {
       {/* LIST */}
       <div className="tx-list">
 
-        {transactions.map((tx) => (
-          <div className="tx-card" key={tx.id}>
+        {loading ? (
+          <p className="tx-loading">Loading transactions...</p>
+        ) : transactions.length === 0 ? (
+          <p className="tx-empty">No transactions found</p>
+        ) : (
+          transactions.map((tx) => (
+            <div className="tx-card" key={tx._id || tx.id}>
 
-            <div className="tx-left">
-              <div className={`tx-icon ${tx.type}`}>
-                {tx.type === "deposit" ? (
-                  <FiArrowDownLeft />
-                ) : (
-                  <FiArrowUpRight />
-                )}
+              <div className="tx-left">
+                <div className={`tx-icon ${tx.type}`}>
+                  {tx.type === "deposit" ? (
+                    <FiArrowDownLeft />
+                  ) : (
+                    <FiArrowUpRight />
+                  )}
+                </div>
+
+                <div>
+                  <p className="tx-type">
+                    {tx.type === "deposit" ? "Deposit" : "Withdraw"}
+                  </p>
+                  <span className="tx-date">
+                    {new Date(tx.createdAt || tx.date).toLocaleDateString()}
+                  </span>
+                </div>
               </div>
 
-              <div>
-                <p className="tx-type">
-                  {tx.type === "deposit" ? "Deposit" : "Withdraw"}
+              <div className="tx-right">
+                <p className={`tx-amount ${tx.type}`}>
+                  {tx.type === "deposit" ? "+" : "-"}
+                  {format(tx.amount)}
                 </p>
-                <span className="tx-date">{tx.date}</span>
+
+                <span className={`tx-status ${tx.status}`}>
+                  {tx.status}
+                </span>
               </div>
+
             </div>
-
-            <div className="tx-right">
-              <p className={`tx-amount ${tx.type}`}>
-                {tx.type === "deposit" ? "+" : "-"}
-                {format(tx.amount)}
-              </p>
-
-              <span className={`tx-status ${tx.status}`}>
-                {tx.status}
-              </span>
-            </div>
-
-          </div>
-        ))}
+          ))
+        )}
 
       </div>
 
