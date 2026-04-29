@@ -38,7 +38,7 @@ const Profile = () => {
   const [walletPassword, setWalletPassword] = useState("");
 
   const [showWalletPwd, setShowWalletPwd] = useState(false);
-  const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
+  // const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
 
   const [showCurrentPwd, setShowCurrentPwd] = useState(false);
   const [showNewPwd, setShowNewPwd] = useState(false);
