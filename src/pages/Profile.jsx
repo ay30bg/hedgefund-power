@@ -1,3 +1,385 @@
+// // import React, { useState, useEffect } from "react";
+// // import { useNavigate } from "react-router-dom";
+// // import "../styles/profile.css";
+
+// // import { useBalance } from "../context/BalanceContext";
+// // import { useCurrency } from "../context/CurrencyContext";
+
+// // import {
+// //   FiShare2,
+// //   FiStar,
+// //   FiHelpCircle,
+// //   FiMessageSquare,
+// //   FiEye,
+// //   FiEyeOff,
+// //   FiLogOut,
+// //   FiCreditCard,
+// //   FiLock
+// // } from "react-icons/fi";
+
+// // const Profile = () => {
+// //   const navigate = useNavigate();
+
+// //   const { balance, setBalance } = useBalance();
+// //   const { currency } = useCurrency();
+
+// //   const [user, setUser] = useState(null);
+// //   const [showBalance, setShowBalance] = useState(true);
+
+// //   const [showBindWallet, setShowBindWallet] = useState(false);
+// //   const [showWithdrawalPassword, setShowWithdrawalPassword] = useState(false);
+// //   const [confirmWithdrawalPassword, setConfirmWithdrawalPassword] = useState("");
+// //   const [currentWithdrawalPassword, setCurrentWithdrawalPassword] = useState("");
+// //   const [newWithdrawalPassword, setNewWithdrawalPassword] = useState("");
+// //   const [confirmWithdrawalPassword, setConfirmWithdrawalPassword] = useState("");
+
+// //   const [walletAddress, setWalletAddress] = useState("");
+// //   const [network, setNetwork] = useState("USDT-TRC20");
+
+// //   // ✅ SEPARATED STATES (FIX)
+// //   const [walletPassword, setWalletPassword] = useState("");
+// //   const [withdrawalPassword, setWithdrawalPassword] = useState("");
+
+// //   const [showWalletPwd, setShowWalletPwd] = useState(false);
+// //   const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
+
+// //   const API = process.env.REACT_APP_API_URL;
+
+// //   const isWalletBound = !!user?.walletAddress;
+
+// //   // ================= FETCH USER =================
+// //   useEffect(() => {
+// //     const fetchUser = async () => {
+// //       try {
+// //         const res = await fetch(`${API}/api/user/profile`, {
+// //           headers: {
+// //             Authorization: `Bearer ${localStorage.getItem("token")}`
+// //           }
+// //         });
+
+// //         const data = await res.json();
+
+// //         if (res.ok) {
+// //           setUser(data.user);
+
+// //           if (data.user?.balance !== undefined) {
+// //             setBalance(data.user.balance);
+// //           }
+// //         } else {
+// //           console.log(data.message);
+// //         }
+// //       } catch (err) {
+// //         console.error(err);
+// //       }
+// //     };
+
+// //     fetchUser();
+// //   }, [API, setBalance]);
+
+// //   // ================= BIND / UPDATE WALLET =================
+// //   const handleBindWallet = async () => {
+// //     if (!walletAddress) return alert("Please enter a wallet address.");
+
+// //     if (isWalletBound && !walletPassword) {
+// //       return alert("Enter withdrawal password to change wallet.");
+// //     }
+
+// //     try {
+// //       const res = await fetch(`${API}/api/user/bind-wallet`, {
+// //         method: "POST",
+// //         headers: {
+// //           "Content-Type": "application/json",
+// //           Authorization: `Bearer ${localStorage.getItem("token")}`
+// //         },
+// //         body: JSON.stringify({
+// //           walletAddress,
+// //           network,
+// //           password: isWalletBound ? walletPassword : undefined
+// //         })
+// //       });
+
+// //       const data = await res.json();
+
+// //       if (!res.ok) return alert(data.message);
+
+// //       alert(data.message);
+
+// //       // ✅ UPDATE STATE INSTEAD OF RELOAD
+// //       setUser((prev) => ({
+// //         ...prev,
+// //         walletAddress,
+// //         network
+// //       }));
+
+// //       setShowBindWallet(false);
+// //       setWalletAddress("");
+// //       setNetwork("USDT-TRC20");
+// //       setWalletPassword("");
+// //     } catch (err) {
+// //       alert("Server error");
+// //     }
+// //   };
+
+// //   // ================= SET WITHDRAWAL PASSWORD =================
+// // const handleSetWithdrawalPassword = async () => {
+// //   if (!newWithdrawalPassword || !confirmWithdrawalPassword) {
+// //     return alert("Please fill all fields");
+// //   }
+
+// //   if (newWithdrawalPassword !== confirmWithdrawalPassword) {
+// //     return alert("Passwords do not match");
+// //   }
+
+// //   try {
+// //     const res = await fetch(`${API}/api/user/set-withdrawal-password`, {
+// //       method: "POST",
+// //       headers: {
+// //         "Content-Type": "application/json",
+// //         Authorization: `Bearer ${localStorage.getItem("token")}`
+// //       },
+// //       body: JSON.stringify({
+// //         password: newWithdrawalPassword,
+// //         currentPassword: currentWithdrawalPassword || undefined
+// //       })
+// //     });
+
+// //     const data = await res.json();
+
+// //     if (!res.ok) return alert(data.message);
+
+// //     alert(data.message);
+
+// //     setCurrentWithdrawalPassword("");
+// //     setNewWithdrawalPassword("");
+// //     setConfirmWithdrawalPassword("");
+// //     setShowWithdrawalPassword(false);
+
+// //   } catch (err) {
+// //     alert("Server error");
+// //   }
+// // };
+
+// //   // ================= LOGOUT =================
+// //   const handleLogout = () => {
+// //     localStorage.clear();
+// //     sessionStorage.clear();
+// //     navigate("/");
+// //   };
+
+// //   if (!user) {
+// //     return (
+// //       <div className="profile-loading">
+// //         <div className="loading-card">
+// //           <div className="skeleton avatar"></div>
+// //           <div className="loading-text">
+// //             <div className="skeleton line short"></div>
+// //             <div className="skeleton line long"></div>
+// //           </div>
+// //         </div>
+// //       </div>
+// //     );
+// //   }
+
+// //   return (
+// //     <div className="profile-page">
+
+// //       {/* PROFILE INFO (FIXED STRUCTURE) */}
+// //       <div className="profile-info">
+// //         <div className="profile-left">
+// //           <img
+// //             src={
+// //               user.avatar ||
+// //               `https://ui-avatars.com/api/?name=${encodeURIComponent(
+// //                 user.email || "User"
+// //               )}&background=E2E8F0&color=475569&bold=true&size=128`
+// //             }
+// //             alt="avatar"
+// //           />
+
+// //           <div>
+// //             <h3>{user?.email?.split("@")[0] || "User"}</h3>
+// //             <p>ID: {user._id?.slice(0, 6)}</p>
+// //           </div>
+// //         </div>
+// //       </div>
+
+// //       {/* ACTION BUTTONS */}
+// //       <div className="profile-actions">
+// //         <button className="topup" onClick={() => navigate("/topup")}>
+// //           Top-up
+// //         </button>
+// //         <button className="withdraw" onClick={() => navigate("/withdraw")}>
+// //           Withdraw
+// //         </button>
+// //       </div>
+
+// //       {/* ASSET CARD */}
+// //       <div className="asset-card">
+// //         <div className="asset-header">
+// //           <span>Total Assets</span>
+
+// //           <div onClick={() => setShowBalance(!showBalance)}>
+// //             {showBalance ? <FiEye /> : <FiEyeOff />}
+// //           </div>
+// //         </div>
+
+// //         <div className="asset-balance">
+// //           {showBalance
+// //             ? `${currency.symbol}${(balance * currency.rate).toLocaleString()}`
+// //             : "****"}
+// //         </div>
+// //       </div>
+
+// //       {/* MENU */}
+// //       <div className="profile-menu">
+
+// //         <div className="menu-item" onClick={() => navigate("/invite")}>
+// //           <FiShare2 />
+// //           <span>Invite Friends</span>
+// //         </div>
+
+// //         <div className="menu-item" onClick={() => navigate("/rewards")}>
+// //           <FiStar />
+// //           <span>Rewards</span>
+// //         </div>
+
+// //         <div className="menu-item" onClick={() => setShowBindWallet(true)}>
+// //           <FiCreditCard />
+// //           <span>{isWalletBound ? "Change Wallet" : "Bind Wallet"}</span>
+// //         </div>
+
+// //         <div
+// //           className="menu-item"
+// //           onClick={() => setShowWithdrawalPassword(true)}
+// //         >
+// //           <FiLock />
+// //           <span>Set Withdrawal Password</span>
+// //         </div>
+
+// //         <div className="menu-item" onClick={() => navigate("/faq")}>
+// //           <FiHelpCircle />
+// //           <span>FAQ</span>
+// //         </div>
+
+// //         <div className="menu-item" onClick={() => navigate("/about")}>
+// //           <FiMessageSquare />
+// //           <span>About</span>
+// //         </div>
+// //       </div>
+
+// //       {/* LOGOUT */}
+// //       <div className="logout-section">
+// //         <button className="logout-btn" onClick={handleLogout}>
+// //           <FiLogOut /> Sign Out
+// //         </button>
+// //       </div>
+
+// //       {/* WALLET MODAL */}
+// //       {showBindWallet && (
+// //         <div className="modal">
+// //           <div className="modal-content">
+
+// //             <h3>{isWalletBound ? "Change Wallet" : "Bind Wallet"}</h3>
+
+// //             <input
+// //               type="text"
+// //               placeholder="Wallet address"
+// //               value={walletAddress}
+// //               onChange={(e) => setWalletAddress(e.target.value)}
+// //             />
+
+// //             <select
+// //               value={network}
+// //               onChange={(e) => setNetwork(e.target.value)}
+// //             >
+// //               <option value="USDT-TRC20">USDT-TRC20</option>
+// //               <option value="USDT-TON">USDT-TON</option>
+// //               <option value="USDT-BEP20">USDT-BEP20</option>
+// //             </select>
+
+// //             {/* PASSWORD ONLY WHEN UPDATING */}
+// //             {isWalletBound && (
+// //               <div style={{ position: "relative" }}>
+// //                 <input
+// //                   type={showWalletPwd ? "text" : "password"}
+// //                   placeholder="Withdrawal password"
+// //                   value={walletPassword}
+// //                   onChange={(e) => setWalletPassword(e.target.value)}
+// //                 />
+
+// //                 <div onClick={() => setShowWalletPwd(!showWalletPwd)}>
+// //                   {showWalletPwd ? <FiEyeOff /> : <FiEye />}
+// //                 </div>
+// //               </div>
+// //             )}
+
+// //             <button onClick={handleBindWallet}>
+// //               {isWalletBound ? "Update Wallet" : "Bind Wallet"}
+// //             </button>
+
+// //             <button onClick={() => setShowBindWallet(false)}>
+// //               Cancel
+// //             </button>
+
+// //           </div>
+// //         </div>
+// //       )}
+
+// //      {showWithdrawalPassword && (
+// //   <div className="modal">
+// //     <div className="modal-content">
+
+// //       <h3>Withdrawal Security</h3>
+
+// //       {/* SHOW CURRENT PASSWORD ONLY IF USER ALREADY HAS ONE */}
+// //       {user?.withdrawalPassword && (
+// //         <div className="password-input-wrapper">
+// //           <input
+// //             type="password"
+// //             placeholder="Current withdrawal password"
+// //             value={currentWithdrawalPassword}
+// //             onChange={(e) => setCurrentWithdrawalPassword(e.target.value)}
+// //           />
+// //         </div>
+// //       )}
+
+// //       {/* NEW PASSWORD */}
+// //       <div className="password-input-wrapper">
+// //         <input
+// //           type="password"
+// //           placeholder="New password"
+// //           value={newWithdrawalPassword}
+// //           onChange={(e) => setNewWithdrawalPassword(e.target.value)}
+// //         />
+// //       </div>
+
+// //       {/* CONFIRM PASSWORD */}
+// //       <div className="password-input-wrapper">
+// //         <input
+// //           type="password"
+// //           placeholder="Confirm new password"
+// //           value={confirmWithdrawalPassword}
+// //           onChange={(e) => setConfirmWithdrawalPassword(e.target.value)}
+// //         />
+// //       </div>
+
+// //       <button onClick={handleSetWithdrawalPassword}>
+// //         {user?.withdrawalPassword ? "Update Password" : "Set Password"}
+// //       </button>
+
+// //       <button onClick={() => setShowWithdrawalPassword(false)}>
+// //         Cancel
+// //       </button>
+
+// //     </div>
+// //   </div>
+// // )}
+// //     </div>
+// //   );
+// // };
+
+// // export default Profile;
+
 // import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 // import "../styles/profile.css";
@@ -28,7 +410,7 @@
 
 //   const [showBindWallet, setShowBindWallet] = useState(false);
 //   const [showWithdrawalPassword, setShowWithdrawalPassword] = useState(false);
-//   const [confirmWithdrawalPassword, setConfirmWithdrawalPassword] = useState("");
+
 //   const [currentWithdrawalPassword, setCurrentWithdrawalPassword] = useState("");
 //   const [newWithdrawalPassword, setNewWithdrawalPassword] = useState("");
 //   const [confirmWithdrawalPassword, setConfirmWithdrawalPassword] = useState("");
@@ -36,16 +418,16 @@
 //   const [walletAddress, setWalletAddress] = useState("");
 //   const [network, setNetwork] = useState("USDT-TRC20");
 
-//   // ✅ SEPARATED STATES (FIX)
 //   const [walletPassword, setWalletPassword] = useState("");
-//   const [withdrawalPassword, setWithdrawalPassword] = useState("");
 
 //   const [showWalletPwd, setShowWalletPwd] = useState(false);
 //   const [showWithdrawalPwd, setShowWithdrawalPwd] = useState(false);
 
+//   const [loading, setLoading] = useState(false);
+
 //   const API = process.env.REACT_APP_API_URL;
 
-//   const isWalletBound = !!user?.walletAddress;
+//   const isWalletBound = Boolean(user?.walletAddress?.trim());
 
 //   // ================= FETCH USER =================
 //   useEffect(() => {
@@ -79,10 +461,12 @@
 //   // ================= BIND / UPDATE WALLET =================
 //   const handleBindWallet = async () => {
 //     if (!walletAddress) return alert("Please enter a wallet address.");
-
 //     if (isWalletBound && !walletPassword) {
 //       return alert("Enter withdrawal password to change wallet.");
 //     }
+
+//     if (loading) return;
+//     setLoading(true);
 
 //     try {
 //       const res = await fetch(`${API}/api/user/bind-wallet`, {
@@ -104,7 +488,6 @@
 
 //       alert(data.message);
 
-//       // ✅ UPDATE STATE INSTEAD OF RELOAD
 //       setUser((prev) => ({
 //         ...prev,
 //         walletAddress,
@@ -117,47 +500,54 @@
 //       setWalletPassword("");
 //     } catch (err) {
 //       alert("Server error");
+//     } finally {
+//       setLoading(false);
 //     }
 //   };
 
 //   // ================= SET WITHDRAWAL PASSWORD =================
-// const handleSetWithdrawalPassword = async () => {
-//   if (!newWithdrawalPassword || !confirmWithdrawalPassword) {
-//     return alert("Please fill all fields");
-//   }
+//   const handleSetWithdrawalPassword = async () => {
+//     if (!newWithdrawalPassword || !confirmWithdrawalPassword) {
+//       return alert("Please fill all fields");
+//     }
 
-//   if (newWithdrawalPassword !== confirmWithdrawalPassword) {
-//     return alert("Passwords do not match");
-//   }
+//     if (newWithdrawalPassword !== confirmWithdrawalPassword) {
+//       return alert("Passwords do not match");
+//     }
 
-//   try {
-//     const res = await fetch(`${API}/api/user/set-withdrawal-password`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${localStorage.getItem("token")}`
-//       },
-//       body: JSON.stringify({
-//         password: newWithdrawalPassword,
-//         currentPassword: currentWithdrawalPassword || undefined
-//       })
-//     });
+//     if (loading) return;
+//     setLoading(true);
 
-//     const data = await res.json();
+//     try {
+//       const res = await fetch(`${API}/api/user/set-withdrawal-password`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${localStorage.getItem("token")}`
+//         },
+//         body: JSON.stringify({
+//           password: newWithdrawalPassword,
+//           currentPassword: currentWithdrawalPassword || undefined
+//         })
+//       });
 
-//     if (!res.ok) return alert(data.message);
+//       const data = await res.json();
 
-//     alert(data.message);
+//       if (!res.ok) return alert(data.message);
 
-//     setCurrentWithdrawalPassword("");
-//     setNewWithdrawalPassword("");
-//     setConfirmWithdrawalPassword("");
-//     setShowWithdrawalPassword(false);
+//       alert(data.message);
 
-//   } catch (err) {
-//     alert("Server error");
-//   }
-// };
+//       setCurrentWithdrawalPassword("");
+//       setNewWithdrawalPassword("");
+//       setConfirmWithdrawalPassword("");
+//       setShowWithdrawalPassword(false);
+
+//     } catch (err) {
+//       alert("Server error");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
 //   // ================= LOGOUT =================
 //   const handleLogout = () => {
@@ -183,7 +573,7 @@
 //   return (
 //     <div className="profile-page">
 
-//       {/* PROFILE INFO (FIXED STRUCTURE) */}
+//       {/* PROFILE INFO */}
 //       <div className="profile-info">
 //         <div className="profile-left">
 //           <img
@@ -217,7 +607,6 @@
 //       <div className="asset-card">
 //         <div className="asset-header">
 //           <span>Total Assets</span>
-
 //           <div onClick={() => setShowBalance(!showBalance)}>
 //             {showBalance ? <FiEye /> : <FiEyeOff />}
 //           </div>
@@ -248,10 +637,7 @@
 //           <span>{isWalletBound ? "Change Wallet" : "Bind Wallet"}</span>
 //         </div>
 
-//         <div
-//           className="menu-item"
-//           onClick={() => setShowWithdrawalPassword(true)}
-//         >
+//         <div className="menu-item" onClick={() => setShowWithdrawalPassword(true)}>
 //           <FiLock />
 //           <span>Set Withdrawal Password</span>
 //         </div>
@@ -288,36 +674,76 @@
 //               onChange={(e) => setWalletAddress(e.target.value)}
 //             />
 
-//             <select
-//               value={network}
-//               onChange={(e) => setNetwork(e.target.value)}
-//             >
+//             <select value={network} onChange={(e) => setNetwork(e.target.value)}>
 //               <option value="USDT-TRC20">USDT-TRC20</option>
 //               <option value="USDT-TON">USDT-TON</option>
 //               <option value="USDT-BEP20">USDT-BEP20</option>
 //             </select>
 
-//             {/* PASSWORD ONLY WHEN UPDATING */}
 //             {isWalletBound && (
-//               <div style={{ position: "relative" }}>
+//               <div className="password-input-wrapper">
 //                 <input
 //                   type={showWalletPwd ? "text" : "password"}
 //                   placeholder="Withdrawal password"
 //                   value={walletPassword}
 //                   onChange={(e) => setWalletPassword(e.target.value)}
 //                 />
-
 //                 <div onClick={() => setShowWalletPwd(!showWalletPwd)}>
 //                   {showWalletPwd ? <FiEyeOff /> : <FiEye />}
 //                 </div>
 //               </div>
 //             )}
 
-//             <button onClick={handleBindWallet}>
-//               {isWalletBound ? "Update Wallet" : "Bind Wallet"}
+//             <button onClick={handleBindWallet} disabled={loading}>
+//               {loading ? "Processing..." : isWalletBound ? "Update Wallet" : "Bind Wallet"}
 //             </button>
 
-//             <button onClick={() => setShowBindWallet(false)}>
+//             <button onClick={() => setShowBindWallet(false)}>Cancel</button>
+
+//           </div>
+//         </div>
+//       )}
+
+//       {/* WITHDRAWAL PASSWORD MODAL */}
+//       {showWithdrawalPassword && (
+//         <div className="modal">
+//           <div className="modal-content">
+
+//             <h3>Withdrawal Security</h3>
+
+//             {user?.withdrawalPassword && (
+//               <input
+//                 type="password"
+//                 placeholder="Current withdrawal password"
+//                 value={currentWithdrawalPassword}
+//                 onChange={(e) => setCurrentWithdrawalPassword(e.target.value)}
+//               />
+//             )}
+
+//             <div className="password-input-wrapper">
+//               <input
+//                 type={showWithdrawalPwd ? "text" : "password"}
+//                 placeholder="New password"
+//                 value={newWithdrawalPassword}
+//                 onChange={(e) => setNewWithdrawalPassword(e.target.value)}
+//               />
+//               <div onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}>
+//                 {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
+//               </div>
+//             </div>
+
+//             <input
+//               type={showWithdrawalPwd ? "text" : "password"}
+//               placeholder="Confirm new password"
+//               value={confirmWithdrawalPassword}
+//               onChange={(e) => setConfirmWithdrawalPassword(e.target.value)}
+//             />
+
+//             <button onClick={handleSetWithdrawalPassword} disabled={loading}>
+//               {loading ? "Processing..." : user?.withdrawalPassword ? "Update Password" : "Set Password"}
+//             </button>
+
+//             <button onClick={() => setShowWithdrawalPassword(false)}>
 //               Cancel
 //             </button>
 
@@ -325,55 +751,6 @@
 //         </div>
 //       )}
 
-//      {showWithdrawalPassword && (
-//   <div className="modal">
-//     <div className="modal-content">
-
-//       <h3>Withdrawal Security</h3>
-
-//       {/* SHOW CURRENT PASSWORD ONLY IF USER ALREADY HAS ONE */}
-//       {user?.withdrawalPassword && (
-//         <div className="password-input-wrapper">
-//           <input
-//             type="password"
-//             placeholder="Current withdrawal password"
-//             value={currentWithdrawalPassword}
-//             onChange={(e) => setCurrentWithdrawalPassword(e.target.value)}
-//           />
-//         </div>
-//       )}
-
-//       {/* NEW PASSWORD */}
-//       <div className="password-input-wrapper">
-//         <input
-//           type="password"
-//           placeholder="New password"
-//           value={newWithdrawalPassword}
-//           onChange={(e) => setNewWithdrawalPassword(e.target.value)}
-//         />
-//       </div>
-
-//       {/* CONFIRM PASSWORD */}
-//       <div className="password-input-wrapper">
-//         <input
-//           type="password"
-//           placeholder="Confirm new password"
-//           value={confirmWithdrawalPassword}
-//           onChange={(e) => setConfirmWithdrawalPassword(e.target.value)}
-//         />
-//       </div>
-
-//       <button onClick={handleSetWithdrawalPassword}>
-//         {user?.withdrawalPassword ? "Update Password" : "Set Password"}
-//       </button>
-
-//       <button onClick={() => setShowWithdrawalPassword(false)}>
-//         Cancel
-//       </button>
-
-//     </div>
-//   </div>
-// )}
 //     </div>
 //   );
 // };
@@ -417,7 +794,6 @@ const Profile = () => {
 
   const [walletAddress, setWalletAddress] = useState("");
   const [network, setNetwork] = useState("USDT-TRC20");
-
   const [walletPassword, setWalletPassword] = useState("");
 
   const [showWalletPwd, setShowWalletPwd] = useState(false);
@@ -426,7 +802,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
 
   const API = process.env.REACT_APP_API_URL;
-
   const isWalletBound = Boolean(user?.walletAddress?.trim());
 
   // ================= FETCH USER =================
@@ -443,7 +818,6 @@ const Profile = () => {
 
         if (res.ok) {
           setUser(data.user);
-
           if (data.user?.balance !== undefined) {
             setBalance(data.user.balance);
           }
@@ -483,7 +857,6 @@ const Profile = () => {
       });
 
       const data = await res.json();
-
       if (!res.ok) return alert(data.message);
 
       alert(data.message);
@@ -498,7 +871,7 @@ const Profile = () => {
       setWalletAddress("");
       setNetwork("USDT-TRC20");
       setWalletPassword("");
-    } catch (err) {
+    } catch {
       alert("Server error");
     } finally {
       setLoading(false);
@@ -532,7 +905,6 @@ const Profile = () => {
       });
 
       const data = await res.json();
-
       if (!res.ok) return alert(data.message);
 
       alert(data.message);
@@ -541,8 +913,7 @@ const Profile = () => {
       setNewWithdrawalPassword("");
       setConfirmWithdrawalPassword("");
       setShowWithdrawalPassword(false);
-
-    } catch (err) {
+    } catch {
       alert("Server error");
     } finally {
       setLoading(false);
@@ -573,7 +944,7 @@ const Profile = () => {
   return (
     <div className="profile-page">
 
-      {/* PROFILE INFO */}
+      {/* PROFILE */}
       <div className="profile-info">
         <div className="profile-left">
           <img
@@ -581,11 +952,10 @@ const Profile = () => {
               user.avatar ||
               `https://ui-avatars.com/api/?name=${encodeURIComponent(
                 user.email || "User"
-              )}&background=E2E8F0&color=475569&bold=true&size=128`
+              )}`
             }
             alt="avatar"
           />
-
           <div>
             <h3>{user?.email?.split("@")[0] || "User"}</h3>
             <p>ID: {user._id?.slice(0, 6)}</p>
@@ -593,7 +963,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* ACTION BUTTONS */}
+      {/* ACTIONS */}
       <div className="profile-actions">
         <button className="topup" onClick={() => navigate("/topup")}>
           Top-up
@@ -603,7 +973,7 @@ const Profile = () => {
         </button>
       </div>
 
-      {/* ASSET CARD */}
+      {/* BALANCE */}
       <div className="asset-card">
         <div className="asset-header">
           <span>Total Assets</span>
@@ -621,7 +991,6 @@ const Profile = () => {
 
       {/* MENU */}
       <div className="profile-menu">
-
         <div className="menu-item" onClick={() => navigate("/invite")}>
           <FiShare2 />
           <span>Invite Friends</span>
@@ -654,17 +1023,14 @@ const Profile = () => {
       </div>
 
       {/* LOGOUT */}
-      <div className="logout-section">
-        <button className="logout-btn" onClick={handleLogout}>
-          <FiLogOut /> Sign Out
-        </button>
-      </div>
+      <button className="logout-btn" onClick={handleLogout}>
+        <FiLogOut /> Sign Out
+      </button>
 
       {/* WALLET MODAL */}
       {showBindWallet && (
         <div className="modal">
           <div className="modal-content">
-
             <h3>{isWalletBound ? "Change Wallet" : "Bind Wallet"}</h3>
 
             <input
@@ -674,7 +1040,11 @@ const Profile = () => {
               onChange={(e) => setWalletAddress(e.target.value)}
             />
 
-            <select value={network} onChange={(e) => setNetwork(e.target.value)}>
+            <select
+              className="wallet-select"
+              value={network}
+              onChange={(e) => setNetwork(e.target.value)}
+            >
               <option value="USDT-TRC20">USDT-TRC20</option>
               <option value="USDT-TON">USDT-TON</option>
               <option value="USDT-BEP20">USDT-BEP20</option>
@@ -688,18 +1058,20 @@ const Profile = () => {
                   value={walletPassword}
                   onChange={(e) => setWalletPassword(e.target.value)}
                 />
-                <div onClick={() => setShowWalletPwd(!showWalletPwd)}>
+                <div
+                  className="eye-toggle"
+                  onClick={() => setShowWalletPwd(!showWalletPwd)}
+                >
                   {showWalletPwd ? <FiEyeOff /> : <FiEye />}
                 </div>
               </div>
             )}
 
             <button onClick={handleBindWallet} disabled={loading}>
-              {loading ? "Processing..." : isWalletBound ? "Update Wallet" : "Bind Wallet"}
+              {loading ? "Processing..." : "Confirm"}
             </button>
 
             <button onClick={() => setShowBindWallet(false)}>Cancel</button>
-
           </div>
         </div>
       )}
@@ -708,7 +1080,6 @@ const Profile = () => {
       {showWithdrawalPassword && (
         <div className="modal">
           <div className="modal-content">
-
             <h3>Withdrawal Security</h3>
 
             {user?.withdrawalPassword && (
@@ -716,7 +1087,9 @@ const Profile = () => {
                 type="password"
                 placeholder="Current withdrawal password"
                 value={currentWithdrawalPassword}
-                onChange={(e) => setCurrentWithdrawalPassword(e.target.value)}
+                onChange={(e) =>
+                  setCurrentWithdrawalPassword(e.target.value)
+                }
               />
             )}
 
@@ -725,9 +1098,16 @@ const Profile = () => {
                 type={showWithdrawalPwd ? "text" : "password"}
                 placeholder="New password"
                 value={newWithdrawalPassword}
-                onChange={(e) => setNewWithdrawalPassword(e.target.value)}
+                onChange={(e) =>
+                  setNewWithdrawalPassword(e.target.value)
+                }
               />
-              <div onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}>
+              <div
+                className="eye-toggle"
+                onClick={() =>
+                  setShowWithdrawalPwd(!showWithdrawalPwd)
+                }
+              >
                 {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
               </div>
             </div>
@@ -736,17 +1116,18 @@ const Profile = () => {
               type={showWithdrawalPwd ? "text" : "password"}
               placeholder="Confirm new password"
               value={confirmWithdrawalPassword}
-              onChange={(e) => setConfirmWithdrawalPassword(e.target.value)}
+              onChange={(e) =>
+                setConfirmWithdrawalPassword(e.target.value)
+              }
             />
 
             <button onClick={handleSetWithdrawalPassword} disabled={loading}>
-              {loading ? "Processing..." : user?.withdrawalPassword ? "Update Password" : "Set Password"}
+              {loading ? "Processing..." : "Confirm"}
             </button>
 
             <button onClick={() => setShowWithdrawalPassword(false)}>
               Cancel
             </button>
-
           </div>
         </div>
       )}
