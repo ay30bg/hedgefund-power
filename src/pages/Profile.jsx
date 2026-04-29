@@ -322,9 +322,12 @@ const Profile = () => {
               onChange={(e) => setWithdrawalPassword(e.target.value)}
             />
 
-            <div onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}>
-              {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
-            </div>
+            <div
+  onClick={() => setShowWithdrawalPwd(!showWithdrawalPwd)}
+  className="eye-toggle"
+>
+  {showWithdrawalPwd ? <FiEyeOff /> : <FiEye />}
+</div>
 
             <button onClick={handleSetWithdrawalPassword}>
               Save Password
