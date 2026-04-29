@@ -1,3 +1,116 @@
+// import React, {
+//   createContext,
+//   useContext,
+//   useEffect,
+//   useState,
+//   useCallback
+// } from "react";
+// import axios from "axios";
+
+// const BalanceContext = createContext();
+
+// const API_URL =
+//   process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+// export const BalanceProvider = ({ children }) => {
+//   const [balance, setBalanceState] = useState(0);
+//   const [loading, setLoading] = useState(false);
+//   const [userId, setUserId] = useState(null);
+
+//   // ================= FETCH BALANCE =================
+//   const fetchBalance = useCallback(async (id) => {
+//     if (!id) {
+//       console.log("fetchBalance aborted: no userId");
+//       return;
+//     }
+
+//     try {
+//       setLoading(true);
+
+//       console.log("Fetching balance for user:", id);
+
+//       const res = await axios.get(
+//         `${API_URL}/api/balance/${id}`
+//       );
+
+//       console.log("Balance API response:", res.data);
+
+//       setBalanceState(res.data?.balance ?? 0);
+
+//     } catch (err) {
+//       console.error(
+//         "Error fetching balance:",
+//         err.response?.data || err.message
+//       );
+//     } finally {
+//       setLoading(false);
+//     }
+//   }, []);
+
+//   // ================= INIT USER + FETCH =================
+//   useEffect(() => {
+//     const storedUserId = localStorage.getItem("userId");
+
+//     console.log("Loaded userId from localStorage:", storedUserId);
+
+//     if (!storedUserId || storedUserId === "null") return;
+
+//     setUserId(storedUserId);
+
+//     // 🔥 IMPORTANT FIX: fetch immediately here
+//     fetchBalance(storedUserId);
+//   }, [fetchBalance]);
+
+//   // ================= UPDATE BALANCE =================
+//   const updateBalance = useCallback(
+//     async (newBalance) => {
+//       if (!userId) {
+//         console.log("updateBalance aborted: no userId");
+//         return;
+//       }
+
+//       try {
+//         setBalanceState(newBalance); // optimistic update
+
+//         await axios.put(
+//           `${API_URL}/api/balance/${userId}`,
+//           { amount: newBalance }
+//         );
+
+//         console.log("Balance updated successfully");
+//       } catch (err) {
+//         console.error(
+//           "Error updating balance:",
+//           err.response?.data || err.message
+//         );
+//       }
+//     },
+//     [userId]
+//   );
+
+//   // ================= REFRESH =================
+//   const refreshBalance = () => {
+//     if (userId) {
+//       fetchBalance(userId);
+//     }
+//   };
+
+//   return (
+//     <BalanceContext.Provider
+//       value={{
+//         balance,
+//         setBalance: updateBalance,
+//         loading,
+//         refreshBalance
+//       }}
+//     >
+//       {children}
+//     </BalanceContext.Provider>
+//   );
+// };
+
+// export const useBalance = () => useContext(BalanceContext);
+
 import React, {
   createContext,
   useContext,
@@ -15,7 +128,6 @@ const API_URL =
 export const BalanceProvider = ({ children }) => {
   const [balance, setBalanceState] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState(null);
 
   // ================= FETCH BALANCE =================
   const fetchBalance = useCallback(async (id) => {
@@ -36,7 +148,6 @@ export const BalanceProvider = ({ children }) => {
       console.log("Balance API response:", res.data);
 
       setBalanceState(res.data?.balance ?? 0);
-
     } catch (err) {
       console.error(
         "Error fetching balance:",
@@ -47,53 +158,58 @@ export const BalanceProvider = ({ children }) => {
     }
   }, []);
 
-  // ================= INIT USER + FETCH =================
+  // ================= INIT + USER SWITCH HANDLING =================
   useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
+    const id = localStorage.getItem("userId");
 
-    console.log("Loaded userId from localStorage:", storedUserId);
+    console.log("Loaded userId from localStorage:", id);
 
-    if (!storedUserId || storedUserId === "null") return;
+    if (!id || id === "null") {
+      setBalanceState(0); // ensure clean state if no user
+      return;
+    }
 
-    setUserId(storedUserId);
+    // 🔥 IMPORTANT: reset old user's balance immediately
+    setBalanceState(0);
 
-    // 🔥 IMPORTANT FIX: fetch immediately here
-    fetchBalance(storedUserId);
+    // fetch fresh balance for current user
+    fetchBalance(id);
   }, [fetchBalance]);
 
   // ================= UPDATE BALANCE =================
-  const updateBalance = useCallback(
-    async (newBalance) => {
-      if (!userId) {
-        console.log("updateBalance aborted: no userId");
-        return;
-      }
+  const updateBalance = useCallback(async (newBalance) => {
+    const id = localStorage.getItem("userId");
 
-      try {
-        setBalanceState(newBalance); // optimistic update
+    if (!id) {
+      console.log("updateBalance aborted: no userId");
+      return;
+    }
 
-        await axios.put(
-          `${API_URL}/api/balance/${userId}`,
-          { amount: newBalance }
-        );
+    try {
+      setBalanceState(newBalance); // optimistic update
 
-        console.log("Balance updated successfully");
-      } catch (err) {
-        console.error(
-          "Error updating balance:",
-          err.response?.data || err.message
-        );
-      }
-    },
-    [userId]
-  );
+      await axios.put(
+        `${API_URL}/api/balance/${id}`,
+        { amount: newBalance }
+      );
+
+      console.log("Balance updated successfully");
+    } catch (err) {
+      console.error(
+        "Error updating balance:",
+        err.response?.data || err.message
+      );
+    }
+  }, []);
 
   // ================= REFRESH =================
-  const refreshBalance = () => {
-    if (userId) {
-      fetchBalance(userId);
+  const refreshBalance = useCallback(() => {
+    const id = localStorage.getItem("userId");
+
+    if (id) {
+      fetchBalance(id);
     }
-  };
+  }, [fetchBalance]);
 
   return (
     <BalanceContext.Provider
