@@ -249,6 +249,7 @@
   align-items: center;
   transition: 0.2s ease;
   border: 1px solid #eee;
+  margin-bottom: 10px;
 }
 
 /* LEFT */
