@@ -81,6 +81,106 @@
 }
 
 /* =========================
+   FILTER BUTTONS
+========================= */
+.tx-filters {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 18px;
+  justify-content: space-between;
+}
+
+.tx-filters button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+  color: #333;
+}
+
+.tx-filters button:hover {
+  transform: translateY(-2px);
+  border-color: #d4a64f;
+}
+
+.tx-filters button.active {
+  background: linear-gradient(135deg, #d4a64f, #b88a2b);
+  color: white;
+  border: none;
+  box-shadow: 0 6px 14px rgba(212, 166, 79, 0.3);
+}
+
+/* =========================
+   DATE GROUP LABEL
+========================= */
+.tx-date-group {
+  font-size: 12px;
+  font-weight: 700;
+  color: #777;
+  margin: 18px 4px 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  position: relative;
+  padding-left: 10px;
+}
+
+.tx-date-group::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: #d4a64f;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+/* =========================
+   PAGINATION
+========================= */
+.tx-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 25px 0 10px;
+}
+
+.tx-pagination button {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #111;
+  color: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.tx-pagination button:hover {
+  background: #d4a64f;
+  color: #111;
+}
+
+.tx-pagination button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  color: #777;
+}
+
+.tx-pagination span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* =========================
    DEPOSITS CARD (GREEN THEME)
 ========================= */
 .summary-card.deposits {
