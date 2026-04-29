@@ -1,3 +1,97 @@
+// import React from "react";
+// import { useNavigate } from "react-router-dom";
+// import "../styles/rewards.css";
+// import { FiGift, FiStar, FiUsers, FiArrowLeft } from "react-icons/fi";
+// import { useCurrency } from "../context/CurrencyContext";
+
+// const Rewards = () => {
+//   const navigate = useNavigate();
+//   const { currency } = useCurrency(); 
+
+//   // ✅ Use numeric values (NOT strings)
+//   const rewards = [
+//     {
+//       title: "Daily Check-in Bonus",
+//       desc: "Log in every day to earn rewards",
+//       min: 2,
+//       max: 10,
+//       icon: <FiGift />,
+//     },
+//     {
+//       title: "Referral Bonus",
+//       desc: "Invite friends and earn instantly",
+//       amount: 5,
+//       suffix: "per user",
+//       icon: <FiUsers />,
+//     },
+//     {
+//       title: "Loyalty Tier Rewards",
+//       desc: "Higher tiers unlock better benefits",
+//       amount: 100,
+//       suffix: "/month",
+//       icon: <FiStar />,
+//     },
+//   ];
+
+//   // ✅ helper formatter
+//   const format = (value) =>
+//     `${currency.symbol}${(value * currency.rate).toLocaleString()}`;
+
+//   return (
+//     <div className="about-page rewards-page">
+
+//       {/* HEADER */}
+//       <div className="about-header">
+//         <button className="back-btn" onClick={() => navigate(-1)}>
+//           <FiArrowLeft />
+//         </button>
+//         <h2>Rewards</h2>
+//       </div>
+
+//       {/* HERO */}
+//       <div className="reward-hero">
+//         <h3>Your Rewards Hub</h3>
+//         <p>Earn bonuses by staying active and inviting friends</p>
+
+//         <div className="reward-balance">
+//           Current Points: <span>1,250</span>
+//         </div>
+//       </div>
+
+//       {/* LIST */}
+//       <div className="reward-list">
+//         {rewards.map((item, i) => (
+//           <div key={i} className="reward-card">
+//             <div className="reward-icon">{item.icon}</div>
+
+//             <div className="reward-info">
+//               <h4>{item.title}</h4>
+//               <p>{item.desc}</p>
+//             </div>
+
+//             <div className="reward-value">
+//               {item.min !== undefined ? (
+//                 <>
+//                   {format(item.min)} - {format(item.max)}
+//                 </>
+//               ) : (
+//                 <>
+//                   {format(item.amount)} {item.suffix}
+//                 </>
+//               )}
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+
+//       {/* BUTTON */}
+//       <button className="claim-btn">Claim Available Rewards</button>
+//     </div>
+//   );
+// };
+
+// export default Rewards;
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/rewards.css";
@@ -6,23 +100,25 @@ import { useCurrency } from "../context/CurrencyContext";
 
 const Rewards = () => {
   const navigate = useNavigate();
-  const { currency } = useCurrency(); // ✅ currency + rate
+  const { currency } = useCurrency();
 
-  // ✅ Use numeric values (NOT strings)
+  // =========================
+  // FIXED REWARD RULES
+  // =========================
   const rewards = [
     {
       title: "Daily Check-in Bonus",
       desc: "Log in every day to earn rewards",
-      min: 2,
-      max: 10,
+      amount: 0.2, // ✅ FIXED $0.20
       icon: <FiGift />,
+      type: "fixed",
     },
     {
       title: "Referral Bonus",
-      desc: "Invite friends and earn instantly",
-      amount: 5,
-      suffix: "per user",
+      desc: "Earn 5% of every deposit made by your referrals",
+      percent: "5%",
       icon: <FiUsers />,
+      type: "percentage",
     },
     {
       title: "Loyalty Tier Rewards",
@@ -30,12 +126,17 @@ const Rewards = () => {
       amount: 100,
       suffix: "/month",
       icon: <FiStar />,
+      type: "fixed",
     },
   ];
 
-  // ✅ helper formatter
+  // =========================
+  // FORMAT CURRENCY
+  // =========================
   const format = (value) =>
-    `${currency.symbol}${(value * currency.rate).toLocaleString()}`;
+    `${currency.symbol}${(value * currency.rate).toLocaleString(undefined, {
+      maximumFractionDigits: 2,
+    })}`;
 
   return (
     <div className="about-page rewards-page">
@@ -70,22 +171,30 @@ const Rewards = () => {
             </div>
 
             <div className="reward-value">
-              {item.min !== undefined ? (
+
+              {/* ================= DAILY FIXED ================= */}
+              {item.type === "fixed" && (
                 <>
-                  {format(item.min)} - {format(item.max)}
-                </>
-              ) : (
-                <>
-                  {format(item.amount)} {item.suffix}
+                  {format(item.amount)} {item.suffix || ""}
                 </>
               )}
+
+              {/* ================= REFERRAL ================= */}
+              {item.type === "percentage" && (
+                <>
+                  {item.percent} per deposit
+                </>
+              )}
+
             </div>
           </div>
         ))}
       </div>
 
-      {/* BUTTON */}
-      <button className="claim-btn">Claim Available Rewards</button>
+      <button className="claim-btn">
+        Claim Available Rewards
+      </button>
+
     </div>
   );
 };
