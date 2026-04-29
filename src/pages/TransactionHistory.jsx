@@ -1,4 +1,4 @@
-// import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState, useMemo } from "react";
 // import { useNavigate } from "react-router-dom";
 // import "../styles/transaction.css";
 
@@ -10,6 +10,8 @@
 //   FiArrowUpRight
 // } from "react-icons/fi";
 
+// const ITEMS_PER_PAGE = 6;
+
 // const TransactionHistory = () => {
 
 //   const navigate = useNavigate();
@@ -18,12 +20,15 @@
 //   const [transactions, setTransactions] = useState([]);
 //   const [loading, setLoading] = useState(true);
 
+//   // ✅ NEW STATES
+//   const [filter, setFilter] = useState("all");
+//   const [currentPage, setCurrentPage] = useState(1);
+
 //   const userId = localStorage.getItem("userId");
 //   const token = localStorage.getItem("token");
-
 //   const API_URL = process.env.REACT_APP_API_URL;
 
-//   // ===== FETCH FROM BACKEND =====
+//   // ===== FETCH =====
 //   useEffect(() => {
 //     const fetchTransactions = async () => {
 //       try {
@@ -31,21 +36,16 @@
 //           `${API_URL}/api/transactions/${userId}`,
 //           {
 //             headers: {
-//               "Content-Type": "application/json",
 //               Authorization: `Bearer ${token}`,
 //             },
 //           }
 //         );
 
-//         if (!res.ok) {
-//           throw new Error("Failed to fetch transactions");
-//         }
-
 //         const data = await res.json();
 //         setTransactions(data);
 
 //       } catch (err) {
-//         console.error("Failed to fetch transactions:", err);
+//         console.error(err);
 //       } finally {
 //         setLoading(false);
 //       }
@@ -54,12 +54,63 @@
 //     if (userId && API_URL) fetchTransactions();
 //   }, [userId, API_URL, token]);
 
-//   // ===== FORMATTER =====
+//   // ===== FORMAT =====
 //   const format = (value) =>
 //     `${currency.symbol}${(value * currency.rate).toLocaleString(undefined, {
 //       maximumFractionDigits: 2,
 //     })}`;
 
+//   // ===== FILTERED =====
+//   const filteredTransactions = useMemo(() => {
+//     if (filter === "all") return transactions;
+//     return transactions.filter(tx => tx.type === filter);
+//   }, [transactions, filter]);
+
+//   // ===== PAGINATION =====
+//   const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
+
+//   const paginatedTransactions = useMemo(() => {
+//     const start = (currentPage - 1) * ITEMS_PER_PAGE;
+//     return filteredTransactions.slice(start, start + ITEMS_PER_PAGE);
+//   }, [filteredTransactions, currentPage]);
+
+//   // ===== DATE LABEL =====
+//   const getDateLabel = (date) => {
+//     const d = new Date(date);
+//     const today = new Date();
+//     const yesterday = new Date();
+//     yesterday.setDate(today.getDate() - 1);
+
+//     const isToday = d.toDateString() === today.toDateString();
+//     const isYesterday = d.toDateString() === yesterday.toDateString();
+
+//     if (isToday) return "Today";
+//     if (isYesterday) return "Yesterday";
+
+//     return d.toLocaleDateString(undefined, {
+//       month: "long",
+//       day: "numeric"
+//     });
+//   };
+
+//   // ===== GROUP BY DATE =====
+//   const groupedTransactions = useMemo(() => {
+//     const groups = {};
+
+//     paginatedTransactions.forEach(tx => {
+//       const label = getDateLabel(tx.createdAt || tx.date);
+
+//       if (!groups[label]) {
+//         groups[label] = [];
+//       }
+
+//       groups[label].push(tx);
+//     });
+
+//     return groups;
+//   }, [paginatedTransactions]);
+
+//   // ===== TOTALS =====
 //   const totalDeposits = transactions
 //     .filter(tx => tx.type === "deposit")
 //     .reduce((sum, tx) => sum + tx.amount, 0);
@@ -76,69 +127,104 @@
 //         <button className="back-btn" onClick={() => navigate(-1)}>
 //           <FiArrowLeft />
 //         </button>
-
 //         <h2>Transaction History</h2>
 //       </div>
 
 //       {/* SUMMARY */}
 //       <div className="tx-summary">
-
 //         <div className="summary-card deposits">
 //           <div className="label">Total Deposits</div>
-//           <div className="value">
-//             +{format(totalDeposits)}
-//           </div>
+//           <div className="value">+{format(totalDeposits)}</div>
 //         </div>
 
 //         <div className="summary-card withdrawals">
 //           <div className="label">Total Withdrawals</div>
-//           <div className="value">
-//             -{format(totalWithdrawals)}
-//           </div>
+//           <div className="value">-{format(totalWithdrawals)}</div>
 //         </div>
+//       </div>
 
+//       {/* ✅ FILTER */}
+//       <div className="tx-filters">
+//         <button
+//           className={filter === "all" ? "active" : ""}
+//           onClick={() => {
+//             setFilter("all");
+//             setCurrentPage(1);
+//           }}
+//         >
+//           All
+//         </button>
+
+//         <button
+//           className={filter === "deposit" ? "active" : ""}
+//           onClick={() => {
+//             setFilter("deposit");
+//             setCurrentPage(1);
+//           }}
+//         >
+//           Deposits
+//         </button>
+
+//         <button
+//           className={filter === "withdraw" ? "active" : ""}
+//           onClick={() => {
+//             setFilter("withdraw");
+//             setCurrentPage(1);
+//           }}
+//         >
+//           Withdrawals
+//         </button>
 //       </div>
 
 //       {/* LIST */}
 //       <div className="tx-list">
 
 //         {loading ? (
-//           <p className="tx-loading">Loading transactions...</p>
-//         ) : transactions.length === 0 ? (
+//           <p className="tx-loading">Loading...</p>
+//         ) : filteredTransactions.length === 0 ? (
 //           <p className="tx-empty">No transactions found</p>
 //         ) : (
-//           transactions.map((tx) => (
-//             <div className="tx-card" key={tx._id || tx.id}>
+//           Object.keys(groupedTransactions).map(date => (
+//             <div key={date}>
 
-//               <div className="tx-left">
-//                 <div className={`tx-icon ${tx.type}`}>
-//                   {tx.type === "deposit" ? (
-//                     <FiArrowDownLeft />
-//                   ) : (
-//                     <FiArrowUpRight />
-//                   )}
+//               {/* DATE HEADER */}
+//               <p className="tx-date-group">{date}</p>
+
+//               {groupedTransactions[date].map((tx) => (
+//                 <div className="tx-card" key={tx._id || tx.id}>
+
+//                   <div className="tx-left">
+//                     <div className={`tx-icon ${tx.type}`}>
+//                       {tx.type === "deposit" ? (
+//                         <FiArrowDownLeft />
+//                       ) : (
+//                         <FiArrowUpRight />
+//                       )}
+//                     </div>
+
+//                     <div>
+//                       <p className="tx-type">
+//                         {tx.type === "deposit" ? "Deposit" : "Withdraw"}
+//                       </p>
+//                       <span className="tx-date">
+//                         {new Date(tx.createdAt || tx.date).toLocaleString()}
+//                       </span>
+//                     </div>
+//                   </div>
+
+//                   <div className="tx-right">
+//                     <p className={`tx-amount ${tx.type}`}>
+//                       {tx.type === "deposit" ? "+" : "-"}
+//                       {format(tx.amount)}
+//                     </p>
+
+//                     <span className={`tx-status ${tx.status}`}>
+//                       {tx.status}
+//                     </span>
+//                   </div>
+
 //                 </div>
-
-//                 <div>
-//                   <p className="tx-type">
-//                     {tx.type === "deposit" ? "Deposit" : "Withdraw"}
-//                   </p>
-//                   <span className="tx-date">
-//                     {new Date(tx.createdAt || tx.date).toLocaleDateString()}
-//                   </span>
-//                 </div>
-//               </div>
-
-//               <div className="tx-right">
-//                 <p className={`tx-amount ${tx.type}`}>
-//                   {tx.type === "deposit" ? "+" : "-"}
-//                   {format(tx.amount)}
-//                 </p>
-
-//                 <span className={`tx-status ${tx.status}`}>
-//                   {tx.status}
-//                 </span>
-//               </div>
+//               ))}
 
 //             </div>
 //           ))
@@ -146,13 +232,38 @@
 
 //       </div>
 
+//       {/* ✅ PAGINATION */}
+//       {!loading && totalPages > 1 && (
+//         <div className="tx-pagination">
+
+//           <button
+//             disabled={currentPage === 1}
+//             onClick={() => setCurrentPage(p => p - 1)}
+//           >
+//             Prev
+//           </button>
+
+//           <span>
+//             {currentPage} / {totalPages}
+//           </span>
+
+//           <button
+//             disabled={currentPage === totalPages}
+//             onClick={() => setCurrentPage(p => p + 1)}
+//           >
+//             Next
+//           </button>
+
+//         </div>
+//       )}
+
 //     </div>
 //   );
 // };
 
 // export default TransactionHistory;
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/transaction.css";
 
@@ -167,27 +278,28 @@ import {
 const ITEMS_PER_PAGE = 6;
 
 const TransactionHistory = () => {
-
   const navigate = useNavigate();
   const { currency } = useCurrency();
 
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ NEW STATES
   const [filter, setFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   const API_URL = process.env.REACT_APP_API_URL;
 
-  // ===== FETCH =====
+  // ===== FETCH FROM BACKEND =====
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
+        setLoading(true);
+
         const res = await fetch(
-          `${API_URL}/api/transactions/${userId}`,
+          `${API_URL}/api/transactions/${userId}?type=${filter}&page=${currentPage}&limit=${ITEMS_PER_PAGE}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -196,7 +308,9 @@ const TransactionHistory = () => {
         );
 
         const data = await res.json();
-        setTransactions(data);
+
+        setTransactions(data.data);
+        setTotalPages(data.totalPages);
 
       } catch (err) {
         console.error(err);
@@ -206,27 +320,13 @@ const TransactionHistory = () => {
     };
 
     if (userId && API_URL) fetchTransactions();
-  }, [userId, API_URL, token]);
+  }, [userId, API_URL, token, filter, currentPage]);
 
-  // ===== FORMAT =====
+  // ===== FORMAT CURRENCY =====
   const format = (value) =>
     `${currency.symbol}${(value * currency.rate).toLocaleString(undefined, {
       maximumFractionDigits: 2,
     })}`;
-
-  // ===== FILTERED =====
-  const filteredTransactions = useMemo(() => {
-    if (filter === "all") return transactions;
-    return transactions.filter(tx => tx.type === filter);
-  }, [transactions, filter]);
-
-  // ===== PAGINATION =====
-  const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
-
-  const paginatedTransactions = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredTransactions.slice(start, start + ITEMS_PER_PAGE);
-  }, [filteredTransactions, currentPage]);
 
   // ===== DATE LABEL =====
   const getDateLabel = (date) => {
@@ -235,36 +335,26 @@ const TransactionHistory = () => {
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
 
-    const isToday = d.toDateString() === today.toDateString();
-    const isYesterday = d.toDateString() === yesterday.toDateString();
-
-    if (isToday) return "Today";
-    if (isYesterday) return "Yesterday";
+    if (d.toDateString() === today.toDateString()) return "Today";
+    if (d.toDateString() === yesterday.toDateString()) return "Yesterday";
 
     return d.toLocaleDateString(undefined, {
       month: "long",
-      day: "numeric"
+      day: "numeric",
     });
   };
 
   // ===== GROUP BY DATE =====
-  const groupedTransactions = useMemo(() => {
-    const groups = {};
+  const groupedTransactions = transactions.reduce((acc, tx) => {
+    const label = getDateLabel(tx.date);
 
-    paginatedTransactions.forEach(tx => {
-      const label = getDateLabel(tx.createdAt || tx.date);
+    if (!acc[label]) acc[label] = [];
+    acc[label].push(tx);
 
-      if (!groups[label]) {
-        groups[label] = [];
-      }
+    return acc;
+  }, {});
 
-      groups[label].push(tx);
-    });
-
-    return groups;
-  }, [paginatedTransactions]);
-
-  // ===== TOTALS =====
+  // ===== TOTALS (optional frontend display) =====
   const totalDeposits = transactions
     .filter(tx => tx.type === "deposit")
     .reduce((sum, tx) => sum + tx.amount, 0);
@@ -297,7 +387,7 @@ const TransactionHistory = () => {
         </div>
       </div>
 
-      {/* ✅ FILTER */}
+      {/* FILTER */}
       <div className="tx-filters">
         <button
           className={filter === "all" ? "active" : ""}
@@ -335,17 +425,16 @@ const TransactionHistory = () => {
 
         {loading ? (
           <p className="tx-loading">Loading...</p>
-        ) : filteredTransactions.length === 0 ? (
+        ) : transactions.length === 0 ? (
           <p className="tx-empty">No transactions found</p>
         ) : (
-          Object.keys(groupedTransactions).map(date => (
+          Object.keys(groupedTransactions).map((date) => (
             <div key={date}>
 
-              {/* DATE HEADER */}
               <p className="tx-date-group">{date}</p>
 
               {groupedTransactions[date].map((tx) => (
-                <div className="tx-card" key={tx._id || tx.id}>
+                <div className="tx-card" key={tx.id}>
 
                   <div className="tx-left">
                     <div className={`tx-icon ${tx.type}`}>
@@ -361,7 +450,7 @@ const TransactionHistory = () => {
                         {tx.type === "deposit" ? "Deposit" : "Withdraw"}
                       </p>
                       <span className="tx-date">
-                        {new Date(tx.createdAt || tx.date).toLocaleString()}
+                        {new Date(tx.date).toLocaleString()}
                       </span>
                     </div>
                   </div>
@@ -386,7 +475,7 @@ const TransactionHistory = () => {
 
       </div>
 
-      {/* ✅ PAGINATION */}
+      {/* PAGINATION */}
       {!loading && totalPages > 1 && (
         <div className="tx-pagination">
 
