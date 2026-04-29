@@ -288,11 +288,17 @@ const TransactionHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  // ✅ GLOBAL SUMMARY FROM BACKEND
+  const [summary, setSummary] = useState({
+    totalDeposits: 0,
+    totalWithdrawals: 0,
+  });
+
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   const API_URL = process.env.REACT_APP_API_URL;
 
-  // ===== FETCH FROM BACKEND =====
+  // ===== FETCH =====
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -312,6 +318,12 @@ const TransactionHistory = () => {
         setTransactions(data.data);
         setTotalPages(data.totalPages);
 
+        // ✅ FIXED GLOBAL TOTALS
+        setSummary({
+          totalDeposits: data.totalDeposits,
+          totalWithdrawals: data.totalWithdrawals,
+        });
+
       } catch (err) {
         console.error(err);
       } finally {
@@ -322,13 +334,13 @@ const TransactionHistory = () => {
     if (userId && API_URL) fetchTransactions();
   }, [userId, API_URL, token, filter, currentPage]);
 
-  // ===== FORMAT CURRENCY =====
+  // ===== FORMAT =====
   const format = (value) =>
     `${currency.symbol}${(value * currency.rate).toLocaleString(undefined, {
       maximumFractionDigits: 2,
     })}`;
 
-  // ===== DATE LABEL =====
+  // ===== DATE GROUP =====
   const getDateLabel = (date) => {
     const d = new Date(date);
     const today = new Date();
@@ -344,7 +356,6 @@ const TransactionHistory = () => {
     });
   };
 
-  // ===== GROUP BY DATE =====
   const groupedTransactions = transactions.reduce((acc, tx) => {
     const label = getDateLabel(tx.date);
 
@@ -353,15 +364,6 @@ const TransactionHistory = () => {
 
     return acc;
   }, {});
-
-  // ===== TOTALS (optional frontend display) =====
-  const totalDeposits = transactions
-    .filter(tx => tx.type === "deposit")
-    .reduce((sum, tx) => sum + tx.amount, 0);
-
-  const totalWithdrawals = transactions
-    .filter(tx => tx.type === "withdraw")
-    .reduce((sum, tx) => sum + tx.amount, 0);
 
   return (
     <div className="tx-page">
@@ -374,16 +376,20 @@ const TransactionHistory = () => {
         <h2>Transaction History</h2>
       </div>
 
-      {/* SUMMARY */}
+      {/* SUMMARY (FIXED - FROM BACKEND) */}
       <div className="tx-summary">
         <div className="summary-card deposits">
           <div className="label">Total Deposits</div>
-          <div className="value">+{format(totalDeposits)}</div>
+          <div className="value">
+            +{format(summary.totalDeposits)}
+          </div>
         </div>
 
         <div className="summary-card withdrawals">
           <div className="label">Total Withdrawals</div>
-          <div className="value">-{format(totalWithdrawals)}</div>
+          <div className="value">
+            -{format(summary.totalWithdrawals)}
+          </div>
         </div>
       </div>
 
