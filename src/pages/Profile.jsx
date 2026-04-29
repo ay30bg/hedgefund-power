@@ -225,8 +225,6 @@ const Profile = () => {
           <div onClick={() => setShowBalance(!showBalance)}>
             {showBalance ? <FiEye /> : <FiEyeOff />}
           </div>
-
-          <span className="history">Transaction History ›</span>
         </div>
 
         <div className="asset-balance">
@@ -234,6 +232,8 @@ const Profile = () => {
             ? `${currency.symbol}${(balance * currency.rate).toLocaleString()}`
             : "****"}
         </div>
+
+           <span className="history">Transaction History ›</span>
       </div>
 
       {/* MENU */}
