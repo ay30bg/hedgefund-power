@@ -103,17 +103,17 @@
   color: #333;
 }
 
-/* .tx-filters button:hover {
+ /* .tx-filters button:hover {
   transform: translateY(-2px);
   border-color: #d4a64f;
-}
+} */
 
 .tx-filters button.active {
   background: linear-gradient(135deg, #d4a64f, #b88a2b);
   color: white;
   border: none;
   box-shadow: 0 6px 14px rgba(212, 166, 79, 0.3);
-} */
+} 
 
 /* =========================
    DATE GROUP LABEL
