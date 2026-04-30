@@ -231,15 +231,31 @@ const InviteFriends = () => {
       </div>
 
       {/* HOW IT WORKS */}
-      <div className="invite-rules">
-        <h4>How it works</h4>
-        <ul>
-          <li>Share your invite link</li>
-          <li>Your friend signs up</li>
-          <li>They deposit funds</li>
-          <li>You earn 5% of every deposit</li>
-        </ul>
-      </div>
+    <div className="invite-rules">
+  <h4>How it works</h4>
+
+  <ul>
+    <li>
+      Share your personal invite link with friends
+    </li>
+
+    <li>
+      Your friend signs up using your link (this links them to your account)
+    </li>
+
+    <li>
+      When they make a deposit, you earn <strong>5% of the amount</strong>
+    </li>
+
+    <li>
+      You earn on <strong>every deposit they make</strong>, not just the first one
+    </li>
+
+    <li>
+      Earnings are added to your account automatically after each successful deposit
+    </li>
+  </ul>
+</div>
 
       {/* SHARE */}
       <button className="share-btn" onClick={shareInvite}>
