@@ -132,7 +132,7 @@ const InviteFriends = () => {
     })}`;
 
   // ===== COPY =====
-  const copyCode = () => {
+  const copyLink = () => {
     navigator.clipboard.writeText(referralLink);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -140,7 +140,7 @@ const InviteFriends = () => {
 
   // ===== SHARE =====
   const shareInvite = () => {
-    const text = `Join this app and earn rewards! Use my code ${referralCode} or sign up here: ${referralLink}`;
+    const text = `Join this app and earn rewards! Earn 5% of your friends' deposits when they sign up using your link: ${referralLink}`;
 
     if (navigator.share) {
       navigator.share({
@@ -178,30 +178,19 @@ const InviteFriends = () => {
       <div className="invite-hero">
         <FiGift className="invite-hero-icon" />
 
-        <h3>Referral Program</h3>
+        <h3>Earn 5% Referral Bonus</h3>
 
         <p>
-          Invite friends and earn bonuses for every successful signup and deposit.
+          Invite friends and earn <strong>5% of every deposit</strong> they make.
         </p>
 
-        {/* CODE */}
+        {/* LINK ONLY */}
         <div className="referral-box">
-          <span>Your Code</span>
-          <div className="code-row">
-            <strong>{referralCode}</strong>
-            <button onClick={copyCode} className="copy-btn">
-              {copied ? "Copied ✓" : <FiCopy />}
-            </button>
-          </div>
-        </div>
-
-        {/* LINK */}
-        <div className="referral-box">
-          <span>Your Link</span>
+          <span>Your Invite Link</span>
           <div className="code-row">
             <small className="ref-link">{referralLink}</small>
-            <button onClick={copyCode} className="copy-btn">
-              <FiCopy />
+            <button onClick={copyLink} className="copy-btn">
+              {copied ? "Copied ✓" : <FiCopy />}
             </button>
           </div>
         </div>
@@ -245,10 +234,10 @@ const InviteFriends = () => {
       <div className="invite-rules">
         <h4>How it works</h4>
         <ul>
-          <li>Invite a friend using your link</li>
-          <li>They sign up</li>
-          <li>They make a deposit</li>
-          <li>You earn {format(4)}</li>
+          <li>Share your invite link</li>
+          <li>Your friend signs up</li>
+          <li>They deposit funds</li>
+          <li>You earn 5% of every deposit</li>
         </ul>
       </div>
 
