@@ -184,35 +184,27 @@ const InviteFriends = () => {
           Invite friends and earn bonuses for every successful signup and deposit.
         </p>
 
+        {/* CODE */}
+        <div className="referral-box">
+          <span>Your Code</span>
+          <div className="code-row">
+            <strong>{referralCode}</strong>
+            <button onClick={copyCode} className="copy-btn">
+              {copied ? "Copied ✓" : <FiCopy />}
+            </button>
+          </div>
         </div>
 
         {/* LINK */}
         <div className="referral-box">
           <span>Your Link</span>
-
           <div className="code-row">
             <small className="ref-link">{referralLink}</small>
-
             <button onClick={copyCode} className="copy-btn">
               <FiCopy />
             </button>
           </div>
         </div>
-      </div>
-
-      {/* REFERRAL LIST */}
-      <div className="referral-list">
-        <h4>Your Referrals</h4>
-
-        {referrals.map((ref, i) => (
-          <div key={i} className="referral-row">
-            <span>{ref.name}</span>
-            <span className={ref.status === "Completed" ? "success" : "pending"}>
-              {ref.status}
-            </span>
-            <span>{format(ref.reward)}</span>
-          </div>
-        ))}
       </div>
 
       {/* STATS */}
@@ -234,6 +226,21 @@ const InviteFriends = () => {
         </div>
       </div>
 
+      {/* REFERRAL LIST */}
+      <div className="referral-list">
+        <h4>Your Referrals</h4>
+
+        {referrals.map((ref, i) => (
+          <div key={i} className="referral-row">
+            <span>{ref.name}</span>
+            <span className={ref.status === "Completed" ? "success" : "pending"}>
+              {ref.status}
+            </span>
+            <span>{format(ref.reward)}</span>
+          </div>
+        ))}
+      </div>
+
       {/* HOW IT WORKS */}
       <div className="invite-rules">
         <h4>How it works</h4>
@@ -244,8 +251,6 @@ const InviteFriends = () => {
           <li>You earn {format(4)}</li>
         </ul>
       </div>
-
-      
 
       {/* SHARE */}
       <button className="share-btn" onClick={shareInvite}>
