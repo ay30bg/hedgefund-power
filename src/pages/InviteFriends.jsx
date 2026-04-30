@@ -1,4 +1,108 @@
-import React from "react";
+// import React from "react";
+// import { useNavigate } from "react-router-dom";
+// import "../styles/invite.css";
+
+// import { useCurrency } from "../context/CurrencyContext";
+
+// import {
+//   FiArrowLeft,
+//   FiUserPlus,
+//   FiCopy,
+//   FiShare2,
+//   FiGift
+// } from "react-icons/fi";
+
+// const InviteFriends = () => {
+
+//   const navigate = useNavigate();
+//   const { currency } = useCurrency(); // ✅ GLOBAL
+
+//   const referralCode = "AYO-48291";
+
+//   const copyCode = () => {
+//     navigator.clipboard.writeText(referralCode);
+//     alert("Referral code copied!");
+//   };
+
+//   // ===== FORMATTER =====
+//   const format = (value) =>
+//     `${currency.symbol}${(value * currency.rate).toLocaleString(undefined, {
+//       maximumFractionDigits: 2,
+//     })}`;
+
+//   // demo stats (later from backend)
+//   const totalInvites = 12;
+//   const totalEarned = 48;
+
+//   return (
+//     <div className="invite-page">
+
+//       {/* HEADER */}
+//       <div className="invite-header">
+//         <button className="back-btn" onClick={() => navigate(-1)}>
+//           <FiArrowLeft />
+//         </button>
+
+//         <h2>Invite Friends</h2>
+//       </div>
+
+//       {/* HERO */}
+//       <div className="invite-hero">
+//         <FiGift className="invite-hero-icon" />
+
+//         <h3>Referral Program</h3>
+
+//         <p>
+//           Invite friends and earn bonuses for every successful signup and deposit.
+//         </p>
+
+//         <div className="referral-box">
+//           <span>Your Code</span>
+
+//           <div className="code-row">
+//             <strong>{referralCode}</strong>
+
+//             <button onClick={copyCode} className="copy-btn">
+//               <FiCopy />
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* STATS */}
+//       <div className="invite-card">
+
+//         <div className="invite-item">
+//           <FiUserPlus />
+//           <div>
+//             <h4>Total Invites</h4>
+//             <p>{totalInvites} users</p>
+//           </div>
+//         </div>
+
+//         <div className="invite-item">
+//           <FiGift />
+//           <div>
+//             <h4>Total Earned</h4>
+//             <p>{format(totalEarned)}</p>
+//           </div>
+//         </div>
+
+//       </div>
+
+//       {/* SHARE */}
+//       <button className="share-btn">
+//         <FiShare2 />
+//         Share Invite Link
+//       </button>
+
+//     </div>
+//   );
+// };
+
+// export default InviteFriends;
+
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/invite.css";
 
@@ -13,16 +117,13 @@ import {
 } from "react-icons/fi";
 
 const InviteFriends = () => {
-
   const navigate = useNavigate();
-  const { currency } = useCurrency(); // ✅ GLOBAL
+  const { currency } = useCurrency();
 
   const referralCode = "AYO-48291";
+  const referralLink = `https://yourapp.com/signup?ref=${referralCode}`;
 
-  const copyCode = () => {
-    navigator.clipboard.writeText(referralCode);
-    alert("Referral code copied!");
-  };
+  const [copied, setCopied] = useState(false);
 
   // ===== FORMATTER =====
   const format = (value) =>
@@ -30,9 +131,37 @@ const InviteFriends = () => {
       maximumFractionDigits: 2,
     })}`;
 
-  // demo stats (later from backend)
+  // ===== COPY =====
+  const copyCode = () => {
+    navigator.clipboard.writeText(referralLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // ===== SHARE =====
+  const shareInvite = () => {
+    const text = `Join this app and earn rewards! Use my code ${referralCode} or sign up here: ${referralLink}`;
+
+    if (navigator.share) {
+      navigator.share({
+        title: "Join & Earn",
+        text,
+        url: referralLink,
+      });
+    } else {
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+    }
+  };
+
+  // ===== DEMO DATA =====
   const totalInvites = 12;
   const totalEarned = 48;
+
+  const referrals = [
+    { name: "John D.", status: "Completed", reward: 5 },
+    { name: "Mary K.", status: "Pending", reward: 5 },
+    { name: "Samuel A.", status: "Completed", reward: 5 },
+  ];
 
   return (
     <div className="invite-page">
@@ -42,7 +171,6 @@ const InviteFriends = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
-
         <h2>Invite Friends</h2>
       </div>
 
@@ -56,11 +184,25 @@ const InviteFriends = () => {
           Invite friends and earn bonuses for every successful signup and deposit.
         </p>
 
+        {/* CODE */}
         <div className="referral-box">
           <span>Your Code</span>
 
           <div className="code-row">
             <strong>{referralCode}</strong>
+
+            <button onClick={copyCode} className="copy-btn">
+              {copied ? "Copied ✓" : <FiCopy />}
+            </button>
+          </div>
+        </div>
+
+        {/* LINK */}
+        <div className="referral-box">
+          <span>Your Link</span>
+
+          <div className="code-row">
+            <small className="ref-link">{referralLink}</small>
 
             <button onClick={copyCode} className="copy-btn">
               <FiCopy />
@@ -71,7 +213,6 @@ const InviteFriends = () => {
 
       {/* STATS */}
       <div className="invite-card">
-
         <div className="invite-item">
           <FiUserPlus />
           <div>
@@ -87,11 +228,36 @@ const InviteFriends = () => {
             <p>{format(totalEarned)}</p>
           </div>
         </div>
+      </div>
 
+      {/* HOW IT WORKS */}
+      <div className="invite-rules">
+        <h4>How it works</h4>
+        <ul>
+          <li>Invite a friend using your link</li>
+          <li>They sign up</li>
+          <li>They make a deposit</li>
+          <li>You earn {format(4)}</li>
+        </ul>
+      </div>
+
+      {/* REFERRAL LIST */}
+      <div className="referral-list">
+        <h4>Your Referrals</h4>
+
+        {referrals.map((ref, i) => (
+          <div key={i} className="referral-row">
+            <span>{ref.name}</span>
+            <span className={ref.status === "Completed" ? "success" : "pending"}>
+              {ref.status}
+            </span>
+            <span>{format(ref.reward)}</span>
+          </div>
+        ))}
       </div>
 
       {/* SHARE */}
-      <button className="share-btn">
+      <button className="share-btn" onClick={shareInvite}>
         <FiShare2 />
         Share Invite Link
       </button>
@@ -101,4 +267,3 @@ const InviteFriends = () => {
 };
 
 export default InviteFriends;
-
