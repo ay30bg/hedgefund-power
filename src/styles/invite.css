@@ -169,6 +169,83 @@
   color: #666;
 }
 
+.ref-link {
+  font-size: 12px;
+  color: #444;
+  word-break: break-all;
+  max-width: 220px;
+}
+
+.referral-list {
+  margin-top: 16px;
+  background: white;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.referral-list h4 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.referral-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+.referral-row:last-child {
+  border-bottom: none;
+}
+
+/* STATUS COLORS */
+.success {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.pending {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.invite-rules {
+  margin-top: 16px;
+  background: white;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.invite-rules h4 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.invite-rules ul {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.invite-rules li {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.copy-btn:active {
+  transform: scale(0.95);
+}
+
+.copy-btn:hover {
+  opacity: 0.9;
+}
+
 /* SHARE BUTTON */
 .share-btn {
   width: 100%;
