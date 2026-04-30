@@ -178,10 +178,10 @@ const InviteFriends = () => {
       <div className="invite-hero">
         <FiGift className="invite-hero-icon" />
 
-        <h3>Earn 5% Referral Bonus</h3>
+        <h3>Referral Program</h3>
 
         <p>
-          Invite friends and earn <strong>5% of every deposit</strong> they make.
+         Invite friends and earn bonuses for every successful signup and deposit.
         </p>
 
         {/* LINK ONLY */}
