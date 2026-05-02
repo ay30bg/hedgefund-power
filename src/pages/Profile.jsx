@@ -270,9 +270,13 @@ const Profile = () => {
         </div>
 
         <div className="menu-item" onClick={() => setShowWithdrawalPassword(true)}>
-          <FiLock />
-          <span>Set Withdrawal Password</span>
-        </div>
+  <FiLock />
+  <span>
+    {user?.withdrawalPassword
+      ? "Change Withdrawal Password"
+      : "Set Withdrawal Password"}
+  </span>
+</div>
 
         <div className="menu-item" onClick={() => navigate("/faq")}>
           <FiHelpCircle />
@@ -343,7 +347,11 @@ const Profile = () => {
       {showWithdrawalPassword && (
         <div className="modal">
           <div className="modal-content">
-            <h3>Withdrawal Security</h3>
+            <h3>
+  {user?.withdrawalPassword
+    ? "Change Withdrawal Password"
+    : "Set Withdrawal Password"}
+</h3>
 
            {/* CURRENT PASSWORD */}
 {user?.withdrawalPassword && (
