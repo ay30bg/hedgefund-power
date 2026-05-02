@@ -719,7 +719,8 @@ export default function Portfolio() {
                 const progress = getProgress(inv.startDate, inv.endDate);
 
                 return (
-                  <div className="invest-card" key={inv._id}>
+                  // <div className="invest-card" key={inv._id}>
+                  <div className={`invest-card ${status === "claimed" ? "claimed" : ""}`} key={inv._id}>
                     <div className="invest-header">
                       <img
                         src={inv.days > 10 ? goldBarStack : goldImg}
@@ -829,7 +830,8 @@ export default function Portfolio() {
                 );
 
                 return (
-                  <div className="machine-card" key={machine._id}>
+                  // <div className="machine-card" key={machine._id}> 
+                  <div className={`machine-card ${status === "claimed" ? "claimed" : ""}`} key={machine._id}>
                     <div className="machine-header">
                       <img
                         src={machineImages[machine.name]}
