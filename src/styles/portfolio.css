@@ -54,6 +54,19 @@
     gap: 12px;
 }
 
+/* Claimed cards styling */
+.invest-card.claimed,
+.machine-card.claimed {
+  opacity: 0.55;
+  filter: grayscale(0.3);
+  transition: all 0.3s ease;
+}
+
+.invest-card.claimed .claim-btn,
+.machine-card.claimed .claim-btn {
+  display: none;
+}
+
 /* ---------- Header ---------- */
 
 .invest-header,
