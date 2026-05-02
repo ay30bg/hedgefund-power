@@ -183,7 +183,8 @@
 
 /* ---------- Dates ---------- */
 
-.invest-dates {
+.invest-dates,
+.machine-dates{
     font-size: .75rem;
     color: #7f8c8d;
 }
