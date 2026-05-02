@@ -203,7 +203,7 @@ const Profile = () => {
       {/* PROFILE */}
       <div className="profile-info">
         <div className="profile-left">
-          <img
+          {/* <img
             src={
               user.avatar ||
               `https://ui-avatars.com/api/?name=${encodeURIComponent(
@@ -211,7 +211,14 @@ const Profile = () => {
               )}`
             }
             alt="avatar"
-          />
+          /> */}
+
+          <img
+  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+    user.email || "User"
+  )}&background=0D8ABC&color=fff&format=png&bold=true&rounded=true&size=128`}
+  alt="avatar"
+/>
           <div>
             <h3>{user?.email?.split("@")[0] || "User"}</h3>
             <p>ID: {user._id?.slice(0, 6)}</p>
