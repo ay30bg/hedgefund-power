@@ -201,7 +201,7 @@ const openBuy = (machine) => {
 
           <div className="machine-header">
             <img
-              src={`${process.env.REACT_APP_API_URL}/${machine.img}`}
+              src={`${process.env.REACT_APP_API_URL}/uploads/${machine.img}`}
               alt={machine.name}
               onError={(e) => {
                 e.target.src = "/fallback.png";
