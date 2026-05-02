@@ -216,7 +216,7 @@ const Profile = () => {
           <img
   src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
     user.email || "User"
-  )}&background=0D8ABC&color=fff&format=png&bold=true&rounded=true&size=128`}
+  )}&background=fff&color=D4A64F&format=png&bold=true&rounded=true&size=128`}
   alt="avatar"
 />
           <div>
