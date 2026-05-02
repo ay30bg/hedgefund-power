@@ -203,16 +203,6 @@ const Profile = () => {
       {/* PROFILE */}
       <div className="profile-info">
         <div className="profile-left">
-          {/* <img
-            src={
-              user.avatar ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(
-                user.email || "User"
-              )}`
-            }
-            alt="avatar"
-          /> */}
-
           <img
   src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
     user.email || "User"
