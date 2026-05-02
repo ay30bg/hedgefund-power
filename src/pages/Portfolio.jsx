@@ -461,7 +461,6 @@ const machineImages = {
 /* ---------------- Helpers ---------------- */
 const getStatus = (start, end, claimed) => {
   if (!start || !end) return "waiting";
-
   if (claimed) return "claimed";
 
   const now = new Date();
@@ -584,7 +583,7 @@ export default function Portfolio() {
       maximumFractionDigits: 2,
     })}`;
 
-  /* ---------------- CLAIM INVESTMENT ---------------- */
+  /* ---------------- CLAIM ---------------- */
   const handleClaimInvestment = async (id) => {
     try {
       setLoadingId(id);
@@ -608,7 +607,7 @@ export default function Portfolio() {
 
       alert("Investment claimed successfully");
 
-      // ✅ INSTANT UI UPDATE (IMPORTANT FIX)
+      // instant UI update
       setInvestments((prev) =>
         prev.map((inv) =>
           inv._id === id ? { ...inv, claimed: true } : inv
@@ -616,37 +615,6 @@ export default function Portfolio() {
       );
 
       await fetchInvestments();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoadingId(null);
-    }
-  };
-
-  /* ---------------- CLAIM MACHINE ---------------- */
-  const handleClaimMachine = async (id) => {
-    try {
-      setLoadingId(id);
-
-      const token = localStorage.getItem("token");
-
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/market/claim/${id}`,
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || "Claim failed");
-        return;
-      }
-
-      alert("Machine profit claimed");
-      await fetchMachines();
     } catch (err) {
       console.error(err);
     } finally {
@@ -682,7 +650,27 @@ export default function Portfolio() {
 
             {loadingInvestments ? (
               [...Array(investSkeletonCount)].map((_, i) => (
-                <div className="invest-card skeleton-card" key={i} />
+                <div className="invest-card skeleton-card" key={i}>
+                  <div className="invest-header">
+                    <div className="skeleton img"></div>
+
+                    <div className="name-tag">
+                      <div className="skeleton line short"></div>
+                      <div className="skeleton line tiny"></div>
+                    </div>
+
+                    <div className="skeleton badge"></div>
+                  </div>
+
+                  <div className="invest-info">
+                    <div className="skeleton box"></div>
+                    <div className="skeleton box"></div>
+                  </div>
+
+                  <div className="skeleton progress"></div>
+                  <div className="skeleton line full"></div>
+                  <div className="skeleton button"></div>
+                </div>
               ))
             ) : investments.length === 0 ? (
               <p>No investments yet</p>
@@ -751,86 +739,6 @@ export default function Portfolio() {
                     {status === "claimed" && (
                       <button className="claim-btn claimed" disabled>
                         Claimed
-                      </button>
-                    )}
-                  </div>
-                );
-              })
-            )}
-
-          </div>
-        </section>
-      )}
-
-      {/* ================= MACHINES ================= */}
-      {activeTab === "machines" && (
-        <section className="machines-section">
-          <div className="machine-cards">
-
-            {loadingMachines ? (
-              [...Array(machineSkeletonCount)].map((_, i) => (
-                <div className="machine-card skeleton-card" key={i} />
-              ))
-            ) : machines.length === 0 ? (
-              <p>No machines purchased yet</p>
-            ) : (
-              machines.map((machine) => {
-                const status = getStatus(
-                  machine.purchaseDate,
-                  machine.expiryDate
-                );
-
-                const progress = getProgress(
-                  machine.purchaseDate,
-                  machine.expiryDate
-                );
-
-                return (
-                  <div className="machine-card" key={machine._id}>
-                    <div className="machine-header">
-                      <img
-                        src={machineImages[machine.name]}
-                        alt={machine.name}
-                      />
-
-                      <div className="name-tag">
-                        <h3>{machine.name}</h3>
-                        <span className="tag">{machine.duration} Days</span>
-                      </div>
-
-                      <span className={`status-badge ${status}`}>
-                        {status}
-                      </span>
-                    </div>
-
-                    <div className="machine-info">
-                      <div>
-                        <span>Profit / Hour</span>
-                        <strong>{format(machine.profit)}</strong>
-                      </div>
-
-                      <div>
-                        <span>Daily Profit</span>
-                        <strong>{format(machine.profit * 24)}</strong>
-                      </div>
-                    </div>
-
-                    <div className="progress-bar">
-                      <div
-                        className="progress-fill"
-                        style={{ width: `${progress}%` }}
-                      />
-                    </div>
-
-                    {status === "claimable" && (
-                      <button
-                        className="claim-btn"
-                        onClick={() => handleClaimMachine(machine._id)}
-                        disabled={loadingId === machine._id}
-                      >
-                        {loadingId === machine._id
-                          ? "Processing..."
-                          : "Claim Profit"}
                       </button>
                     )}
                   </div>
