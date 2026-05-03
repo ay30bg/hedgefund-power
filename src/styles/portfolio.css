@@ -34,99 +34,93 @@
     color: #eee;
 }
 
-.empty-state.premium {
-    position: relative;
+/* ================= EMPTY STATE ================= */
+
+.empty-state {
     width: 100%;
     max-width: 420px;
-    margin: 60px auto;
-    padding: 40px 25px;
+    margin: 40px auto;
+    padding: 30px 20px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 
-    border-radius: 20px;
+    border-radius: 16px;
 
-    background: linear-gradient(
-        145deg,
-        rgba(20, 20, 25, 0.9),
-        rgba(10, 10, 15, 0.95)
-    );
+    background: #fff;
+    border: 2px dashed #d6a85a;
 
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 
-    box-shadow:
-        0 10px 30px rgba(0, 0, 0, 0.6),
-        inset 0 0 40px rgba(255, 215, 0, 0.03);
-
-    backdrop-filter: blur(12px);
-
-    overflow: hidden;
+    animation: fadeIn 0.3s ease;
 }
 
-/* ✨ Glow effect */
-.empty-glow {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.25), transparent 70%);
-    top: -50px;
-    right: -50px;
-    filter: blur(60px);
-    opacity: 0.6;
-}
-
-/* Image */
+/* image */
 .empty-img {
-    width: 90px;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.3));
+    width: 70px;
+    margin-bottom: 15px;
+    opacity: 0.9;
 }
 
-/* Title */
+/* title */
 .empty-state h3 {
-    font-size: 20px;
+    font-size: 1rem;
     font-weight: 600;
-    color: #fff;
-    margin-bottom: 10px;
+    color: #333;
+    margin-bottom: 6px;
 }
 
-/* Subtitle */
+/* subtitle */
 .empty-state p {
-    font-size: 14px;
-    color: #aaa;
-    margin-bottom: 25px;
-    line-height: 1.5;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-bottom: 18px;
+    line-height: 1.4;
 }
 
-/* 🚀 CTA Button */
+/* CTA button */
 .empty-cta {
-    padding: 12px 22px;
-    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
 
-    font-size: 14px;
+    background: #fff;
+    border: 2px solid #d6a85a;
+
+    color: #d6a85a;
     font-weight: 600;
+    font-size: 0.9rem;
 
-    color: #111;
-    background: linear-gradient(135deg, #ffd700, #ffb800);
-
-    border: none;
     cursor: pointer;
-
     transition: all 0.25s ease;
-
-    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.35);
 }
 
+/* hover */
 .empty-cta:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5);
+    background: #d6a85a;
+    color: #eee;
+    transform: translateY(-1px);
 }
 
+/* active click */
 .empty-cta:active {
     transform: scale(0.98);
 }
+
+/* subtle animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 /* ---------- Cards ---------- */
 
 .invest-cards,
