@@ -528,10 +528,8 @@ const DashboardHomepage = () => {
   const [aiLoading, setAiLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState("");
 
-  // ✅ UPDATED: real backend chart data
   const [chartData, setChartData] = useState([]);
 
-  // ✅ NEW: totals from backend
   const [totals, setTotals] = useState({
     totalInvested: 0,
     totalProfit: 0,
@@ -543,12 +541,8 @@ const DashboardHomepage = () => {
     return "69" + Math.random().toString(16).slice(2, 6);
   };
 
-  // ================= MASK ID =================
-  const maskId = (id) => {
-    return id.slice(0, 4) + "**";
-  };
+  const maskId = (id) => id.slice(0, 4) + "**";
 
-  // ================= TIME FORMAT =================
   const formatTimeAgo = (timestamp) => {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
 
@@ -558,7 +552,7 @@ const DashboardHomepage = () => {
     return `${Math.floor(diff / 3600)}h`;
   };
 
-  // ================= FETCH PORTFOLIO =================
+  // ================= PORTFOLIO =================
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
@@ -567,9 +561,7 @@ const DashboardHomepage = () => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -577,14 +569,10 @@ const DashboardHomepage = () => {
 
         if (res.ok) {
           setPortfolio(data.portfolio);
-
-          // ✅ NEW: totals
           setTotals(data.portfolio.totals);
-        } else {
-          console.error("Portfolio error:", data);
         }
       } catch (err) {
-        console.error("Error fetching portfolio:", err);
+        console.error(err);
       } finally {
         setLoadingPortfolio(false);
       }
@@ -593,7 +581,7 @@ const DashboardHomepage = () => {
     fetchPortfolio();
   }, []);
 
-  // ================= FETCH EARNINGS CHART =================
+  // ================= EARNINGS =================
   useEffect(() => {
     const fetchEarnings = async () => {
       try {
@@ -602,9 +590,7 @@ const DashboardHomepage = () => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/dashboard/earnings`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
           }
         );
 
@@ -614,7 +600,7 @@ const DashboardHomepage = () => {
           setChartData(data.earnings);
         }
       } catch (err) {
-        console.error("Error fetching earnings:", err);
+        console.error(err);
       }
     };
 
@@ -634,7 +620,6 @@ const DashboardHomepage = () => {
     }
   }, [loadingPortfolio, portfolio]);
 
-  // ================= LAST UPDATED =================
   useEffect(() => {
     if (!aiLoading) {
       setLastUpdated(
@@ -649,19 +634,13 @@ const DashboardHomepage = () => {
   // ================= LIVE ACTIVITY =================
   useEffect(() => {
     const saved = localStorage.getItem("activities");
-
-    if (saved) {
-      setActivities(JSON.parse(saved));
-    }
+    if (saved) setActivities(JSON.parse(saved));
 
     const interval = setInterval(() => {
-      const type = Math.random() > 0.5 ? "deposit" : "withdrawal";
-      const amount = Math.floor(Math.random() * 2000) + 100;
-
       const newActivity = {
         id: generateId(),
-        type,
-        amount,
+        type: Math.random() > 0.5 ? "deposit" : "withdrawal",
+        amount: Math.floor(Math.random() * 2000) + 100,
         createdAt: Date.now(),
       };
 
@@ -678,6 +657,8 @@ const DashboardHomepage = () => {
   // ================= PORTFOLIO VALUES =================
   const roiPower = portfolio?.strength?.roiPower ?? 0;
   const efficiency = portfolio?.strength?.efficiency ?? 0;
+
+  // ✅ USED riskLevel properly
   const riskLevel = portfolio?.strength?.riskLevel ?? "Low";
 
   const plansCount = portfolio?.assetSummary?.plansCount ?? 0;
@@ -693,20 +674,9 @@ const DashboardHomepage = () => {
   const trend =
     efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
 
-  // ================= SKELETON =================
+  // ================= LOADING =================
   if (loadingPortfolio) {
-    return (
-      <div className="dashboard">
-        <div className="overview-card">
-          {[1, 2, 3, 4].map((i) => (
-            <div className="overview-item" key={i}>
-              <div className="skeleton line short"></div>
-              <div className="skeleton line long"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <div className="dashboard">Loading...</div>;
   }
 
   return (
@@ -746,22 +716,21 @@ const DashboardHomepage = () => {
 
       {/* ================= INSIGHTS ================= */}
       <div className="insights">
+
         <div className="insight-card">
           <p className="label">Active Plans</p>
           <h3>{plansCount}</h3>
-          <span>Currently running</span>
         </div>
 
         <div className="insight-card">
           <p className="label">Active Machines</p>
           <h3>{machinesCount}</h3>
-          <span>Mining in progress</span>
         </div>
 
         <div className="insight-card">
           <p className="label">Best Machine</p>
           <h3>{bestMachineName}</h3>
-          <span className="positive">
+          <span>
             {currency.symbol}
             {(bestDailyYield * currency.rate).toFixed(2)} / day
           </span>
@@ -772,12 +741,26 @@ const DashboardHomepage = () => {
           <h3>{marketStatus}</h3>
           <span>{marketNote}</span>
         </div>
+
+        {/* ✅ RISK LEVEL NOW USED */}
+        <div className="insight-card">
+          <p className="label">Risk Level</p>
+          <h3>{riskLevel}</h3>
+          <span>
+            {riskLevel === "High"
+              ? "⚠ High exposure detected"
+              : riskLevel === "Low"
+              ? "🟢 Safe portfolio"
+              : "🟡 Moderate exposure"}
+          </span>
+        </div>
+
       </div>
 
       {/* ================= GRID ================= */}
       <div className="grid">
 
-        {/* CHART (NOW BACKEND POWERED) */}
+        {/* CHART */}
         <div className="card">
           <h3>Earnings Overview</h3>
 
@@ -796,7 +779,7 @@ const DashboardHomepage = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* LIVE ACTIVITY (UNCHANGED) */}
+        {/* LIVE ACTIVITY */}
         <div className="card">
           <h3>Live Activity</h3>
 
@@ -804,19 +787,9 @@ const DashboardHomepage = () => {
             <div className="activity-track">
               {activities.concat(activities).map((item, index) => (
                 <div key={index} className="activity-row">
-                  <span className="time">
-                    {formatTimeAgo(item.createdAt)}
-                  </span>
-
-                  <span className="name">{maskId(item.id)}</span>
-
-                  <span
-                    className={
-                      item.type === "deposit"
-                        ? "amount positive"
-                        : "amount negative"
-                    }
-                  >
+                  <span>{formatTimeAgo(item.createdAt)}</span>
+                  <span>{maskId(item.id)}</span>
+                  <span>
                     {item.type === "deposit" ? "+" : "-"}
                     {currency.symbol}
                     {item.amount}
@@ -827,34 +800,31 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        {/* PORTFOLIO + AI (UNCHANGED) */}
+        {/* AI ENGINE */}
         <div className="card smart-card-ai">
-          <div className="ai-glow"></div>
-
           <div className="smart-header-ai">
-            <div className="ai-title">
-              <span className="ai-dot"></span>
-              AI Insight Engine
-            </div>
-            <div className="ai-status">● Live</div>
+            <div className="ai-title">AI Insight Engine</div>
+            <div className="ai-status">Live</div>
           </div>
 
-          <div className="smart-body-ai">
-            <div className="ai-avatar">🤖</div>
+          <div className="ai-content">
 
-            <div className="ai-content">
-              {aiLoading ? (
-                <p>Scanning portfolio...</p>
-              ) : (
-                <>
-                  <p>
-                    Portfolio is {trend} • ROI {roiPower}%
-                  </p>
+            <p>
+              Portfolio is {trend} • ROI {roiPower}% • Risk: {riskLevel}
+            </p>
 
-                  <p>Updated at {lastUpdated}</p>
-                </>
-              )}
-            </div>
+            <p>
+              {aiLoading
+                ? "Analyzing..."
+                : efficiency < 50
+                ? `Efficiency low at ${efficiency}%`
+                : riskLevel === "High"
+                ? "High risk detected"
+                : "System stable"}
+            </p>
+
+            <p>Updated at {lastUpdated}</p>
+
           </div>
         </div>
 
