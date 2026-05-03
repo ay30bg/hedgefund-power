@@ -276,7 +276,11 @@ export default function Portfolio() {
                                 </div>
                             ))
                         ) : investments.length === 0 ? (
-                            <p>No investments yet</p>
+                            <div className="empty-state">
+        <img src={goldImg} alt="empty" className="empty-img" />
+        <h3>No investments yet</h3>
+        <p>Start investing to see your portfolio grow</p>
+    </div>
                         ) : (
                             investments.map((inv) => {
                                 const status = getStatus(
@@ -288,7 +292,6 @@ export default function Portfolio() {
                                 const progress = getProgress(inv.startDate, inv.endDate);
 
                                 return (
-                                    // <div className="invest-card" key={inv._id}>
                                     <div className={`invest-card ${status === "claimed" ? "claimed" : ""}`} key={inv._id}>
                                         <div className="invest-header">
                                             <img
