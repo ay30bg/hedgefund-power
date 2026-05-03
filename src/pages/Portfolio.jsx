@@ -283,7 +283,7 @@ export default function Portfolio() {
 
                                 <button
                                     className="empty-cta"
-                                    onClick={() => window.location.href = "/invest"}
+                                    onClick={() => window.location.href = "/investhub"}
                                 >
                                     Start Investing
                                 </button>
