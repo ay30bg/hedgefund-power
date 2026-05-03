@@ -40,6 +40,7 @@
     width: 100%;
     max-width: 420px;
     margin: 40px auto;
+    margin-top: 20px;
     padding: 30px 20px;
 
     display: flex;
@@ -55,13 +56,6 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 
     animation: fadeIn 0.3s ease;
-}
-
-/* image */
-.empty-img {
-    width: 70px;
-    margin-bottom: 15px;
-    opacity: 0.9;
 }
 
 /* title */
