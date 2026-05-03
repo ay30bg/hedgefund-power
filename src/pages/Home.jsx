@@ -525,31 +525,19 @@ const DashboardHomepage = () => {
   const [portfolio, setPortfolio] = useState(null);
   const [loadingPortfolio, setLoadingPortfolio] = useState(true);
 
+  const [chartData, setChartData] = useState([]);
+  const [loadingChart, setLoadingChart] = useState(true);
+
   const [aiLoading, setAiLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState("");
 
-  const [chartData, setChartData] = useState([
-    { day: "Mon", profit: 120 },
-    { day: "Tue", profit: 210 },
-    { day: "Wed", profit: 180 },
-    { day: "Thu", profit: 260 },
-    { day: "Fri", profit: 320 },
-    { day: "Sat", profit: 280 },
-    { day: "Sun", profit: 350 },
-  ]);
+  // ================= HELPERS =================
+  const generateId = () => "69" + Math.random().toString(16).slice(2, 6);
 
-  // ================= ID GENERATOR =================
-  const generateId = () => {
-    return "69" + Math.random().toString(16).slice(2, 6);
-  };
-
-  const maskId = (id) => {
-    return id.slice(0, 4) + "**";
-  };
+  const maskId = (id) => id.slice(0, 4) + "**";
 
   const formatTimeAgo = (timestamp) => {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
-
     if (diff < 3) return "just now";
     if (diff < 60) return `${diff}s`;
     if (diff < 3600) return `${Math.floor(diff / 60)}m`;
@@ -588,6 +576,38 @@ const DashboardHomepage = () => {
     fetchPortfolio();
   }, []);
 
+  // ================= FETCH EARNINGS =================
+  useEffect(() => {
+    const fetchEarnings = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/dashboard/earnings`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setChartData(data.earnings);
+        } else {
+          console.error("Earnings error:", data);
+        }
+      } catch (err) {
+        console.error("Error fetching earnings:", err);
+      } finally {
+        setLoadingChart(false);
+      }
+    };
+
+    fetchEarnings();
+  }, []);
+
   // ================= AI LOADING =================
   useEffect(() => {
     if (!loadingPortfolio) {
@@ -595,11 +615,11 @@ const DashboardHomepage = () => {
 
       const timer = setTimeout(() => {
         setAiLoading(false);
-      }, Math.random() * 1200 + 1800);
+      }, Math.random() * 1200 + 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [loadingPortfolio, portfolio]);
+  }, [loadingPortfolio]);
 
   // ================= LAST UPDATED =================
   useEffect(() => {
@@ -642,27 +662,12 @@ const DashboardHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // ================= CHART =================
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setChartData((prev) =>
-        prev.map((item) => ({
-          ...item,
-          profit: Math.max(
-            50,
-            item.profit + Math.floor(Math.random() * 40 - 20)
-          ),
-        }))
-      );
-    }, 4000);
+  // ================= SAFE VALUES =================
+  const totalInvested = Number(portfolio?.totals?.totalInvested || 0);
+  const totalProfit = Number(portfolio?.totals?.totalProfit || 0);
+  const totalWithdrawn = Number(portfolio?.totals?.totalWithdrawn || 0);
 
-    return () => clearInterval(interval);
-  }, []);
-
-  // ================= PORTFOLIO VALUES =================
   const roiPower = portfolio?.strength?.roiPower ?? 0;
-  const efficiency = portfolio?.strength?.efficiency ?? 0;
-  const riskLevel = portfolio?.strength?.riskLevel ?? "Low";
 
   const plansCount = portfolio?.assetSummary?.plansCount ?? 0;
   const machinesCount = portfolio?.assetSummary?.machinesCount ?? 0;
@@ -674,17 +679,9 @@ const DashboardHomepage = () => {
   const marketStatus = portfolio?.market?.status ?? "Stable";
   const marketNote = portfolio?.market?.note ?? "";
 
-  // ================= ✅ NEW BACKEND TOTALS =================
-  const totalInvested = portfolio?.totals?.totalInvested ?? 0;
-  const totalProfit = portfolio?.totals?.totalProfit ?? 0;
-  const totalWithdrawn = portfolio?.totals?.totalWithdrawn ?? 0;
-
-  const trend =
-    efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
-
-  // ================= SKELETON =================
+  // ================= LOADING =================
   if (loadingPortfolio) {
-    return <div className="dashboard">Loading...</div>;
+    return <div className="dashboard">Loading dashboard...</div>;
   }
 
   return (
@@ -697,7 +694,9 @@ const DashboardHomepage = () => {
           <p>Total Invested</p>
           <h2>
             {currency.symbol}
-            {(totalInvested * currency.rate).toFixed(2)}
+            {(totalInvested * currency.rate).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })}
           </h2>
         </div>
 
@@ -705,7 +704,9 @@ const DashboardHomepage = () => {
           <p>Total Profit</p>
           <h2 className="positive">
             {currency.symbol}
-            {(totalProfit * currency.rate).toFixed(2)}
+            {(totalProfit * currency.rate).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })}
           </h2>
         </div>
 
@@ -713,7 +714,9 @@ const DashboardHomepage = () => {
           <p>Total Withdrawal</p>
           <h2>
             {currency.symbol}
-            {(totalWithdrawn * currency.rate).toFixed(2)}
+            {(totalWithdrawn * currency.rate).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+            })}
           </h2>
         </div>
 
@@ -760,19 +763,24 @@ const DashboardHomepage = () => {
         {/* CHART */}
         <div className="card">
           <h3>Earnings Overview</h3>
-          <ResponsiveContainer width="100%" height={180}>
-            <LineChart data={chartData}>
-              <XAxis dataKey="day" />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="profit"
-                stroke="#d6a85a"
-                strokeWidth={3}
-                dot={false}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+
+          {loadingChart ? (
+            <p>Loading chart...</p>
+          ) : (
+            <ResponsiveContainer width="100%" height={180}>
+              <LineChart data={chartData}>
+                <XAxis dataKey="day" />
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="profit"
+                  stroke="#d6a85a"
+                  strokeWidth={3}
+                  dot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
 
         {/* LIVE ACTIVITY */}
@@ -790,7 +798,6 @@ const DashboardHomepage = () => {
               </span>
             </div>
           ))}
-
         </div>
 
       </div>
