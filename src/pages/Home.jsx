@@ -528,7 +528,6 @@ const DashboardHomepage = () => {
   const [chartData, setChartData] = useState([]);
   const [loadingChart, setLoadingChart] = useState(true);
 
-  const [aiLoading, setAiLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState("");
 
   // ================= HELPERS =================
@@ -595,6 +594,14 @@ const DashboardHomepage = () => {
 
         if (res.ok) {
           setChartData(data.earnings);
+
+          // ✅ update timestamp when real data arrives
+          setLastUpdated(
+            new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })
+          );
         } else {
           console.error("Earnings error:", data);
         }
@@ -607,31 +614,6 @@ const DashboardHomepage = () => {
 
     fetchEarnings();
   }, []);
-
-  // ================= AI LOADING =================
-  useEffect(() => {
-    if (!loadingPortfolio) {
-      setAiLoading(true);
-
-      const timer = setTimeout(() => {
-        setAiLoading(false);
-      }, Math.random() * 1200 + 1500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [loadingPortfolio]);
-
-  // ================= LAST UPDATED =================
-  useEffect(() => {
-    if (!aiLoading) {
-      setLastUpdated(
-        new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
-      );
-    }
-  }, [aiLoading]);
 
   // ================= LIVE ACTIVITY =================
   useEffect(() => {
@@ -762,7 +744,12 @@ const DashboardHomepage = () => {
 
         {/* CHART */}
         <div className="card">
-          <h3>Earnings Overview</h3>
+          <div className="card-header">
+            <h3>Earnings Overview</h3>
+            <span className="last-updated">
+              ● Updated: {lastUpdated || "--:--"}
+            </span>
+          </div>
 
           {loadingChart ? (
             <p>Loading chart...</p>
