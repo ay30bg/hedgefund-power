@@ -1,5 +1,5 @@
 /* Verify Page Styling */
-.verify-container {
+.lp-container {
   max-width: 500px;
   margin: 80px auto;
   padding: 24px;
@@ -10,14 +10,14 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.verify-title {
+.lp-greeting {
   font-size: 28px;
   font-weight: 700;
   color: #014f50;
   margin-bottom: 12px;
 }
 
-.verify-subtitle {
+.lp-subtext {
   font-size: 16px;
   color: #555;
   margin-bottom: 24px;
@@ -56,7 +56,7 @@
 }
 
 /* Verify Button */
-.verify-btn {
+.lp-btn {
   width: 100%;
   padding: 16px 0;
   font-size: 16px;
@@ -70,7 +70,7 @@
   margin-bottom: 16px;
 }
 
-.verify-btn:hover {
+.lp-btn:hover {
   background: #013b3c;
 }
 
