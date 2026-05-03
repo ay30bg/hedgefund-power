@@ -277,17 +277,17 @@ export default function Portfolio() {
                             ))
                         ) : investments.length === 0 ? (
                             <div className="empty-state premium">
-        <div className="empty-glow"></div>
- <h3>No investments yet</h3>
-        <p>Your portfolio is waiting. Start investing to unlock earnings.</p>
+                                <div className="empty-glow"></div>
+                                <h3>No investments yet</h3>
+                                <p>Your portfolio is waiting. Start investing to unlock earnings.</p>
 
-        <button
-            className="empty-cta"
-            onClick={() => window.location.href = "/invest"}
-        >
-            Start Investing
-        </button>
-    </div>
+                                <button
+                                    className="empty-cta"
+                                    onClick={() => window.location.href = "/invest"}
+                                >
+                                    Start Investing
+                                </button>
+                            </div>
                         ) : (
                             investments.map((inv) => {
                                 const status = getStatus(
@@ -396,17 +396,17 @@ export default function Portfolio() {
                             ))
                         ) : machines.length === 0 ? (
                             <div className="empty-state premium">
-        <div className="empty-glow"></div>
- <h3>No machines yet</h3>
-        <p>Purchase a machine to start generating hourly profits.</p>
+                                <div className="empty-glow"></div>
+                                <h3>No machines yet</h3>
+                                <p>Purchase a machine to start generating hourly profits.</p>
 
-        <button
-            className="empty-cta"
-            onClick={() => window.location.href = "/market"}
-        >
-            Browse Machines
-        </button>
-    </div>
+                                <button
+                                    className="empty-cta"
+                                    onClick={() => window.location.href = "/market"}
+                                >
+                                    Browse Machines
+                                </button>
+                            </div>
                         ) : (
                             machines.map((machine) => {
                                 const status = getStatus(
