@@ -279,7 +279,7 @@ export default function Portfolio() {
                             <div className="empty-state premium">
         <div className="empty-glow"></div>
 
-        <img src={goldImg} alt="empty" className="empty-img" />
+        {/* <img src={goldImg} alt="empty" className="empty-img" /> */}
 
         <h3>No investments yet</h3>
         <p>Your portfolio is waiting. Start investing to unlock earnings.</p>
