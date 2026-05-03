@@ -37,7 +37,7 @@ function Layout() {
   const location = useLocation();
 
   const isAuthPage =
-    ["/", "/signup", "/forgot-password"].includes(location.pathname) ||
+    ["/", "/signup", "/forgot-password", "/verify"].includes(location.pathname) ||
     location.pathname.startsWith("/reset-password");
 
   return (
