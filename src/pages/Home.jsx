@@ -686,21 +686,72 @@ const DashboardHomepage = () => {
   const trend =
     efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
 
-  // ================= SKELETON =================
-  if (loadingPortfolio) {
-    return (
-      <div className="dashboard">
-        <div className="overview-card">
-          {[1, 2, 3, 4].map((i) => (
-            <div className="overview-item" key={i}>
-              <div className="skeleton line short"></div>
-              <div className="skeleton line long"></div>
-            </div>
+   // ================= SKELETON LOADING =================
+if (loadingPortfolio) {
+  return (
+    <div className="dashboard">
+
+      {/* ================= OVERVIEW SKELETON ================= */}
+      <div className="overview-card">
+        {[1, 2, 3, 4].map((i) => (
+          <div className="overview-item" key={i}>
+            <div className="skeleton line short"></div>
+            <div className="skeleton line long"></div>
+          </div>
+        ))}
+      </div>
+
+      {/* ================= INSIGHTS SKELETON ================= */}
+      <div className="insights">
+        {[1, 2, 3, 4].map((i) => (
+          <div className="insight-card" key={i}>
+            <div className="skeleton line short"></div>
+            <div className="skeleton line medium"></div>
+            <div className="skeleton line long"></div>
+          </div>
+        ))}
+      </div>
+
+      {/* ================= GRID SKELETON ================= */}
+      <div className="grid">
+
+        {/* CHART */}
+        <div className="card">
+          <div className="skeleton line medium"></div>
+          <div className="skeleton chart"></div>
+        </div>
+
+        {/* LIVE ACTIVITY */}
+        <div className="card">
+          <div className="skeleton line medium"></div>
+
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div className="skeleton activity-row" key={i}></div>
           ))}
         </div>
+
+        {/* PORTFOLIO STRENGTH */}
+        <div className="card">
+          <div className="skeleton line medium"></div>
+
+          <div className="gauge-grid">
+            <div className="skeleton gauge"></div>
+            <div className="skeleton gauge"></div>
+            <div className="skeleton gauge"></div>
+          </div>
+        </div>
+
+        {/* AI CARD */}
+        <div className="card smart-card-ai">
+          <div className="skeleton ai-header"></div>
+          <div className="skeleton ai-body"></div>
+        </div>
+
       </div>
-    );
-  }
+
+    </div>
+  );
+}
 
   return (
     <div className="dashboard">
