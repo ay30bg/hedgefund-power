@@ -276,10 +276,20 @@ export default function Portfolio() {
                                 </div>
                             ))
                         ) : investments.length === 0 ? (
-                            <div className="empty-state">
+                            <div className="empty-state premium">
+        <div className="empty-glow"></div>
+
         <img src={goldImg} alt="empty" className="empty-img" />
+
         <h3>No investments yet</h3>
-        <p>Start investing to see your portfolio grow</p>
+        <p>Your portfolio is waiting. Start investing to unlock earnings.</p>
+
+        <button
+            className="empty-cta"
+            onClick={() => window.location.href = "/market"}
+        >
+            Start Investing
+        </button>
     </div>
                         ) : (
                             investments.map((inv) => {
