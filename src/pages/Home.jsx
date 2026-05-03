@@ -525,18 +525,27 @@ const DashboardHomepage = () => {
   const [portfolio, setPortfolio] = useState(null);
   const [loadingPortfolio, setLoadingPortfolio] = useState(true);
 
-  const [chartData, setChartData] = useState([]);
-  const [loadingChart, setLoadingChart] = useState(true);
-
+  const [aiLoading, setAiLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState("");
 
-  // ================= HELPERS =================
+  const [chartData, setChartData] = useState([
+    { day: "Mon", profit: 120 },
+    { day: "Tue", profit: 210 },
+    { day: "Wed", profit: 180 },
+    { day: "Thu", profit: 260 },
+    { day: "Fri", profit: 320 },
+    { day: "Sat", profit: 280 },
+    { day: "Sun", profit: 350 },
+  ]);
+
+  // ================= ID GENERATOR =================
   const generateId = () => "69" + Math.random().toString(16).slice(2, 6);
 
   const maskId = (id) => id.slice(0, 4) + "**";
 
   const formatTimeAgo = (timestamp) => {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
+
     if (diff < 3) return "just now";
     if (diff < 60) return `${diff}s`;
     if (diff < 3600) return `${Math.floor(diff / 60)}m`;
@@ -560,11 +569,8 @@ const DashboardHomepage = () => {
 
         const data = await res.json();
 
-        if (res.ok) {
-          setPortfolio(data.portfolio);
-        } else {
-          console.error("Portfolio error:", data);
-        }
+        if (res.ok) setPortfolio(data.portfolio);
+        else console.error("Portfolio error:", data);
       } catch (err) {
         console.error("Error fetching portfolio:", err);
       } finally {
@@ -575,53 +581,36 @@ const DashboardHomepage = () => {
     fetchPortfolio();
   }, []);
 
-  // ================= FETCH EARNINGS =================
+  // ================= AI LOADING =================
   useEffect(() => {
-    const fetchEarnings = async () => {
-      try {
-        const token = localStorage.getItem("token");
+    if (!loadingPortfolio) {
+      setAiLoading(true);
 
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/dashboard/earnings`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      const timer = setTimeout(() => {
+        setAiLoading(false);
+      }, Math.random() * 1200 + 1800);
 
-        const data = await res.json();
+      return () => clearTimeout(timer);
+    }
+  }, [loadingPortfolio, portfolio]);
 
-        if (res.ok) {
-          setChartData(data.earnings);
-
-          // ✅ update timestamp when real data arrives
-          setLastUpdated(
-            new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            })
-          );
-        } else {
-          console.error("Earnings error:", data);
-        }
-      } catch (err) {
-        console.error("Error fetching earnings:", err);
-      } finally {
-        setLoadingChart(false);
-      }
-    };
-
-    fetchEarnings();
-  }, []);
+  // ================= LAST UPDATED =================
+  useEffect(() => {
+    if (!aiLoading) {
+      setLastUpdated(
+        new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
+    }
+  }, [aiLoading]);
 
   // ================= LIVE ACTIVITY =================
   useEffect(() => {
     const saved = localStorage.getItem("activities");
 
-    if (saved) {
-      setActivities(JSON.parse(saved));
-    }
+    if (saved) setActivities(JSON.parse(saved));
 
     const interval = setInterval(() => {
       const type = Math.random() > 0.5 ? "deposit" : "withdrawal";
@@ -644,26 +633,45 @@ const DashboardHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // ================= SAFE VALUES =================
-  const totalInvested = Number(portfolio?.totals?.totalInvested || 0);
-  const totalProfit = Number(portfolio?.totals?.totalProfit || 0);
-  const totalWithdrawn = Number(portfolio?.totals?.totalWithdrawn || 0);
+  // ================= CHART =================
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setChartData((prev) =>
+        prev.map((item) => ({
+          ...item,
+          profit: Math.max(50, item.profit + Math.floor(Math.random() * 40 - 20)),
+        }))
+      );
+    }, 4000);
 
+    return () => clearInterval(interval);
+  }, []);
+
+  // ================= PORTFOLIO VALUES =================
   const roiPower = portfolio?.strength?.roiPower ?? 0;
+  const efficiency = portfolio?.strength?.efficiency ?? 0;
+  const riskLevel = portfolio?.strength?.riskLevel ?? "Low";
 
   const plansCount = portfolio?.assetSummary?.plansCount ?? 0;
   const machinesCount = portfolio?.assetSummary?.machinesCount ?? 0;
 
   const bestDailyYield = portfolio?.assetSummary?.bestDailyYield ?? 0;
-  const bestMachineName =
-    portfolio?.assetSummary?.bestMachineName ?? "N/A";
+  const bestMachineName = portfolio?.assetSummary?.bestMachineName ?? "N/A";
 
   const marketStatus = portfolio?.market?.status ?? "Stable";
   const marketNote = portfolio?.market?.note ?? "";
 
+  // ================= ✅ BACKEND TOTALS =================
+  const totalInvested = portfolio?.totals?.totalInvested ?? 0;
+  const totalProfit = portfolio?.totals?.totalProfit ?? 0;
+  const totalWithdrawn = portfolio?.totals?.totalWithdrawn ?? 0;
+
+  const trend =
+    efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
+
   // ================= LOADING =================
   if (loadingPortfolio) {
-    return <div className="dashboard">Loading dashboard...</div>;
+    return <div className="dashboard">Loading...</div>;
   }
 
   return (
@@ -676,9 +684,7 @@ const DashboardHomepage = () => {
           <p>Total Invested</p>
           <h2>
             {currency.symbol}
-            {(totalInvested * currency.rate).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-            })}
+            {(totalInvested * currency.rate).toFixed(2)}
           </h2>
         </div>
 
@@ -686,9 +692,7 @@ const DashboardHomepage = () => {
           <p>Total Profit</p>
           <h2 className="positive">
             {currency.symbol}
-            {(totalProfit * currency.rate).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-            })}
+            {(totalProfit * currency.rate).toFixed(2)}
           </h2>
         </div>
 
@@ -696,9 +700,7 @@ const DashboardHomepage = () => {
           <p>Total Withdrawal</p>
           <h2>
             {currency.symbol}
-            {(totalWithdrawn * currency.rate).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-            })}
+            {(totalWithdrawn * currency.rate).toFixed(2)}
           </h2>
         </div>
 
@@ -744,50 +746,48 @@ const DashboardHomepage = () => {
 
         {/* CHART */}
         <div className="card">
-          <div className="card-header">
-            <h3>Earnings Overview</h3>
-            <span className="last-updated">
-              ● Updated: {lastUpdated || "--:--"}
-            </span>
-          </div>
-
-          {loadingChart ? (
-            <p>Loading chart...</p>
-          ) : (
-            <ResponsiveContainer width="100%" height={180}>
-              <LineChart data={chartData}>
-                <XAxis dataKey="day" />
-                <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="profit"
-                  stroke="#d6a85a"
-                  strokeWidth={3}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          )}
+          <h3>Earnings Overview</h3>
+          <ResponsiveContainer width="100%" height={180}>
+            <LineChart data={chartData}>
+              <XAxis dataKey="day" />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="profit"
+                stroke="#d6a85a"
+                strokeWidth={3}
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
 
         {/* LIVE ACTIVITY */}
         <div className="card">
           <h3>Live Activity</h3>
 
-          {activities.concat(activities).map((item, index) => (
-            <div key={index} className="activity-row">
-              <span>{formatTimeAgo(item.createdAt)}</span>
-              <span>{maskId(item.id)}</span>
-              <span className={item.type === "deposit" ? "positive" : "negative"}>
-                {item.type === "deposit" ? "+" : "-"}
-                {currency.symbol}
-                {item.amount}
-              </span>
+          <div className="activity-ticker">
+            <div className="activity-track">
+              {activities.concat(activities).map((item, index) => (
+                <div key={index} className="activity-row">
+
+                  <span>{formatTimeAgo(item.createdAt)}</span>
+                  <span>{maskId(item.id)}</span>
+
+                  <span className={item.type === "deposit" ? "positive" : "negative"}>
+                    {item.type === "deposit" ? "+" : "-"}
+                    {currency.symbol}
+                    {item.amount}
+                  </span>
+
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
 
       </div>
+
     </div>
   );
 };
