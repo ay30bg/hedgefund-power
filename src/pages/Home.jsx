@@ -507,7 +507,6 @@
 
 import React, { useEffect, useState } from "react";
 import "../styles/home.css";
-
 import { useCurrency } from "../context/CurrencyContext";
 
 import {
@@ -527,22 +526,19 @@ const DashboardHomepage = () => {
 
   const [aiLoading, setAiLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState("");
-
   const [chartData, setChartData] = useState([]);
-
-  const [totals, setTotals] = useState({
-    totalInvested: 0,
-    totalProfit: 0,
-    totalWithdrawn: 0,
-  });
 
   // ================= ID GENERATOR =================
   const generateId = () => {
     return "69" + Math.random().toString(16).slice(2, 6);
   };
 
-  const maskId = (id) => id.slice(0, 4) + "**";
+  // ================= MASK ID =================
+  const maskId = (id) => {
+    return id.slice(0, 4) + "**";
+  };
 
+  // ================= TIME FORMAT =================
   const formatTimeAgo = (timestamp) => {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
 
@@ -552,7 +548,7 @@ const DashboardHomepage = () => {
     return `${Math.floor(diff / 3600)}h`;
   };
 
-  // ================= PORTFOLIO =================
+  // ================= FETCH PORTFOLIO =================
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
@@ -561,7 +557,9 @@ const DashboardHomepage = () => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
@@ -569,10 +567,11 @@ const DashboardHomepage = () => {
 
         if (res.ok) {
           setPortfolio(data.portfolio);
-          setTotals(data.portfolio.totals);
+        } else {
+          console.error("Portfolio error:", data);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching portfolio:", err);
       } finally {
         setLoadingPortfolio(false);
       }
@@ -581,7 +580,7 @@ const DashboardHomepage = () => {
     fetchPortfolio();
   }, []);
 
-  // ================= EARNINGS =================
+  // ================= FETCH EARNINGS =================
   useEffect(() => {
     const fetchEarnings = async () => {
       try {
@@ -590,7 +589,9 @@ const DashboardHomepage = () => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/dashboard/earnings`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
@@ -598,9 +599,11 @@ const DashboardHomepage = () => {
 
         if (res.ok) {
           setChartData(data.earnings);
+        } else {
+          console.error("Earnings error:", data);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching earnings:", err);
       }
     };
 
@@ -620,6 +623,7 @@ const DashboardHomepage = () => {
     }
   }, [loadingPortfolio, portfolio]);
 
+  // ================= LAST UPDATED =================
   useEffect(() => {
     if (!aiLoading) {
       setLastUpdated(
@@ -634,13 +638,19 @@ const DashboardHomepage = () => {
   // ================= LIVE ACTIVITY =================
   useEffect(() => {
     const saved = localStorage.getItem("activities");
-    if (saved) setActivities(JSON.parse(saved));
+
+    if (saved) {
+      setActivities(JSON.parse(saved));
+    }
 
     const interval = setInterval(() => {
+      const type = Math.random() > 0.5 ? "deposit" : "withdrawal";
+      const amount = Math.floor(Math.random() * 2000) + 100;
+
       const newActivity = {
         id: generateId(),
-        type: Math.random() > 0.5 ? "deposit" : "withdrawal",
-        amount: Math.floor(Math.random() * 2000) + 100,
+        type,
+        amount,
         createdAt: Date.now(),
       };
 
@@ -655,10 +665,12 @@ const DashboardHomepage = () => {
   }, []);
 
   // ================= PORTFOLIO VALUES =================
+  const totalInvested = portfolio?.totals?.totalInvested ?? 0;
+  const totalProfit = portfolio?.totals?.totalProfit ?? 0;
+  const totalWithdrawn = portfolio?.totals?.totalWithdrawn ?? 0;
+
   const roiPower = portfolio?.strength?.roiPower ?? 0;
   const efficiency = portfolio?.strength?.efficiency ?? 0;
-
-  // ✅ USED riskLevel properly
   const riskLevel = portfolio?.strength?.riskLevel ?? "Low";
 
   const plansCount = portfolio?.assetSummary?.plansCount ?? 0;
@@ -674,21 +686,31 @@ const DashboardHomepage = () => {
   const trend =
     efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
 
-  // ================= LOADING =================
+  // ================= SKELETON =================
   if (loadingPortfolio) {
-    return <div className="dashboard">Loading...</div>;
+    return (
+      <div className="dashboard">
+        <div className="overview-card">
+          {[1, 2, 3, 4].map((i) => (
+            <div className="overview-item" key={i}>
+              <div className="skeleton line short"></div>
+              <div className="skeleton line long"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="dashboard">
-
       {/* ================= OVERVIEW ================= */}
       <div className="overview-card">
         <div className="overview-item">
           <p>Total Invested</p>
           <h2>
             {currency.symbol}
-            {(totals.totalInvested * currency.rate).toFixed(2)}
+            {(totalInvested * currency.rate).toFixed(2)}
           </h2>
         </div>
 
@@ -696,7 +718,7 @@ const DashboardHomepage = () => {
           <p>Total Profit</p>
           <h2 className="positive">
             {currency.symbol}
-            {(totals.totalProfit * currency.rate).toFixed(2)}
+            {(totalProfit * currency.rate).toFixed(2)}
           </h2>
         </div>
 
@@ -704,7 +726,7 @@ const DashboardHomepage = () => {
           <p>Total Withdrawal</p>
           <h2>
             {currency.symbol}
-            {(totals.totalWithdrawn * currency.rate).toFixed(2)}
+            {(totalWithdrawn * currency.rate).toFixed(2)}
           </h2>
         </div>
 
@@ -716,21 +738,22 @@ const DashboardHomepage = () => {
 
       {/* ================= INSIGHTS ================= */}
       <div className="insights">
-
         <div className="insight-card">
           <p className="label">Active Plans</p>
           <h3>{plansCount}</h3>
+          <span>Currently running</span>
         </div>
 
         <div className="insight-card">
           <p className="label">Active Machines</p>
           <h3>{machinesCount}</h3>
+          <span>Mining in progress</span>
         </div>
 
         <div className="insight-card">
           <p className="label">Best Machine</p>
           <h3>{bestMachineName}</h3>
-          <span>
+          <span className="positive">
             {currency.symbol}
             {(bestDailyYield * currency.rate).toFixed(2)} / day
           </span>
@@ -741,29 +764,13 @@ const DashboardHomepage = () => {
           <h3>{marketStatus}</h3>
           <span>{marketNote}</span>
         </div>
-
-        {/* ✅ RISK LEVEL NOW USED */}
-        <div className="insight-card">
-          <p className="label">Risk Level</p>
-          <h3>{riskLevel}</h3>
-          <span>
-            {riskLevel === "High"
-              ? "⚠ High exposure detected"
-              : riskLevel === "Low"
-              ? "🟢 Safe portfolio"
-              : "🟡 Moderate exposure"}
-          </span>
-        </div>
-
       </div>
 
       {/* ================= GRID ================= */}
       <div className="grid">
-
         {/* CHART */}
         <div className="card">
           <h3>Earnings Overview</h3>
-
           <ResponsiveContainer width="100%" height={180}>
             <LineChart data={chartData}>
               <XAxis dataKey="day" />
@@ -787,9 +794,19 @@ const DashboardHomepage = () => {
             <div className="activity-track">
               {activities.concat(activities).map((item, index) => (
                 <div key={index} className="activity-row">
-                  <span>{formatTimeAgo(item.createdAt)}</span>
-                  <span>{maskId(item.id)}</span>
-                  <span>
+                  <span className="time">
+                    {formatTimeAgo(item.createdAt)}
+                  </span>
+
+                  <span className="name">{maskId(item.id)}</span>
+
+                  <span
+                    className={
+                      item.type === "deposit"
+                        ? "amount positive"
+                        : "amount negative"
+                    }
+                  >
                     {item.type === "deposit" ? "+" : "-"}
                     {currency.symbol}
                     {item.amount}
@@ -800,34 +817,71 @@ const DashboardHomepage = () => {
           </div>
         </div>
 
-        {/* AI ENGINE */}
-        <div className="card smart-card-ai">
-          <div className="smart-header-ai">
-            <div className="ai-title">AI Insight Engine</div>
-            <div className="ai-status">Live</div>
-          </div>
+        {/* PORTFOLIO STRENGTH */}
+        <div className="card">
+          <h3>Portfolio Strength</h3>
 
-          <div className="ai-content">
+          <div className="gauge-grid">
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#d6a85a ${Math.min(
+                    roiPower,
+                    100
+                  )}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{roiPower}%</h2>
+                </div>
+              </div>
+              <p>ROI Power</p>
+            </div>
 
-            <p>
-              Portfolio is {trend} • ROI {roiPower}% • Risk: {riskLevel}
-            </p>
+            <div className="gauge">
+              <div
+                className="circle"
+                style={{
+                  background: `conic-gradient(#4caf50 ${efficiency}%, rgba(255,255,255,0.08) 0%)`,
+                }}
+              >
+                <div className="inner">
+                  <h2>{efficiency}%</h2>
+                </div>
+              </div>
+              <p>Efficiency</p>
+            </div>
 
-            <p>
-              {aiLoading
-                ? "Analyzing..."
-                : efficiency < 50
-                ? `Efficiency low at ${efficiency}%`
-                : riskLevel === "High"
-                ? "High risk detected"
-                : "System stable"}
-            </p>
-
-            <p>Updated at {lastUpdated}</p>
-
+            <div className="gauge">
+              <div className="inner">
+                <h2>{riskLevel}</h2>
+              </div>
+              <p>Risk Level</p>
+            </div>
           </div>
         </div>
 
+        {/* AI CARD */}
+        <div className="card smart-card-ai">
+          <h3>AI Insight Engine</h3>
+
+          {aiLoading ? (
+            <p>Scanning portfolio signals...</p>
+          ) : (
+            <>
+              <p>
+                {trend === "down"
+                  ? "Performance decline detected."
+                  : trend === "up"
+                  ? "Growth trend active."
+                  : "Portfolio stable."}
+              </p>
+
+              <small>Updated at {lastUpdated}</small>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
