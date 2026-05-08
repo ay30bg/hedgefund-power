@@ -143,9 +143,9 @@ const InviteFriends = () => {
       When they make a deposit, you earn <strong>5% of the amount</strong>
     </li>
 
-    <li>
-      You earn on <strong>every deposit they make</strong>, not just the first one
-    </li>
+   <li>
+  You earn <strong>5% commission on their first deposit</strong>
+</li>
 
     <li>
       Earnings are added to your account automatically after each successful deposit
