@@ -25,6 +25,16 @@
   line-height: 1.5;
 }
 
+.verify-note {
+  margin-top: 8px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: 666;
+  text-align: center;
+  line-height: 1.5;
+  padding: 0 15px;
+}
+
 /* OTP Boxes */
 .otp-container {
   display: flex;
