@@ -33,6 +33,7 @@ import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Verify from "./pages/Verify";
+import Terms from "./pages/Terms";
 
 function Layout() {
   const location = useLocation();
@@ -63,6 +64,7 @@ function Layout() {
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify" element={<Verify />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
