@@ -7,7 +7,7 @@
   min-height: 100vh;
 }
 
-/* HEADER (same style as About) */
+/* HEADER */
 .terms-header {
   margin-bottom: 20px;
   padding: 24px 20px;
@@ -34,8 +34,14 @@
 
 .terms-header h2 {
   margin: 0;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
+}
+
+.terms-header p {
+  margin: 6px 0 0;
+  color: #ccc;
+  font-size: 14px;
 }
 
 /* CARD */
@@ -44,13 +50,12 @@
   border-radius: 14px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   overflow: hidden;
+  border: 1px solid #eee;
 }
 
-/* ITEM */
+/* ITEMS */
 .terms-item {
-  display: flex;
-  gap: 12px;
-  padding: 16px;
+  padding: 18px;
   border-bottom: 1px solid #eee;
 }
 
@@ -58,20 +63,39 @@
   border-bottom: none;
 }
 
-.terms-item svg {
-  font-size: 20px;
-  color: #d4a64f;
-  margin-top: 4px;
-}
-
 .terms-item h4 {
-  margin: 0;
+  margin: 0 0 8px;
   font-size: 15px;
+  font-weight: 700;
+  color: #222;
 }
 
 .terms-item p {
-  margin: 4px 0 0;
+  margin: 0;
   font-size: 13px;
   color: #666;
-  line-height: 1.4;
+  line-height: 1.7;
+}
+
+/* BACK BUTTON */
+.back-btn {
+  position: absolute;
+  left: 16px;
+  top: 20px;
+
+  width: 36px;
+  height: 36px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: rgba(255,255,255,0.1);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+  font-size: 18px;
 }
