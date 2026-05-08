@@ -12,7 +12,7 @@ import BottomNavbar from "./components/BottomNavbar";
 import ScrollToTop from "./components/ScrollToTop";
 
 import { CurrencyProvider } from "./context/CurrencyContext";
-import { AuthProvider } from "./context/AuthContext"; // 🔥 ADD THIS
+import { AuthProvider } from "./context/AuthContext"; 
 import { BalanceProvider } from "./context/BalanceContext";
 
 // Pages
@@ -64,7 +64,7 @@ function Layout() {
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/verify" element={<Verify />} />
-          <Route path="/terms" element={<Terms />} />
+          <Route path="/terms-of-use" element={<Terms />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Routes>
