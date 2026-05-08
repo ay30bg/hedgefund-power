@@ -247,10 +247,10 @@ function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // ================= AUTO REFERRAL FROM URL =================
+  // ================= AUTO FILL REFERRAL FROM URL =================
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const ref = queryParams.get("ref");
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref");
 
     if (ref) {
       setForm((prev) => ({
@@ -260,12 +260,7 @@ function SignupPage() {
     }
   }, [location.search]);
 
-  // ================= REGEX =================
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  const referralRegex = /^[A-Z0-9]{4,12}$/;
-
-  // ================= HANDLE CHANGE =================
+  // ================= INPUT HANDLER =================
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -280,36 +275,36 @@ function SignupPage() {
     });
   };
 
-  // ================= SUBMIT =================
+  // ================= VALIDATION =================
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
   const handleSubmit = async () => {
-    let errorMessages = [];
+    let errors = [];
 
     if (!emailRegex.test(form.email)) {
-      errorMessages.push("Enter a valid email address.");
+      errors.push("Enter a valid email.");
     }
 
     if (!passwordRegex.test(form.password)) {
-      errorMessages.push(
-        "Password must be at least 8 characters with letters and numbers."
+      errors.push(
+        "Password must be 8+ characters with letters and numbers."
       );
     }
 
     if (form.password !== form.confirmPassword) {
-      errorMessages.push("Passwords do not match.");
-    }
-
-    if (form.referralCode && !referralRegex.test(form.referralCode)) {
-      errorMessages.push("Invalid referral code format.");
+      errors.push("Passwords do not match.");
     }
 
     if (!form.terms) {
-      errorMessages.push(
-        "You must accept the Terms of Use and Privacy Policy."
-      );
+      errors.push("You must accept Terms & Privacy Policy.");
     }
 
-    if (errorMessages.length > 0) {
-      alert(errorMessages.join("\n"));
+    // 🚨 IMPORTANT: NO REFERRAL FORMAT VALIDATION HERE
+    // Backend will validate real referral codes
+
+    if (errors.length > 0) {
+      alert(errors.join("\n"));
       return;
     }
 
@@ -364,11 +359,7 @@ function SignupPage() {
 
           {/* LOGO */}
           <div className="signup-logo-container">
-            <img
-              src={logo}
-              alt="Logo"
-              className="signup-logo"
-            />
+            <img src={logo} alt="Logo" className="signup-logo" />
           </div>
 
           {/* EMAIL */}
@@ -380,7 +371,7 @@ function SignupPage() {
             onChange={handleChange}
           />
 
-          {/* REFERRAL */}
+          {/* REFERRAL CODE */}
           <input
             type="text"
             name="referralCode"
@@ -449,9 +440,7 @@ function SignupPage() {
             onClick={handleSubmit}
             disabled={loading}
           >
-            {loading
-              ? "Creating account..."
-              : "Sign Up"}
+            {loading ? "Creating account..." : "Sign Up"}
           </button>
 
           <p className="signup">
