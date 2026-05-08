@@ -165,7 +165,7 @@
 
 // export default InviteFriends;
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/invite.css";
@@ -189,7 +189,6 @@ const InviteFriends = () => {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const [referralCode, setReferralCode] = useState("");
   const [referralLink, setReferralLink] = useState("");
 
   const [stats, setStats] = useState({
@@ -206,12 +205,8 @@ const InviteFriends = () => {
       { maximumFractionDigits: 2 }
     )}`;
 
-  // ================= FETCH DATA =================
-  useEffect(() => {
-    fetchReferrals();
-  }, []);
-
-  const fetchReferrals = async () => {
+  // ================= FETCH REFERRALS =================
+  const fetchReferrals = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -225,8 +220,7 @@ const InviteFriends = () => {
 
       const data = res.data;
 
-      setReferralCode(data.referralCode);
-
+      // referral link
       const link = `${window.location.origin}/signup?ref=${data.referralCode}`;
       setReferralLink(link);
 
@@ -241,7 +235,11 @@ const InviteFriends = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL]);
+
+  useEffect(() => {
+    fetchReferrals();
+  }, [fetchReferrals]);
 
   // ================= COPY LINK =================
   const copyLink = () => {
@@ -252,7 +250,7 @@ const InviteFriends = () => {
 
   // ================= SHARE =================
   const shareInvite = () => {
-    const text = `Join this app and earn rewards! Use my link: ${referralLink}`;
+    const text = `Join this app and earn rewards! Use my invite link: ${referralLink}`;
 
     if (navigator.share) {
       navigator.share({
@@ -359,14 +357,9 @@ const InviteFriends = () => {
 
         <ul>
           <li>Share your invite link with friends</li>
-
           <li>They sign up using your link</li>
-
-          <li>
-            You earn <strong>5% on their first deposit</strong>
-          </li>
-
-          <li>Earnings are credited instantly</li>
+          <li>You earn 5% on their first deposit</li>
+          <li>Earnings are credited automatically</li>
         </ul>
       </div>
 
