@@ -201,7 +201,7 @@ function SignupPage() {
               />
               <span className="terms-text">
                 By registering, you agree to our{" "}
-                <a href="/terms-of-use">Terms & Conditions</a> and{" "}
+                <a href="/terms-of-use">Terms of Use</a> and{" "}
                 <a href="/privacy-policy">Privacy Policy</a>
               </span>
             </label>
