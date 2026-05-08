@@ -163,6 +163,10 @@ export default function VerifyPage() {
         Enter the 5-digit code sent to <strong>{email}</strong>
       </p>
 
+      <p className="verify-note">
+  Didn’t receive the code? Check your spam or junk folder.
+</p>
+
       {/* OTP INPUTS */}
       <div className="otp-container">
         {otp.map((value, index) => (
