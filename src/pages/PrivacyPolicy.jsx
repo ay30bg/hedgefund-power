@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
-import "../styles/privacy.css";
+import "../styles/privacyPolicy.css";
 
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
