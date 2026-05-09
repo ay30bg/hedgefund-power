@@ -3,6 +3,7 @@
   margin: auto;
   padding: 0;
   height: 100dvh;
+  min-height: 100dvh;
   overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
