@@ -41,8 +41,11 @@
   flex-shrink: 0;
 }
 
-.chat-left{
-  margin: 2opx;
+.chat-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 12px;
 }
 
 .chat-avatar {
