@@ -1,155 +1,201 @@
-// src/pages/SupportChatPage.jsx
-
 import React, { useState, useRef, useEffect } from "react";
-import {
-  FiArrowLeft,
-  FiSend,
-  FiPaperclip,
-  FiMoreVertical,
-} from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import "../styles/support.css";
 
-const SupportChatPage = () => {
-  const navigate = useNavigate();
-  const messagesEndRef = useRef(null);
+import {
+  FiArrowLeft,
+  FiSend,
+  FiHeadphones,
+  FiClock,
+  FiShield,
+  FiCheckCircle
+} from "react-icons/fi";
 
-  const [message, setMessage] = useState("");
+const Support = () => {
+  const navigate = useNavigate();
 
   const [messages, setMessages] = useState([
     {
-      id: 1,
-      sender: "support",
-      text: "Hello 👋 Welcome to Support.",
-      time: "09:10 AM",
-    },
-    {
-      id: 2,
-      sender: "support",
-      text: "How can we help you today?",
-      time: "09:11 AM",
-    },
+      from: "ai",
+      text: "Hello 👋 Welcome to Support Center. How can we help you today?"
+    }
   ]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
-  };
+  const [input, setInput] = useState("");
+
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth"
+    });
   }, [messages]);
 
-  const handleSend = () => {
-    if (!message.trim()) return;
+  // AI AUTO REPLY
+  const getAIResponse = (msg) => {
+    const text = msg.toLowerCase();
 
-    const newMessage = {
-      id: Date.now(),
-      sender: "user",
-      text: message,
-      time: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
+    if (text.includes("withdraw")) {
+      return "Withdrawals are usually completed within 5–30 minutes depending on network congestion.";
+    }
 
-    setMessages((prev) => [...prev, newMessage]);
-    setMessage("");
+    if (text.includes("deposit")) {
+      return "Deposits reflect instantly after successful blockchain confirmation.";
+    }
 
-    // fake support reply
-    setTimeout(() => {
-      const supportReply = {
-        id: Date.now() + 1,
-        sender: "support",
-        text: "Thanks for contacting support. We’ll respond shortly.",
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
+    if (text.includes("referral")) {
+      return "You receive referral commissions whenever your invited users make deposits.";
+    }
 
-      setMessages((prev) => [...prev, supportReply]);
-    }, 1200);
+    if (text.includes("account")) {
+      return "You can manage your account settings inside the Profile section.";
+    }
+
+    if (text.includes("security")) {
+      return "Your account is protected with encrypted security systems and secure authentication.";
+    }
+
+    return "Thanks for your message 👍 Our support team is always ready to assist you.";
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSend();
-    }
+  const sendMessage = () => {
+    if (!input.trim()) return;
+
+    const userMessage = {
+      from: "user",
+      text: input
+    };
+
+    const aiMessage = {
+      from: "ai",
+      text: getAIResponse(input)
+    };
+
+    setMessages((prev) => [...prev, userMessage, aiMessage]);
+
+    setInput("");
   };
 
   return (
-    <div className="support-chat-page">
+    <div className="support-page">
+
       {/* HEADER */}
-      <div className="support-chat-header">
-        <div className="support-chat-left">
-          <button
-            className="support-back-btn"
-            onClick={() => navigate(-1)}
-          >
-            <FiArrowLeft />
-          </button>
+      <div className="support-header">
 
-          <div className="support-avatar">
-            S
-          </div>
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          <FiArrowLeft />
+        </button>
 
+        <div>
+          <h2>Support Center</h2>
+          <p>Fast & reliable customer assistance</p>
+        </div>
+
+      </div>
+
+      {/* SUPPORT INFO */}
+      <div className="support-card">
+
+        <div className="support-item">
+          <FiHeadphones />
           <div>
-            <h3>Support Team</h3>
-            <p>Typically replies in a few minutes</p>
+            <h4>24/7 Live Support</h4>
+            <p>
+              Our support team is available anytime to assist you with
+              transactions, accounts, and platform issues.
+            </p>
           </div>
         </div>
 
-        <button className="support-menu-btn">
-          <FiMoreVertical />
-        </button>
-      </div>
-
-      {/* CHAT BODY */}
-      <div className="support-chat-body">
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`chat-message ${
-              msg.sender === "user"
-                ? "user-message"
-                : "support-message"
-            }`}
-          >
-            <div className="chat-bubble">
-              <p>{msg.text}</p>
-              <span>{msg.time}</span>
-            </div>
+        <div className="support-item">
+          <FiClock />
+          <div>
+            <h4>Fast Response</h4>
+            <p>
+              Most inquiries are answered within a few minutes during active
+              support hours.
+            </p>
           </div>
-        ))}
+        </div>
 
-        <div ref={messagesEndRef} />
+        <div className="support-item">
+          <FiShield />
+          <div>
+            <h4>Secure Assistance</h4>
+            <p>
+              Your conversations and account details remain fully protected and
+              confidential.
+            </p>
+          </div>
+        </div>
+
+        <div className="support-item">
+          <FiCheckCircle />
+          <div>
+            <h4>Trusted Service</h4>
+            <p>
+              We are committed to providing transparent and professional support
+              for every user.
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      {/* INPUT */}
-      <div className="support-chat-input-area">
-        <button className="attachment-btn">
-          <FiPaperclip />
-        </button>
+      {/* CHAT BOX */}
+      <div className="support-chat">
 
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={handleKeyPress}
-        />
+        {/* CHAT HEADER */}
+        <div className="chat-top">
+          <div className="chat-avatar">
+            <FiHeadphones />
+          </div>
 
-        <button
-          className="send-btn"
-          onClick={handleSend}
-        >
-          <FiSend />
-        </button>
+          <div>
+            <h4>Support Assistant</h4>
+            <span>Online now</span>
+          </div>
+        </div>
+
+        {/* CHAT BODY */}
+        <div className="chat-messages">
+
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`chat-message ${
+                msg.from === "user" ? "user" : "ai"
+              }`}
+            >
+              {msg.text}
+            </div>
+          ))}
+
+          <div ref={messagesEndRef} />
+
+        </div>
+
+        {/* CHAT INPUT */}
+        <div className="chat-input-box">
+
+          <input
+            type="text"
+            placeholder="Type your message..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+          />
+
+          <button onClick={sendMessage}>
+            <FiSend />
+          </button>
+
+        </div>
+
       </div>
+
     </div>
   );
 };
 
-export default SupportChatPage;
+export default Support;
