@@ -3,7 +3,8 @@
   margin: auto;
   padding: 0;
   height: 100dvh;
-  background: #f5f6fa;
+  /* background: #f5f6fa; */
+   background: red;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
 }
