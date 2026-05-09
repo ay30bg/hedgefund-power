@@ -2,9 +2,7 @@
   max-width: 500px;
   margin: auto;
   padding: 0;
-  height: 100dvh;
-  /* background: #f5f6fa; */
-   background: red;
+  height: 80dvh;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
 }
