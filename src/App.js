@@ -22,6 +22,7 @@ import About from "./pages/About";
 import Market from "./pages/Market";
 import InvestHub from "./pages/InvestHub";
 import Rewards from "./pages/Rewards";
+import Support from "./pages/Support";
 import Faq from "./pages/FAQ";
 import TopUp from "./pages/TopUp";
 import Withdraw from "./pages/Withdraw";
@@ -55,6 +56,7 @@ function Layout() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/about" element={<About />} />
           <Route path="/rewards" element={<Rewards />} />
+          <Route path="/support" element={<Support />} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/topup" element={<TopUp />} />
           <Route path="/withdraw" element={<Withdraw />} />
