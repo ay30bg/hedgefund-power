@@ -76,7 +76,7 @@ const Support = () => {
           <button className="back-btn" onClick={() => navigate(-1)}>
             <FiArrowLeft />
           </button>
-
+          
           <div className="chat-avatar">
             <FiHeadphones />
           </div>
