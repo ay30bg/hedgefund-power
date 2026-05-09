@@ -69,17 +69,12 @@ const Support = () => {
 
       {/* HEADER */}
       <div className="support-header">
-
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
-
-        <div>
-          <h2>Support Chat</h2>
-          <p>We’re online to help you</p>
-        </div>
-
+        <h2>About Us</h2>
       </div>
+
 
       {/* CHAT BOX */}
       <div className="support-chat">
