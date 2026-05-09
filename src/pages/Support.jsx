@@ -76,7 +76,8 @@ const Support = () => {
           <button className="back-btn" onClick={() => navigate(-1)}>
             <FiArrowLeft />
           </button>
-          
+
+          <div className="chat-left">
           <div className="chat-avatar">
             <FiHeadphones />
           </div>
@@ -85,7 +86,7 @@ const Support = () => {
             <h4>Support Assistant</h4>
             <span>Online now</span>
           </div>
-
+       </div>
         </div>
 
         {/* MESSAGES */}
