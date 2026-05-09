@@ -72,13 +72,14 @@ const Support = () => {
 
         {/* CHAT TOP */}
         <div className="chat-top">
-
+          <div className="chat-right">
+          <button className="back-btn" onClick={() => navigate(-1)}>
+            <FiArrowLeft />
+          </button>
+          </div>
          
 
           <div className="chat-left">
-             <button className="back-btn" onClick={() => navigate(-1)}>
-            <FiArrowLeft />
-          </button>
             
           <div className="chat-avatar">
             <FiHeadphones />
