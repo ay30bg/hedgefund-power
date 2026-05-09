@@ -103,8 +103,7 @@
   -webkit-overflow-scrolling: touch;
 
   padding: 16px;
-  /* background: #f7f8fa; */
- background: red;
+  background: #f7f8fa;
   display: flex;
   flex-direction: column;
 }
