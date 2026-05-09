@@ -9,12 +9,14 @@
 
 /* HEADER */
 .faq-header {
-  position: relative;
-  padding: 24px 20px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #111, #1c1c1c);
-  color: white;
   margin-bottom: 20px;
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+  position: relative;
   overflow: hidden;
 }
 
@@ -23,22 +25,16 @@
   position: absolute;
   top: -40px;
   right: -40px;
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
+  width: 120px;
+  height: 120px;
   background: #d4a64f;
-  opacity: 0.12;
+  opacity: 0.15;
+  border-radius: 50%;
 }
 
 .faq-header h2 {
   margin: 0;
-  font-size: 24px;
-}
-
-.faq-header p {
-  margin-top: 8px;
-  color: #ccc;
-  font-size: 14px;
+  font-size: 22px;
 }
 
 /* BACK BUTTON */
