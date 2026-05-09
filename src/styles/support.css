@@ -45,9 +45,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-left: 20px;
 }
-
 .chat-avatar {
   width: 45px;
   height: 45px;
