@@ -8,7 +8,7 @@ import {
   FiMoreVertical,
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import "../styles/support-chat.css";
+import "../styles/support.css";
 
 const SupportChatPage = () => {
   const navigate = useNavigate();
