@@ -5,10 +5,7 @@ import "../styles/support.css";
 import {
   FiArrowLeft,
   FiSend,
-  FiHeadphones,
-  FiClock,
-  FiShield,
-  FiCheckCircle
+  FiHeadphones
 } from "react-icons/fi";
 
 const Support = () => {
@@ -31,31 +28,22 @@ const Support = () => {
     });
   }, [messages]);
 
-  // AI AUTO REPLY
   const getAIResponse = (msg) => {
     const text = msg.toLowerCase();
 
     if (text.includes("withdraw")) {
-      return "Withdrawals are usually completed within 5–30 minutes depending on network congestion.";
+      return "Withdrawals are usually completed within 5–30 minutes.";
     }
 
     if (text.includes("deposit")) {
-      return "Deposits reflect instantly after successful blockchain confirmation.";
+      return "Deposits reflect instantly after confirmation.";
     }
 
     if (text.includes("referral")) {
-      return "You receive referral commissions whenever your invited users make deposits.";
+      return "Referral rewards are added automatically.";
     }
 
-    if (text.includes("account")) {
-      return "You can manage your account settings inside the Profile section.";
-    }
-
-    if (text.includes("security")) {
-      return "Your account is protected with encrypted security systems and secure authentication.";
-    }
-
-    return "Thanks for your message 👍 Our support team is always ready to assist you.";
+    return "Thanks for your message 👍 Our support team will assist you shortly.";
   };
 
   const sendMessage = () => {
@@ -87,57 +75,8 @@ const Support = () => {
         </button>
 
         <div>
-          <h2>Support Center</h2>
-          <p>Fast & reliable customer assistance</p>
-        </div>
-
-      </div>
-
-      {/* SUPPORT INFO */}
-      <div className="support-card">
-
-        <div className="support-item">
-          <FiHeadphones />
-          <div>
-            <h4>24/7 Live Support</h4>
-            <p>
-              Our support team is available anytime to assist you with
-              transactions, accounts, and platform issues.
-            </p>
-          </div>
-        </div>
-
-        <div className="support-item">
-          <FiClock />
-          <div>
-            <h4>Fast Response</h4>
-            <p>
-              Most inquiries are answered within a few minutes during active
-              support hours.
-            </p>
-          </div>
-        </div>
-
-        <div className="support-item">
-          <FiShield />
-          <div>
-            <h4>Secure Assistance</h4>
-            <p>
-              Your conversations and account details remain fully protected and
-              confidential.
-            </p>
-          </div>
-        </div>
-
-        <div className="support-item">
-          <FiCheckCircle />
-          <div>
-            <h4>Trusted Service</h4>
-            <p>
-              We are committed to providing transparent and professional support
-              for every user.
-            </p>
-          </div>
+          <h2>Support Chat</h2>
+          <p>We’re online to help you</p>
         </div>
 
       </div>
@@ -145,8 +84,9 @@ const Support = () => {
       {/* CHAT BOX */}
       <div className="support-chat">
 
-        {/* CHAT HEADER */}
+        {/* CHAT TOP */}
         <div className="chat-top">
+
           <div className="chat-avatar">
             <FiHeadphones />
           </div>
@@ -155,9 +95,10 @@ const Support = () => {
             <h4>Support Assistant</h4>
             <span>Online now</span>
           </div>
+
         </div>
 
-        {/* CHAT BODY */}
+        {/* MESSAGES */}
         <div className="chat-messages">
 
           {messages.map((msg, index) => (
@@ -175,7 +116,7 @@ const Support = () => {
 
         </div>
 
-        {/* CHAT INPUT */}
+        {/* INPUT */}
         <div className="chat-input-box">
 
           <input
