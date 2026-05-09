@@ -72,7 +72,7 @@ const Support = () => {
         <button className="back-btn" onClick={() => navigate(-1)}>
           <FiArrowLeft />
         </button>
-        <h2>About Us</h2>
+        <h2>Support</h2>
       </div>
 
 
