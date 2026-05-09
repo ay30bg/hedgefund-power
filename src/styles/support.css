@@ -200,6 +200,10 @@
     margin-right: 12px;
   }
 
+   .chat-left {
+    margin-left: 66px; /* moves content slightly right */
+  }
+
   .chat-avatar {
     width: 38px;
     height: 38px;
