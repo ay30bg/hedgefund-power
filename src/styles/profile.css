@@ -9,6 +9,7 @@
 
 /* ===== LOADING WRAPPER ===== */
 .profile-loading {
+  max-width: 500px;
   padding: 20px;
   display: flex;
   flex-direction: column;
