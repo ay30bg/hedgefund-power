@@ -41,6 +41,10 @@
   flex-shrink: 0;
 }
 
+.chat-left{
+  margin: 2opx;
+}
+
 .chat-avatar {
   width: 45px;
   height: 45px;
