@@ -223,3 +223,23 @@
   cursor: pointer;
   font-size: 18px;
 }
+
+/* MOBILE FULL SCREEN CHAT */
+@media (max-width: 768px) {
+  .support-page {
+    padding: 0;
+  }
+
+  .support-chat {
+    height: 100vh;   /* full screen */
+    border-radius: 0; /* remove card look on mobile */
+  }
+
+  .support-header {
+    border-radius: 0;
+  }
+
+  .chat-messages {
+    padding-bottom: 80px; /* prevents input overlap */
+  }
+}
