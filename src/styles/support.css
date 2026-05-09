@@ -2,7 +2,8 @@
   max-width: 500px;
   margin: auto;
   padding: 0;
-  height: 80dvh;
+  height: 100dvh;
+  overflow: hidden;
   font-family: Arial, Helvetica, sans-serif;
   display: flex;
 }
