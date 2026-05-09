@@ -190,6 +190,10 @@
     border-radius: 0;
   }
 
+ .back-btn {
+ margin-top: 2px;
+}
+  
   .chat-top {
     padding: 12px;
     gap: 10px;
