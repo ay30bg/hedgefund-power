@@ -211,6 +211,7 @@
 
   .chat-input-box {
     padding: 10px;
+    padding-bottom: 0;
   }
 
   .chat-input-box input {
