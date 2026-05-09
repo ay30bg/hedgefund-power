@@ -14,7 +14,8 @@ import {
     FiEyeOff,
     FiLogOut,
     FiCreditCard,
-    FiLock
+    FiLock,
+    FiHeadphones 
 } from "react-icons/fi";
 
 const Profile = () => {
@@ -283,6 +284,11 @@ const Profile = () => {
                 <div className="menu-item" onClick={() => navigate("/about")}>
                     <FiMessageSquare />
                     <span>About</span>
+                </div>
+
+                 <div className="menu-item" onClick={() => navigate("/support")}>
+                    <FiHeadphones  />
+                    <span>Support</span>
                 </div>
             </div>
 
