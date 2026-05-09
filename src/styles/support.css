@@ -198,6 +198,7 @@
 
 .back-btn {
   align-self: center;
+  margin: auto;
 }
   .chat-avatar {
     width: 38px;
