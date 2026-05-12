@@ -23,8 +23,8 @@ const TopUp = () => {
   const createPayment = async () => {
     setError("");
 
-    if (!amount || Number(amount) < 10) {
-      return setError("Minimum deposit is $10");
+    if (!amount || Number(amount) < 5) {
+      return setError("Minimum deposit is $5");
     }
 
     try {
