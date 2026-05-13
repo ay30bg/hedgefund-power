@@ -1,3 +1,237 @@
+// // import React, { useState, useEffect } from "react";
+// // import { useNavigate } from "react-router-dom";
+// // import "../styles/topup.css";
+// // import { FiArrowLeft, FiCopy } from "react-icons/fi";
+// // import { useCurrency } from "../context/CurrencyContext";
+
+// // const API_URL = process.env.REACT_APP_API_URL;
+
+// // const TopUp = () => {
+// //   const navigate = useNavigate();
+// //   const { currency } = useCurrency();
+
+// //   const [amount, setAmount] = useState("");
+// //   const [paymentData, setPaymentData] = useState(null);
+// //   const [status, setStatus] = useState("");
+// //   const [loading, setLoading] = useState(false);
+// //   const [copied, setCopied] = useState(false);
+// //   const [error, setError] = useState("");
+
+// //   // ==============================
+// //   // CREATE PAYMENT (JWT FIXED)
+// //   // ==============================
+// //   const createPayment = async () => {
+// //     setError("");
+
+// //     if (!amount || Number(amount) < 5) {
+// //       return setError("Minimum deposit is $5");
+// //     }
+
+// //     try {
+// //       setLoading(true);
+
+// //       // ✅ GET TOKEN
+// //       const token = localStorage.getItem("token");
+
+// //       if (!token) {
+// //         throw new Error("User not authenticated. Please login again.");
+// //       }
+
+// //       const res = await fetch(`${API_URL}/api/payments/create`, {
+// //         method: "POST",
+// //         headers: {
+// //           "Content-Type": "application/json",
+// //           Authorization: `Bearer ${token}`, // ✅ FIXED
+// //         },
+// //         body: JSON.stringify({ amount }),
+// //       });
+
+// //       const data = await res.json();
+
+// //       if (!res.ok) throw new Error(data.error || "Payment failed");
+
+// //       setPaymentData(data);
+// //       setStatus(data.payment_status);
+// //     } catch (err) {
+// //       setError(err.message);
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   // ==============================
+// //   // POLL PAYMENT STATUS
+// //   // ==============================
+// //   useEffect(() => {
+// //     if (!paymentData?.payment_id) return;
+
+// //     const interval = setInterval(async () => {
+// //       try {
+// //         const token = localStorage.getItem("token");
+
+// //         const res = await fetch(
+// //           `${API_URL}/api/payments/status/${paymentData.payment_id}`,
+// //           {
+// //             headers: {
+// //               Authorization: `Bearer ${token}`,
+// //             },
+// //           }
+// //         );
+
+// //         const data = await res.json();
+// //         setStatus(data.payment_status);
+
+// //         if (data.payment_status === "finished") {
+// //           clearInterval(interval);
+// //         }
+// //       } catch (err) {
+// //         console.error("Status check failed", err);
+// //       }
+// //     }, 5000);
+
+// //     return () => clearInterval(interval);
+// //   }, [paymentData]);
+
+// //   // ==============================
+// //   // COPY ADDRESS
+// //   // ==============================
+// //   const copyAddress = () => {
+// //     if (!paymentData?.pay_address) return;
+
+// //     navigator.clipboard.writeText(paymentData.pay_address);
+// //     setCopied(true);
+// //     setTimeout(() => setCopied(false), 2000);
+// //   };
+
+// //   return (
+// //     <div className="topup-page">
+
+// //       {/* HEADER */}
+// //       <div className="topup-header">
+// //         <button className="back-btn" onClick={() => navigate(-1)}>
+// //           <FiArrowLeft />
+// //         </button>
+// //         <h2>Top-Up</h2>
+// //       </div>
+
+// //       {/* AMOUNT INPUT */}
+// //       <div className="section">
+// //         <label>Enter Amount (USD)</label>
+
+// //         <input
+// //           type="number"
+// //           placeholder="Minimum $10"
+// //           value={amount}
+// //           onChange={(e) => setAmount(e.target.value)}
+// //         />
+
+// //         {amount && (
+// //           <p className="converted">
+// //             ≈{" "}
+// //             <span className="converted-value">
+// //               {currency.symbol}
+// //               {(amount * currency.rate).toLocaleString()}
+// //             </span>
+// //           </p>
+// //         )}
+
+// //         {/* QUICK AMOUNTS */}
+// //         <div className="quick-amounts">
+// //           {[50, 100, 500, 1000].map((amt) => (
+// //             <button key={amt} onClick={() => setAmount(amt)}>
+// //               ${amt}
+// //             </button>
+// //           ))}
+// //         </div>
+
+// //         {error && <p className="error-text">{error}</p>}
+// //       </div>
+
+// //       {/* GENERATE BUTTON */}
+// //       {!paymentData && (
+// //         <button
+// //           className="primary-btn"
+// //           onClick={createPayment}
+// //           disabled={loading}
+// //         >
+// //           {loading ? "Generating..." : "Generate Payment Address"}
+// //         </button>
+// //       )}
+
+// //       {/* PAYMENT DETAILS */}
+// //       {paymentData && (
+// //         <>
+// //           <div className="section">
+// //             <label>Deposit Address (USDT - BEP20)</label>
+
+// //             <div className="wallet-box">
+// //               <span>{paymentData.pay_address}</span>
+// //               <button onClick={copyAddress}>
+// //                 <FiCopy />
+// //               </button>
+// //             </div>
+
+// //             {copied && <p className="success-text">Copied!</p>}
+// //           </div>
+
+// //           <div className="section">
+// //             <label>Amount to Send</label>
+// //             <div className="wallet-box">
+// //               <span>{paymentData.pay_amount} USDT</span>
+// //             </div>
+// //           </div>
+
+// //          {/* QR CODE */}
+// // {paymentData.pay_address && (
+// //   <div className="section qr-section">
+// //     <label>Scan QR Code</label>
+
+// //     <div className="qr-wrapper">
+// //       <img
+// //         src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${paymentData.pay_address}`}
+// //         alt="QR Code"
+// //       />
+// //     </div>
+// //   </div>
+// // )}
+
+// //           {/* STATUS */}
+// //           <div className="info-box">
+// //             <p>
+// //               Status:{" "}
+// //               <strong>
+// //                 {status === "waiting" && "Waiting for payment..."}
+// //                 {status === "confirming" && "Confirming transaction..."}
+// //                 {status === "finished" && "Payment confirmed ✅"}
+// //                 {status === "failed" && "Payment failed ❌"}
+// //                 {status === "expired" && "Payment expired ⏱️"}
+// //               </strong>
+// //             </p>
+// //           </div>
+// //         </>
+// //       )}
+
+// //       {/* INFO */}
+// //       <div className="info-box">
+// //         <p>• Send only USDT (BEP20 - BSC Network)</p>
+// //         <p>• Sending via wrong network will result in loss of funds</p>
+// //         <p>• Minimum deposit: $10</p>
+// //         <p>• Funds arrive within 1–5 minutes</p>
+// //       </div>
+
+// //       {/* WARNING */}
+// //       <p className="warning">
+// //         ⚠️ Only use BSC (BEP20). Do NOT use TRC20 or ERC20.
+// //       </p>
+
+// //     </div>
+// //   );
+// // };
+
+// // export default TopUp;
+
+// // FRONTEND — TopUp.jsx
+
 // import React, { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 // import "../styles/topup.css";
@@ -18,11 +252,12 @@
 //   const [error, setError] = useState("");
 
 //   // ==============================
-//   // CREATE PAYMENT (JWT FIXED)
+//   // CREATE PAYMENT
 //   // ==============================
 //   const createPayment = async () => {
 //     setError("");
 
+//     // MINIMUM = $10
 //     if (!amount || Number(amount) < 5) {
 //       return setError("Minimum deposit is $5");
 //     }
@@ -30,7 +265,6 @@
 //     try {
 //       setLoading(true);
 
-//       // ✅ GET TOKEN
 //       const token = localStorage.getItem("token");
 
 //       if (!token) {
@@ -41,14 +275,16 @@
 //         method: "POST",
 //         headers: {
 //           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`, // ✅ FIXED
+//           Authorization: `Bearer ${token}`,
 //         },
 //         body: JSON.stringify({ amount }),
 //       });
 
 //       const data = await res.json();
 
-//       if (!res.ok) throw new Error(data.error || "Payment failed");
+//       if (!res.ok) {
+//         throw new Error(data.error || "Payment failed");
+//       }
 
 //       setPaymentData(data);
 //       setStatus(data.payment_status);
@@ -79,15 +315,20 @@
 //         );
 
 //         const data = await res.json();
+
 //         setStatus(data.payment_status);
 
-//         if (data.payment_status === "finished") {
+//         if (
+//           data.payment_status === "finished" ||
+//           data.payment_status === "failed" ||
+//           data.payment_status === "expired"
+//         ) {
 //           clearInterval(interval);
 //         }
 //       } catch (err) {
 //         console.error("Status check failed", err);
 //       }
-//     }, 5000);
+//     }, 3000); // Faster polling for TON
 
 //     return () => clearInterval(interval);
 //   }, [paymentData]);
@@ -95,12 +336,20 @@
 //   // ==============================
 //   // COPY ADDRESS
 //   // ==============================
-//   const copyAddress = () => {
+//   const copyAddress = async () => {
 //     if (!paymentData?.pay_address) return;
 
-//     navigator.clipboard.writeText(paymentData.pay_address);
-//     setCopied(true);
-//     setTimeout(() => setCopied(false), 2000);
+//     try {
+//       await navigator.clipboard.writeText(paymentData.pay_address);
+
+//       setCopied(true);
+
+//       setTimeout(() => {
+//         setCopied(false);
+//       }, 2000);
+//     } catch (err) {
+//       console.error("Copy failed", err);
+//     }
 //   };
 
 //   return (
@@ -111,6 +360,7 @@
 //         <button className="back-btn" onClick={() => navigate(-1)}>
 //           <FiArrowLeft />
 //         </button>
+
 //         <h2>Top-Up</h2>
 //       </div>
 
@@ -137,8 +387,11 @@
 
 //         {/* QUICK AMOUNTS */}
 //         <div className="quick-amounts">
-//           {[50, 100, 500, 1000].map((amt) => (
-//             <button key={amt} onClick={() => setAmount(amt)}>
+//           {[10, 50, 100, 500, 1000].map((amt) => (
+//             <button
+//               key={amt}
+//               onClick={() => setAmount(amt)}
+//             >
 //               ${amt}
 //             </button>
 //           ))}
@@ -154,46 +407,56 @@
 //           onClick={createPayment}
 //           disabled={loading}
 //         >
-//           {loading ? "Generating..." : "Generate Payment Address"}
+//           {loading ? "Generating..." : "Generate TON Address"}
 //         </button>
 //       )}
 
 //       {/* PAYMENT DETAILS */}
 //       {paymentData && (
 //         <>
+//           {/* ADDRESS */}
 //           <div className="section">
-//             <label>Deposit Address (USDT - BEP20)</label>
+//             <label>Deposit Address (USDT - TON)</label>
 
 //             <div className="wallet-box">
 //               <span>{paymentData.pay_address}</span>
+
 //               <button onClick={copyAddress}>
 //                 <FiCopy />
 //               </button>
 //             </div>
 
-//             {copied && <p className="success-text">Copied!</p>}
+//             {copied && (
+//               <p className="success-text">Copied!</p>
+//             )}
 //           </div>
 
+//           {/* AMOUNT */}
 //           <div className="section">
 //             <label>Amount to Send</label>
+
 //             <div className="wallet-box">
-//               <span>{paymentData.pay_amount} USDT</span>
+//               <span>
+//                 {paymentData.pay_amount} USDT
+//               </span>
 //             </div>
 //           </div>
 
-//          {/* QR CODE */}
-// {paymentData.pay_address && (
-//   <div className="section qr-section">
-//     <label>Scan QR Code</label>
+//           {/* QR CODE */}
+//           {paymentData.pay_address && (
+//             <div className="section qr-section">
+//               <label>Scan QR Code</label>
 
-//     <div className="qr-wrapper">
-//       <img
-//         src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${paymentData.pay_address}`}
-//         alt="QR Code"
-//       />
-//     </div>
-//   </div>
-// )}
+//               <div className="qr-wrapper">
+//                 <img
+//                   src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
+//                     `${paymentData.pay_address}?amount=${paymentData.pay_amount}`
+//                   )}`}
+//                   alt="QR Code"
+//                 />
+//               </div>
+//             </div>
+//           )}
 
 //           {/* STATUS */}
 //           <div className="info-box">
@@ -201,10 +464,14 @@
 //               Status:{" "}
 //               <strong>
 //                 {status === "waiting" && "Waiting for payment..."}
-//                 {status === "confirming" && "Confirming transaction..."}
-//                 {status === "finished" && "Payment confirmed ✅"}
-//                 {status === "failed" && "Payment failed ❌"}
-//                 {status === "expired" && "Payment expired ⏱️"}
+//                 {status === "confirming" &&
+//                   "Confirming transaction..."}
+//                 {status === "finished" &&
+//                   "Payment confirmed ✅"}
+//                 {status === "failed" &&
+//                   "Payment failed ❌"}
+//                 {status === "expired" &&
+//                   "Payment expired ⏱️"}
 //               </strong>
 //             </p>
 //           </div>
@@ -213,24 +480,25 @@
 
 //       {/* INFO */}
 //       <div className="info-box">
-//         <p>• Send only USDT (BEP20 - BSC Network)</p>
-//         <p>• Sending via wrong network will result in loss of funds</p>
+//         <p>• Send only USDT (TON Network)</p>
+//         <p>
+//           • Sending via wrong network may result
+//           in loss of funds
+//         </p>
 //         <p>• Minimum deposit: $10</p>
-//         <p>• Funds arrive within 1–5 minutes</p>
+//         <p>• Funds arrive within 1–3 minutes</p>
 //       </div>
 
 //       {/* WARNING */}
 //       <p className="warning">
-//         ⚠️ Only use BSC (BEP20). Do NOT use TRC20 or ERC20.
+//         ⚠️ Only use TON Network. Do NOT use
+//         TRC20, ERC20, or BEP20.
 //       </p>
-
 //     </div>
 //   );
 // };
 
 // export default TopUp;
-
-// FRONTEND — TopUp.jsx
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -249,6 +517,7 @@ const TopUp = () => {
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedMemo, setCopiedMemo] = useState(false);
   const [error, setError] = useState("");
 
   // ==============================
@@ -257,7 +526,7 @@ const TopUp = () => {
   const createPayment = async () => {
     setError("");
 
-    // MINIMUM = $10
+    // MINIMUM = $5
     if (!amount || Number(amount) < 5) {
       return setError("Minimum deposit is $5");
     }
@@ -268,26 +537,34 @@ const TopUp = () => {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        throw new Error("User not authenticated. Please login again.");
+        throw new Error(
+          "User not authenticated. Please login again."
+        );
       }
 
-      const res = await fetch(`${API_URL}/api/payments/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ amount }),
-      });
+      const res = await fetch(
+        `${API_URL}/api/payments/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ amount }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Payment failed");
+        throw new Error(
+          data.error || "Payment creation failed"
+        );
       }
 
       setPaymentData(data);
-      setStatus(data.payment_status);
+
+      setStatus(data.payment_status || "waiting");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -299,14 +576,14 @@ const TopUp = () => {
   // POLL PAYMENT STATUS
   // ==============================
   useEffect(() => {
-    if (!paymentData?.payment_id) return;
+    if (!paymentData?.paymentId) return;
 
     const interval = setInterval(async () => {
       try {
         const token = localStorage.getItem("token");
 
         const res = await fetch(
-          `${API_URL}/api/payments/status/${paymentData.payment_id}`,
+          `${API_URL}/api/payments/status/${paymentData.paymentId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -328,7 +605,7 @@ const TopUp = () => {
       } catch (err) {
         console.error("Status check failed", err);
       }
-    }, 3000); // Faster polling for TON
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [paymentData]);
@@ -337,10 +614,12 @@ const TopUp = () => {
   // COPY ADDRESS
   // ==============================
   const copyAddress = async () => {
-    if (!paymentData?.pay_address) return;
+    if (!paymentData?.address) return;
 
     try {
-      await navigator.clipboard.writeText(paymentData.pay_address);
+      await navigator.clipboard.writeText(
+        paymentData.address
+      );
 
       setCopied(true);
 
@@ -352,12 +631,36 @@ const TopUp = () => {
     }
   };
 
+  // ==============================
+  // COPY MEMO
+  // ==============================
+  const copyMemo = async () => {
+    if (!paymentData?.memo) return;
+
+    try {
+      await navigator.clipboard.writeText(
+        paymentData.memo
+      );
+
+      setCopiedMemo(true);
+
+      setTimeout(() => {
+        setCopiedMemo(false);
+      }, 2000);
+    } catch (err) {
+      console.error("Copy memo failed", err);
+    }
+  };
+
   return (
     <div className="topup-page">
 
       {/* HEADER */}
       <div className="topup-header">
-        <button className="back-btn" onClick={() => navigate(-1)}>
+        <button
+          className="back-btn"
+          onClick={() => navigate(-1)}
+        >
           <FiArrowLeft />
         </button>
 
@@ -370,7 +673,7 @@ const TopUp = () => {
 
         <input
           type="number"
-          placeholder="Minimum $10"
+          placeholder="Minimum $5"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
@@ -380,7 +683,9 @@ const TopUp = () => {
             ≈{" "}
             <span className="converted-value">
               {currency.symbol}
-              {(amount * currency.rate).toLocaleString()}
+              {(
+                amount * currency.rate
+              ).toLocaleString()}
             </span>
           </p>
         )}
@@ -397,7 +702,9 @@ const TopUp = () => {
           ))}
         </div>
 
-        {error && <p className="error-text">{error}</p>}
+        {error && (
+          <p className="error-text">{error}</p>
+        )}
       </div>
 
       {/* GENERATE BUTTON */}
@@ -407,19 +714,24 @@ const TopUp = () => {
           onClick={createPayment}
           disabled={loading}
         >
-          {loading ? "Generating..." : "Generate TON Address"}
+          {loading
+            ? "Generating..."
+            : "Generate TON Address"}
         </button>
       )}
 
       {/* PAYMENT DETAILS */}
       {paymentData && (
         <>
+
           {/* ADDRESS */}
           <div className="section">
-            <label>Deposit Address (USDT - TON)</label>
+            <label>
+              Deposit Address (USDT - TON)
+            </label>
 
             <div className="wallet-box">
-              <span>{paymentData.pay_address}</span>
+              <span>{paymentData.address}</span>
 
               <button onClick={copyAddress}>
                 <FiCopy />
@@ -427,9 +739,37 @@ const TopUp = () => {
             </div>
 
             {copied && (
-              <p className="success-text">Copied!</p>
+              <p className="success-text">
+                Address copied!
+              </p>
             )}
           </div>
+
+          {/* MEMO */}
+          {paymentData.memo && (
+            <div className="section">
+              <label>TON Memo / Comment</label>
+
+              <div className="wallet-box">
+                <span>{paymentData.memo}</span>
+
+                <button onClick={copyMemo}>
+                  <FiCopy />
+                </button>
+              </div>
+
+              {copiedMemo && (
+                <p className="success-text">
+                  Memo copied!
+                </p>
+              )}
+
+              <p className="warning">
+                ⚠️ Include this memo/comment when
+                sending USDT TON
+              </p>
+            </div>
+          )}
 
           {/* AMOUNT */}
           <div className="section">
@@ -437,20 +777,20 @@ const TopUp = () => {
 
             <div className="wallet-box">
               <span>
-                {paymentData.pay_amount} USDT
+                {paymentData.amount} USDT
               </span>
             </div>
           </div>
 
           {/* QR CODE */}
-          {paymentData.pay_address && (
+          {paymentData.address && (
             <div className="section qr-section">
               <label>Scan QR Code</label>
 
               <div className="qr-wrapper">
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(
-                    `${paymentData.pay_address}?amount=${paymentData.pay_amount}`
+                    `${paymentData.address}?amount=${paymentData.amount}`
                   )}`}
                   alt="QR Code"
                 />
@@ -463,13 +803,18 @@ const TopUp = () => {
             <p>
               Status:{" "}
               <strong>
-                {status === "waiting" && "Waiting for payment..."}
+                {status === "waiting" &&
+                  "Waiting for payment..."}
+
                 {status === "confirming" &&
                   "Confirming transaction..."}
+
                 {status === "finished" &&
                   "Payment confirmed ✅"}
+
                 {status === "failed" &&
                   "Payment failed ❌"}
+
                 {status === "expired" &&
                   "Payment expired ⏱️"}
               </strong>
@@ -481,12 +826,17 @@ const TopUp = () => {
       {/* INFO */}
       <div className="info-box">
         <p>• Send only USDT (TON Network)</p>
+
         <p>
           • Sending via wrong network may result
           in loss of funds
         </p>
-        <p>• Minimum deposit: $10</p>
-        <p>• Funds arrive within 1–3 minutes</p>
+
+        <p>• Minimum deposit: $5</p>
+
+        <p>
+          • Funds are credited after admin approval
+        </p>
       </div>
 
       {/* WARNING */}
