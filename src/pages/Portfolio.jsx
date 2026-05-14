@@ -194,34 +194,44 @@ export default function Portfolio() {
 
     /* ---------------- CLAIM MACHINE ---------------- */
     const handleClaimMachine = async (id) => {
-        try {
-            setLoadingId(id);
+    try {
+        setLoadingId(id);
 
-            const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token");
 
-            const res = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/market/claim/${id}`,
-                {
-                    method: "POST",
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            );
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                alert(data.message || "Claim failed");
-                return;
+        const res = await fetch(
+            `${process.env.REACT_APP_API_URL}/api/market/claim/${id}`,
+            {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` },
             }
+        );
 
-            alert("Machine profit claimed");
-            await fetchMachines();
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoadingId(null);
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert(data.message || "Claim failed");
+            return;
         }
-    };
+
+        alert("Machine profit claimed");
+
+        // ✅ instant UI update
+        setMachines((prev) =>
+            prev.map((machine) =>
+                machine._id === id
+                    ? { ...machine, claimed: true }
+                    : machine
+            )
+        );
+
+        await fetchMachines();
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setLoadingId(null);
+    }
+};
 
     return (
         <div className="portfolio-page">
@@ -409,72 +419,84 @@ export default function Portfolio() {
                             </div>
                         ) : (
                             machines.map((machine) => {
-                                const status = getStatus(
-                                    machine.purchaseDate,
-                                    machine.expiryDate
-                                );
+    const status = getStatus(
+        machine.purchaseDate,
+        machine.expiryDate,
+        machine.claimed
+    );
 
-                                const progress = getProgress(
-                                    machine.purchaseDate,
-                                    machine.expiryDate
-                                );
+    const progress = getProgress(
+        machine.purchaseDate,
+        machine.expiryDate
+    );
 
-                                return (
-                                    <div className={`machine-card ${status === "claimed" ? "claimed" : ""}`} key={machine._id}>
-                                        <div className="machine-header">
-                                            <img
-                                                src={machineImages[machine.name]}
-                                                alt={machine.name}
-                                            />
+    return (
+        <div
+            className={`machine-card ${status === "claimed" ? "claimed" : ""}`}
+            key={machine._id}
+        >
+            <div className="machine-header">
+                <img
+                    src={machineImages[machine.name]}
+                    alt={machine.name}
+                />
 
-                                            <div className="name-tag">
-                                                <h3>{machine.name}</h3>
-                                                <span className="tag">{machine.duration} Days</span>
-                                            </div>
+                <div className="name-tag">
+                    <h3>{machine.name}</h3>
+                    <span className="tag">
+                        {machine.duration} Days
+                    </span>
+                </div>
 
-                                            <span className={`status-badge ${status}`}>
-                                                {status}
-                                            </span>
-                                        </div>
+                <span className={`status-badge ${status}`}>
+                    {status}
+                </span>
+            </div>
 
-                                        <div className="machine-info">
-                                            <div>
-                                                <span>Profit / Hour</span>
-                                                <strong>{format(machine.profit)}</strong>
-                                            </div>
+            <div className="machine-info">
+                <div>
+                    <span>Profit / Hour</span>
+                    <strong>{format(machine.profit)}</strong>
+                </div>
 
-                                            <div>
-                                                <span>Daily Profit</span>
-                                                <strong>{format(machine.profit * 24)}</strong>
-                                            </div>
-                                        </div>
+                <div>
+                    <span>Daily Profit</span>
+                    <strong>{format(machine.profit * 24)}</strong>
+                </div>
+            </div>
 
-                                        <div className="progress-bar">
-                                            <div
-                                                className="progress-fill"
-                                                style={{ width: `${progress}%` }}
-                                            />
-                                        </div>
+            <div className="progress-bar">
+                <div
+                    className="progress-fill"
+                    style={{ width: `${progress}%` }}
+                />
+            </div>
 
-                                        <p className="machine-dates">
-                                            {formatDateTime(machine.purchaseDate)} -{" "}
-                                            {formatDateTime(machine.expiryDate)}
-                                        </p>
+            <p className="machine-dates">
+                {formatDateTime(machine.purchaseDate)} -{" "}
+                {formatDateTime(machine.expiryDate)}
+            </p>
 
-                                        {status === "claimable" && (
-                                            <button
-                                                className="claim-btn"
-                                                onClick={() => handleClaimMachine(machine._id)}
-                                                disabled={loadingId === machine._id}
-                                            >
-                                                {loadingId === machine._id
-                                                    ? "Processing..."
-                                                    : "Claim Profit"}
-                                            </button>
-                                        )}
-                                    </div>
-                                );
-                            })
+            {status === "claimable" && (
+                <button
+                    className="claim-btn"
+                    onClick={() => handleClaimMachine(machine._id)}
+                    disabled={loadingId === machine._id}
+                >
+                    {loadingId === machine._id
+                        ? "Processing..."
+                        : "Claim Profit"}
+                </button>
+            )}
+
+            {status === "claimed" && (
+                <button className="claim-btn claimed" disabled>
+                    Claimed
+                </button>
+            )}
+        </div>
+    );
+})
                         )}
 
                     </div>
