@@ -17,7 +17,7 @@ const Withdraw = () => {
 
   const API = process.env.REACT_APP_API_URL;
 
-  const fee = amount ? amount * 0.05 : 0;
+  const fee = amount ? amount * 0.03 : 0;
   const receive = amount ? amount - fee : 0;
 
   const formatLocal = (value) =>
@@ -53,8 +53,8 @@ const Withdraw = () => {
   // HANDLE WITHDRAWAL
   // =========================
   const handleWithdraw = async () => {
-    if (!amount || amount < 20) {
-      return alert("Minimum withdrawal is $20");
+    if (!amount || amount < 50) {
+      return alert("Minimum withdrawal is $50");
     }
 
     if (!password) {
@@ -147,7 +147,7 @@ const Withdraw = () => {
 
       <div className="summary-box">
         <div>
-          <span>Fee (5%)</span>
+          <span>Fee (3%)</span>
           <span>${fee.toFixed(2)}</span>
         </div>
 
