@@ -8,7 +8,8 @@
    PAGE
 ========================= */
 .support-page {
-  width: 500px;
+  width: 100%;
+  max-width: 500px;
   height: 100vh;
   height: 100dvh;
   margin: auto;
