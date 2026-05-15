@@ -113,7 +113,7 @@ const Withdraw = () => {
         <label>Enter Amount (USD)</label>
         <input
           type="number"
-          placeholder="Minimum $20"
+          placeholder="Minimum $50"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
