@@ -5,9 +5,10 @@ import "../styles/support.css";
 import {
     FiArrowLeft,
     FiSend,
-    FiHeadphones,
-    FiCheckCircle
+    FiHeadphones
 } from "react-icons/fi";
+
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 const Support = () => {
     const navigate = useNavigate();
@@ -92,7 +93,7 @@ const Support = () => {
                             <div className="support-name">
                                <h4>Support Assistant</h4>
 
-                               <FiCheckCircle className="verified-badge" />
+                               <RiVerifiedBadgeFill className="verified-badge" />
                            </div>
                             
                             <span>Online now</span>
