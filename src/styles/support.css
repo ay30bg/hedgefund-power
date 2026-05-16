@@ -326,18 +326,59 @@
   }
 
   .chat-top-left {
-    gap: 10px;
+    display: flex;
+    align-items: center;
+
+    flex-shrink: 0;
   }
 
-  .chat-avatar {
-    width: 38px;
-    height: 38px;
+  .chat-top-right {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    flex: 1;
+
+    margin-left: 18px;
+
+    min-width: 0;
+
+    overflow: hidden;
+  }
+
+  .back-btn {
+    width: 36px;
+    height: 36px;
+
+    min-width: 36px;
 
     font-size: 18px;
   }
 
+  .chat-avatar {
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+  }
+
+  .chat-user-info {
+    min-width: 0;
+
+    overflow: hidden;
+  }
+
   .chat-user-info h4 {
-    font-size: 14px;
+    font-size: 15px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .chat-user-info span {
