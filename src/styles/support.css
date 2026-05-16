@@ -171,14 +171,15 @@
    MESSAGE BUBBLES
 ========================= */
 .chat-message {
-  width: fit-content;
-
   max-width: 75%;
+
+  min-width: 60px;
 
   padding: 10px 13px;
 
   font-size: 14px;
-  line-height: 1.5;
+
+  line-height: 20px;
 
   border-radius: 8px;
 
@@ -186,13 +187,23 @@
 
   animation: fadeIn 0.2s ease;
 
-  white-space: normal;
+  white-space: pre-wrap;
 
-  overflow-wrap: anywhere;
+  word-break: break-word;
 
-  word-break: normal;
+  overflow-wrap: break-word;
 
   box-sizing: border-box;
+
+  display: block;
+
+  width: auto;
+
+  height: auto;
+
+  min-height: auto;
+
+  flex-shrink: 0;
 }
 
 /* USER MESSAGE */
@@ -206,6 +217,8 @@
   border-top-right-radius: 0;
 
   text-align: left;
+
+  width: auto;
 }
 
 /* AI MESSAGE */
@@ -349,6 +362,8 @@
     max-width: 88%;
 
     font-size: 13px;
+
+    line-height: 19px;
   }
 
   .chat-input-box {
