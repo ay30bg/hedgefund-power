@@ -328,6 +328,14 @@
     align-items: flex-start;
   }
 
+    .chat-top-left {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 15px;
+
+    flex-shrink: 0;
+  }
  
   .chat-top-right {
     display: flex;
