@@ -332,7 +332,7 @@
     display: flex;
     align-items: center;
 
-    padding-top: 6px;
+    padding-top: 15px;
 
     flex-shrink: 0;
   }
@@ -345,7 +345,7 @@
 
     flex: 1;
 
-    margin-left: 12px;
+    margin-left: 50px;
 
     min-width: 0;
 
