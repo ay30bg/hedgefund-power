@@ -326,11 +326,13 @@
   }
 
   .chat-top-left {
-    display: flex;
-    align-items: center;
-    margin-top: -8px;
-     
-    flex-shrink: 0;
+   position: relative;
+   top: -8px;
+
+   display: flex;
+   align-items: center;
+
+   flex-shrink: 0;
   }
 
   .chat-top-right {
