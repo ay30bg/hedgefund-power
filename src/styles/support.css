@@ -275,7 +275,7 @@
 
   border-radius: 999px;
 
-  font-size: 14px;
+  font-size: 16px; 
 
   box-sizing: border-box;
 }
@@ -376,7 +376,6 @@
   }
 
   .chat-input-box input {
-    font-size: 13px;
 
     padding: 12px 14px;
   }
