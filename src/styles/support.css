@@ -66,7 +66,10 @@
 .chat-top-left {
   display: flex;
   align-items: center;
+
   gap: 14px;
+
+  min-width: 0;
 }
 
 .back-btn {
@@ -156,6 +159,7 @@
 
   display: flex;
   flex-direction: column;
+
   gap: 10px;
 
   background: #efeae2;
@@ -167,6 +171,8 @@
    MESSAGE BUBBLES
 ========================= */
 .chat-message {
+  width: fit-content;
+
   max-width: 75%;
 
   padding: 10px 13px;
@@ -176,11 +182,20 @@
 
   border-radius: 8px;
 
-  word-break: break-word;
+  position: relative;
 
   animation: fadeIn 0.2s ease;
+
+  white-space: normal;
+
+  overflow-wrap: anywhere;
+
+  word-break: normal;
+
+  box-sizing: border-box;
 }
 
+/* USER MESSAGE */
 .chat-message.user {
   align-self: flex-end;
 
@@ -189,8 +204,11 @@
   color: #111b21;
 
   border-top-right-radius: 0;
+
+  text-align: left;
 }
 
+/* AI MESSAGE */
 .chat-message.ai {
   align-self: flex-start;
 
@@ -199,6 +217,8 @@
   color: #111b21;
 
   border-top-left-radius: 0;
+
+  text-align: left;
 }
 
 /* =========================
@@ -209,6 +229,7 @@
 
   display: flex;
   align-items: center;
+
   gap: 10px;
 
   padding: 10px 14px;
@@ -228,6 +249,8 @@
 .chat-input-box input {
   flex: 1;
 
+  min-width: 0;
+
   border: none;
   outline: none;
 
@@ -241,7 +264,7 @@
 
   font-size: 14px;
 
-  min-width: 0;
+  box-sizing: border-box;
 }
 
 .chat-input-box input::placeholder {
