@@ -223,7 +223,7 @@ const Support = () => {
                         </button>
 
                     </div>
-                    <div>
+                    <div className="chat-top-right">
                         <div className="chat-avatar">
                             <FiHeadphones />
                         </div>
