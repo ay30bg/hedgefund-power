@@ -328,7 +328,8 @@
   .chat-top-left {
     display: flex;
     align-items: center;
-
+    margin-top: 100px;
+     
     flex-shrink: 0;
   }
 
@@ -350,7 +351,7 @@
   .back-btn {
     width: 36px;
     height: 36px;
-    margin-top: 3px;
+   
     min-width: 36px;
 
     font-size: 18px;
