@@ -321,18 +321,20 @@
     max-width: 100%;
   }
 
-  .chat-top {
+   .chat-top {
     padding: 10px 12px;
+
+    display: flex;
+    align-items: flex-start;
   }
 
   .chat-top-left {
-   position: relative;
-   top: -8px;
+    display: flex;
+    align-items: center;
 
-   display: flex;
-   align-items: center;
+    padding-top: 6px;
 
-   flex-shrink: 0;
+    flex-shrink: 0;
   }
 
   .chat-top-right {
@@ -343,13 +345,13 @@
 
     flex: 1;
 
-    margin-left: 50px;
+    margin-left: 12px;
 
     min-width: 0;
 
     overflow: hidden;
   }
-
+   
   .back-btn {
     width: 36px;
     height: 36px;
