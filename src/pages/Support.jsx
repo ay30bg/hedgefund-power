@@ -5,7 +5,8 @@ import "../styles/support.css";
 import {
     FiArrowLeft,
     FiSend,
-    FiHeadphones
+    FiHeadphones,
+    FiCheckCircle
 } from "react-icons/fi";
 
 const Support = () => {
@@ -88,7 +89,12 @@ const Support = () => {
                         </div>
 
                         <div className="chat-user-info">
-                            <h4>Support Assistant</h4>
+                            <div className="support-name">
+                               <h4>Support Assistant</h4>
+
+                               <FiCheckCircle className="verified-badge" />
+                           </div>
+                            
                             <span>Online now</span>
                         </div>
                     </div>
