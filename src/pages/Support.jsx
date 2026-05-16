@@ -223,15 +223,17 @@ const Support = () => {
                         </button>
 
                     </div>
+                    <div>
+                        <div className="chat-avatar">
+                            <FiHeadphones />
+                        </div>
 
-                    <div className="chat-avatar">
-                        <FiHeadphones />
+                        <div className="chat-user-info">
+                            <h4>Support Assistant</h4>
+                            <span>Online now</span>
+                        </div>
                     </div>
 
-                    <div className="chat-user-info">
-                        <h4>Support Assistant</h4>
-                        <span>Online now</span>
-                    </div>
 
 
 
