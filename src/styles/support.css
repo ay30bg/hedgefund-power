@@ -328,7 +328,7 @@
   .chat-top-left {
     display: flex;
     align-items: center;
-    margin-top: 30px;
+    margin-top: -8px;
      
     flex-shrink: 0;
   }
