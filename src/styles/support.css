@@ -111,6 +111,22 @@
   overflow: hidden;
 }
 
+.support-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.support-name h4 {
+  margin: 0;
+}
+
+.verified-badge {
+  color: #53bdeb;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
 .chat-user-info h4 {
   color: white;
 
