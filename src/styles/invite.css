@@ -199,6 +199,14 @@
   border-bottom: none;
 }
 
+.referral-email {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
 /* STATUS COLORS */
 .success {
   color: #16a34a;
