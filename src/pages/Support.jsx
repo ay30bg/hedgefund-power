@@ -77,7 +77,7 @@ const Support = () => {
                     <div className="chat-top-left">
 
                         <button
-                            className="back-btn"
+                            className="back-btn back-button"
                             onClick={() => navigate(-1)}
                         >
                             <FiArrowLeft />
