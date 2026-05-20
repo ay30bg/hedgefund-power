@@ -188,7 +188,7 @@
 
   gap: 10px;
 
-  background: #efeae2;
+  background: #f5f7fb;
 
   box-sizing: border-box;
 }
@@ -236,9 +236,9 @@
 .chat-message.user {
   align-self: flex-end;
 
-  background: #d9fdd3;
+  background: #d4a64f;
 
-  color: #111b21;
+  color: #eee;
 
   border-top-right-radius: 0;
 
@@ -278,7 +278,9 @@
     env(safe-area-inset-bottom)
   );
 
-  background: #000;
+  border-top: 1px solid #e5e7eb;
+
+  background: #ffffff;
 
   flex-shrink: 0;
 
@@ -290,16 +292,17 @@
 
   min-width: 0;
 
-  border: none;
+  border: 1px solid #d1d5db;
+
   outline: none;
 
-  background: #2a3942;
+  background: #f9fafb;
 
-  color: white;
+  color: #111827;
 
   padding: 13px 16px;
 
-  border-radius: 999px;
+  border-radius: 14px;
 
   font-size: 16px; 
 
@@ -307,7 +310,7 @@
 }
 
 .chat-input-box input::placeholder {
-  color: #8696a0;
+  color: #9ca3af;
 }
 
 .chat-input-box button {
@@ -315,7 +318,7 @@
   height: 46px;
 
   border: none;
-  border-radius: 50%;
+  border-radius: 14px;
 
   background: #d6a85a;
 
