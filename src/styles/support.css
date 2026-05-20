@@ -79,28 +79,11 @@
   margin-left: 45px;
 }
 
-  /* back-btn {
-    width: 38px;
-    height: 38px;
+.back-button{
+   background: rgba(212, 166, 79, 0.1);
 
-    border: none;
-
-    border-radius: 10px;
-
-    background: rgba(212, 166, 79, 0.1);
-
-    color: #d4a64f;
-
-    align-items: center;
-    justify-content: center;
-
-    font-size: 18px;
-
-    flex-shrink: 0;
-
-    cursor: pointer;
-  } */
-
+   color: #d4a64f;
+}
 
 /* AVATAR */
 .chat-avatar {
@@ -404,9 +387,10 @@
     overflow: hidden;
   }
    
-  .back-btn {
-    width: 36px;
-    height: 36px;
+  .back-btn,
+  .back-button{
+    width: 38px;
+    height: 38px;
    
     min-width: 36px;
 
