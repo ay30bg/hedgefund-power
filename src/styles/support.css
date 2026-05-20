@@ -79,6 +79,29 @@
   margin-left: 45px;
 }
 
+  /* back-btn {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: rgba(212, 166, 79, 0.1);
+
+    color: #d4a64f;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+
+    cursor: pointer;
+  } */
+
+
 /* AVATAR */
 .chat-avatar {
   width: 48px;
@@ -119,6 +142,7 @@
 
 .support-name h4 {
   margin: 0;
+  color: #111827;
 }
 
 .verified-badge {
