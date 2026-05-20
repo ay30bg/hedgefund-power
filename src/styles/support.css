@@ -80,7 +80,7 @@
 }
 
 .back-button{
-   background: rgba(212, 166, 79, 0.1);
+   background: rgba(212, 166, 79, 0.1) !important;
 
    color: #d4a64f;
 }
