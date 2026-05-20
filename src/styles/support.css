@@ -142,7 +142,7 @@
 
 .support-name h4 {
   margin: 0;
-  color: #111827;
+  color: #111827 !important;
 }
 
 .verified-badge {
