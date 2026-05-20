@@ -82,7 +82,7 @@
 .back-button{
    background: rgba(212, 166, 79, 0.1) !important;
 
-   color: #d4a64f;
+   color: #d4a64f !important;
 }
 
 /* AVATAR */
