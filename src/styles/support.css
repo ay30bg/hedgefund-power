@@ -180,6 +180,10 @@
    MESSAGE BUBBLES
 ========================= */
 .chat-message {
+  display: flex;
+   
+  flex-direction: column;
+   
   max-width: 75%;
 
   min-width: 60px;
@@ -273,9 +277,12 @@
 ========================= */
 
 .message-time {
-  align-self: flex-end;
+  width: 100%;
 
-  margin-top: 2px;
+  display: flex;
+  justify-content: flex-end;
+
+  margin-top: 4px;
 
   font-size: 9px;
 
@@ -284,6 +291,8 @@
   line-height: 1;
 
   letter-spacing: 0.2px;
+
+  text-align: right;
 }
 
 /* =========================
