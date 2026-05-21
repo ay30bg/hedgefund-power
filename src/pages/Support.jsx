@@ -75,7 +75,9 @@
 //                     {
 //                         sender: "admin",
 //                         message:
-//                             "Hello 👋 Welcome to Support Center. How can we help you today?"
+//                             "Hello 👋 Welcome to Support Center. How can we help you today?",
+//                         createdAt:
+//                             new Date()
 //                     }
 //                 ]);
 //             } else {
@@ -126,12 +128,53 @@
 //         }
 //     };
 
+//     // =========================
+//     // FORMAT DATE LABEL
+//     // =========================
+
+//     const formatDateLabel = (
+//         date
+//     ) => {
+//         const today =
+//             new Date();
+
+//         const yesterday =
+//             new Date();
+
+//         yesterday.setDate(
+//             today.getDate() - 1
+//         );
+
+//         if (
+//             date.toDateString() ===
+//             today.toDateString()
+//         ) {
+//             return "Today";
+//         }
+
+//         if (
+//             date.toDateString() ===
+//             yesterday.toDateString()
+//         ) {
+//             return "Yesterday";
+//         }
+
+//         return date.toLocaleDateString(
+//             [],
+//             {
+//                 day: "numeric",
+//                 month: "long",
+//                 year: "numeric"
+//             }
+//         );
+//     };
+
 //     return (
 //         <div className="support-page">
 
 //             <div className="support-chat">
 
-//                 {/* HEADER */}
+//                 {/* ================= HEADER ================= */}
 
 //                 <div className="chat-top">
 
@@ -176,32 +219,105 @@
 
 //                 </div>
 
-//                 {/* CHAT BODY */}
+//                 {/* ================= CHAT BODY ================= */}
 
 //                 <div className="chat-messages">
 
 //                     {loading ? (
+
 //                         <div className="loading-chat">
 //                             Loading...
 //                         </div>
+
 //                     ) : (
+
 //                         messages.map(
-//                             (msg, index) => (
-//                                 <div
-//                                     key={index}
-//                                     className={`chat-message ${
-//                                         msg.sender ===
-//                                         "user"
-//                                             ? "user"
-//                                             : "ai"
-//                                     }`}
-//                                 >
-//                                     {
-//                                         msg.message
-//                                     }
-//                                 </div>
-//                             )
+//                             (
+//                                 msg,
+//                                 index
+//                             ) => {
+
+//                                 const messageDate =
+//                                     new Date(
+//                                         msg.createdAt ||
+//                                             Date.now()
+//                                     );
+
+//                                 const currentDate =
+//                                     messageDate.toDateString();
+
+//                                 const previousDate =
+//                                     index > 0
+//                                         ? new Date(
+//                                               messages[
+//                                                   index -
+//                                                       1
+//                                               ]
+//                                                   .createdAt ||
+//                                                   Date.now()
+//                                           ).toDateString()
+//                                         : null;
+
+//                                 const showDate =
+//                                     currentDate !==
+//                                     previousDate;
+
+//                                 const time =
+//                                     messageDate.toLocaleTimeString(
+//                                         [],
+//                                         {
+//                                             hour: "2-digit",
+//                                             minute: "2-digit"
+//                                         }
+//                                     );
+
+//                                 return (
+//                                     <React.Fragment
+//                                         key={
+//                                             index
+//                                         }
+//                                     >
+
+//                                         {/* DATE */}
+
+//                                         {showDate && (
+//                                             <div className="chat-date">
+//                                                 {formatDateLabel(
+//                                                     messageDate
+//                                                 )}
+//                                             </div>
+//                                         )}
+
+//                                         {/* MESSAGE */}
+
+//                                         <div
+//                                             className={`chat-message ${
+//                                                 msg.sender ===
+//                                                 "user"
+//                                                     ? "user"
+//                                                     : "ai"
+//                                             }`}
+//                                         >
+
+//                                             <div className="message-text">
+//                                                 {
+//                                                     msg.message
+//                                                 }
+//                                             </div>
+
+//                                             <div className="message-time">
+//                                                 {
+//                                                     time
+//                                                 }
+//                                             </div>
+
+//                                         </div>
+
+//                                     </React.Fragment>
+//                                 );
+//                             }
 //                         )
+
 //                     )}
 
 //                     <div
@@ -212,7 +328,7 @@
 
 //                 </div>
 
-//                 {/* INPUT */}
+//                 {/* ================= INPUT ================= */}
 
 //                 <div className="chat-input-box">
 
@@ -249,6 +365,7 @@
 // };
 
 // export default Support;
+
 
 import React, {
     useState,
@@ -489,24 +606,39 @@ const Support = () => {
                                 index
                             ) => {
 
-                                const messageDate =
-                                    new Date(
-                                        msg.createdAt ||
-                                            Date.now()
+                                // =========================
+                                // SAFE DATE
+                                // =========================
+
+                                const hasValidDate =
+                                    msg.createdAt &&
+                                    !isNaN(
+                                        new Date(
+                                            msg.createdAt
+                                        ).getTime()
                                     );
 
+                                const messageDate =
+                                    hasValidDate
+                                        ? new Date(
+                                              msg.createdAt
+                                          )
+                                        : null;
+
                                 const currentDate =
-                                    messageDate.toDateString();
+                                    messageDate
+                                        ? messageDate.toDateString()
+                                        : "No Date";
 
                                 const previousDate =
-                                    index > 0
+                                    index > 0 &&
+                                    messages[
+                                        index - 1
+                                    ].createdAt
                                         ? new Date(
                                               messages[
-                                                  index -
-                                                      1
-                                              ]
-                                                  .createdAt ||
-                                                  Date.now()
+                                                  index - 1
+                                              ].createdAt
                                           ).toDateString()
                                         : null;
 
@@ -515,13 +647,15 @@ const Support = () => {
                                     previousDate;
 
                                 const time =
-                                    messageDate.toLocaleTimeString(
-                                        [],
-                                        {
-                                            hour: "2-digit",
-                                            minute: "2-digit"
-                                        }
-                                    );
+                                    messageDate
+                                        ? messageDate.toLocaleTimeString(
+                                              [],
+                                              {
+                                                  hour: "2-digit",
+                                                  minute: "2-digit"
+                                              }
+                                          )
+                                        : "";
 
                                 return (
                                     <React.Fragment
@@ -532,13 +666,14 @@ const Support = () => {
 
                                         {/* DATE */}
 
-                                        {showDate && (
-                                            <div className="chat-date">
-                                                {formatDateLabel(
-                                                    messageDate
-                                                )}
-                                            </div>
-                                        )}
+                                        {showDate &&
+                                            messageDate && (
+                                                <div className="chat-date">
+                                                    {formatDateLabel(
+                                                        messageDate
+                                                    )}
+                                                </div>
+                                            )}
 
                                         {/* MESSAGE */}
 
@@ -557,11 +692,20 @@ const Support = () => {
                                                 }
                                             </div>
 
-                                            <div className="message-time">
-                                                {
-                                                    time
-                                                }
-                                            </div>
+                                            {time && (
+                                                <div
+                                                    className={`message-time ${
+                                                        msg.sender ===
+                                                        "user"
+                                                            ? "user-time"
+                                                            : "ai-time"
+                                                    }`}
+                                                >
+                                                    {
+                                                        time
+                                                    }
+                                                </div>
+                                            )}
 
                                         </div>
 
