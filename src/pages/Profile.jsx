@@ -310,25 +310,34 @@ useEffect(() => {
                     <span>About</span>
                 </div>
 
-                 {/* <div className="menu-item" onClick={() => navigate("/support")}>
-                    <FiHeadphones  />
-                    <span>Support</span>
-                </div> */}
+                <div
+    className="menu-item"
+    onClick={() => {
 
-                <div className="menu-item" onClick={() => navigate("/support")}>
+        // RESET BADGE IMMEDIATELY
+        setUnreadSupportCount(0);
+
+        navigate("/support");
+    }}
+>
+
     <div className="menu-icon-wrapper">
+
         <FiHeadphones />
 
         {unreadSupportCount > 0 && (
             <div className="support-badge">
-                {unreadSupportCount > 99 ? "99+" : unreadSupportCount}
+                {unreadSupportCount > 99
+                    ? "99+"
+                    : unreadSupportCount}
             </div>
         )}
+
     </div>
 
     <span>Support</span>
+
 </div>
-            </div>
 
             {/* LOGOUT */}
             <button className="logout-btn" onClick={handleLogout}>
