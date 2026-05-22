@@ -291,20 +291,24 @@ const Profile = () => {
                     <span>About</span>
                 </div>
 
- <div
+<div
     className="menu-item"
     onClick={async () => {
 
-        // INSTANTLY HIDE BADGE
+        // INSTANT UI CLEAR
         clearSupportBadge();
 
         try {
 
-            await fetch(`${API}/api/support/messages`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+            await fetch(
+                `${API}/api/support/mark-seen`,
+                {
+                    method: "PUT",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
                 }
-            });
+            );
 
         } catch (err) {
             console.error(err);
@@ -313,7 +317,6 @@ const Profile = () => {
         navigate("/support");
     }}
 >
-
     <div className="menu-icon-wrapper">
 
         <FiHeadphones />
@@ -329,7 +332,6 @@ const Profile = () => {
     </div>
 
     <span>Support</span>
-
 </div>
 </div>
             {/* LOGOUT */}
