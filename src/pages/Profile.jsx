@@ -24,7 +24,7 @@ const Profile = () => {
 
     const { balance, setBalance } = useBalance();
     const { currency } = useCurrency();
-    const { unreadSupportCount, setUnreadSupportCount, setHasOpenedSupport } = useSupport();
+    const { unreadSupportCount, markSupportAsSeen } = useSupport();
 
     const [user, setUser] = useState(null);
     const [showBalance, setShowBalance] = useState(true);
@@ -288,15 +288,12 @@ const Profile = () => {
                     <span>About</span>
                 </div>
 
-      <div
+     <div
     className="menu-item"
     onClick={async () => {
 
-        // PREVENT REMOUNT FETCH
-        setHasOpenedSupport(true);
-
-        // REMOVE BADGE IMMEDIATELY
-        setUnreadSupportCount(0);
+        // instantly clear
+        markSupportAsSeen();
 
         try {
 
