@@ -86,10 +86,8 @@ export const SupportProvider = ({ children }) => {
 
     const [unreadSupportCount, setUnreadSupportCount] = useState(0);
 
-    // LAST TIME USER OPENED SUPPORT
-    const [lastSeenTimestamp, setLastSeenTimestamp] = useState(
-        localStorage.getItem("lastSeenSupportTimestamp") || null
-    );
+    // TEMPORARY LOCAL HIDE
+    const [supportOpened, setSupportOpened] = useState(false);
 
     const fetchUnreadSupportCount = useCallback(async () => {
 
@@ -108,16 +106,9 @@ export const SupportProvider = ({ children }) => {
 
             if (!res.ok) return;
 
-            // backend should return latest admin message timestamp
-            const latestMessageTime = data.latestMessageTime;
-
-            // if no new message after support opened
-            if (
-                lastSeenTimestamp &&
-                latestMessageTime &&
-                new Date(latestMessageTime) <= new Date(lastSeenTimestamp)
-            ) {
-                setUnreadSupportCount(0);
+            // IF USER ALREADY OPENED SUPPORT,
+            // IGNORE OLD UNREAD COUNT
+            if (supportOpened && data.count > 0) {
                 return;
             }
 
@@ -127,8 +118,9 @@ export const SupportProvider = ({ children }) => {
             console.error(err);
         }
 
-    }, [API, lastSeenTimestamp]);
+    }, [API, supportOpened]);
 
+    // INITIAL FETCH
     useEffect(() => {
 
         if (!localStorage.getItem("token")) return;
@@ -138,27 +130,28 @@ export const SupportProvider = ({ children }) => {
     }, [fetchUnreadSupportCount]);
 
     // OPEN SUPPORT
-    const markSupportAsSeen = () => {
+    const clearSupportBadge = () => {
 
-        const now = new Date().toISOString();
-
-        localStorage.setItem(
-            "lastSeenSupportTimestamp",
-            now
-        );
-
-        setLastSeenTimestamp(now);
+        setSupportOpened(true);
 
         setUnreadSupportCount(0);
+    };
+
+    // NEW ADMIN MESSAGE
+    const restoreSupportBadge = () => {
+
+        setSupportOpened(false);
+
+        fetchUnreadSupportCount();
     };
 
     return (
         <SupportContext.Provider
             value={{
                 unreadSupportCount,
-                setUnreadSupportCount,
-                fetchUnreadSupportCount,
-                markSupportAsSeen
+                clearSupportBadge,
+                restoreSupportBadge,
+                fetchUnreadSupportCount
             }}
         >
             {children}
