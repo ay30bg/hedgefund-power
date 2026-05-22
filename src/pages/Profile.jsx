@@ -4,6 +4,7 @@ import "../styles/profile.css";
 
 import { useBalance } from "../context/BalanceContext";
 import { useCurrency } from "../context/CurrencyContext";
+import { useSupport } from "../context/SupportContext";
 
 import {
     FiShare2,
@@ -23,6 +24,7 @@ const Profile = () => {
 
     const { balance, setBalance } = useBalance();
     const { currency } = useCurrency();
+    const { unreadSupportCount, setUnreadSupportCount, fetchUnreadSupportCount } = useSupport();
 
     const [user, setUser] = useState(null);
     const [showBalance, setShowBalance] = useState(true);
@@ -44,8 +46,7 @@ const Profile = () => {
     const [showCurrentPwd, setShowCurrentPwd] = useState(false);
     const [showNewPwd, setShowNewPwd] = useState(false);
     const [showConfirmPwd, setShowConfirmPwd] = useState(false);
-    const [unreadSupportCount, setUnreadSupportCount] = useState(0);
-
+    
     const [loading, setLoading] = useState(false);
 
     const API = process.env.REACT_APP_API_URL;
@@ -78,69 +79,6 @@ const Profile = () => {
 
         fetchUser();
     }, [API, setBalance]);
-
-//     // ================= FETCH UNREAD SUPPORT COUNT =================
-// useEffect(() => {
-//     const fetchUnreadCount = async () => {
-//         try {
-//             const res = await fetch(`${API}/api/support/unread-count`, {
-//                 headers: {
-//                     Authorization: `Bearer ${localStorage.getItem("token")}`
-//                 }
-//             });
-
-//             const data = await res.json();
-
-//             if (res.ok) {
-//                 setUnreadSupportCount(data.count || 0);
-//             }
-//         } catch (err) {
-//             console.error(err);
-//         }
-//     };
-
-//     fetchUnreadCount();
-// }, [API]);
-
-// ================= FETCH UNREAD SUPPORT COUNT =================
-useEffect(() => {
-
-    let isMounted = true;
-
-    const fetchUnreadCount = async () => {
-        try {
-
-            const res = await fetch(
-                `${API}/api/support/unread-count`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            );
-
-            const data = await res.json();
-
-            if (res.ok && isMounted) {
-                setUnreadSupportCount(data.count || 0);
-            }
-
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    // SMALL DELAY TO ALLOW BACKEND seen:true UPDATE
-    const timeout = setTimeout(() => {
-        fetchUnreadCount();
-    }, 300);
-
-    return () => {
-        isMounted = false;
-        clearTimeout(timeout);
-    };
-
-}, [API]);
     
     // ================= BIND / UPDATE WALLET =================
     const handleBindWallet = async () => {
@@ -350,16 +288,15 @@ useEffect(() => {
                     <span>About</span>
                 </div>
 
-              <div
+                <div
     className="menu-item"
     onClick={async () => {
 
-        // REMOVE BADGE IMMEDIATELY
+        // instantly clear badge
         setUnreadSupportCount(0);
 
         try {
 
-            // MARK ALL ADMIN MESSAGES AS SEEN
             await fetch(`${API}/api/support/messages`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
