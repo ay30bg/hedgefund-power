@@ -79,29 +79,69 @@ const Profile = () => {
         fetchUser();
     }, [API, setBalance]);
 
-    // ================= FETCH UNREAD SUPPORT COUNT =================
+//     // ================= FETCH UNREAD SUPPORT COUNT =================
+// useEffect(() => {
+//     const fetchUnreadCount = async () => {
+//         try {
+//             const res = await fetch(`${API}/api/support/unread-count`, {
+//                 headers: {
+//                     Authorization: `Bearer ${localStorage.getItem("token")}`
+//                 }
+//             });
+
+//             const data = await res.json();
+
+//             if (res.ok) {
+//                 setUnreadSupportCount(data.count || 0);
+//             }
+//         } catch (err) {
+//             console.error(err);
+//         }
+//     };
+
+//     fetchUnreadCount();
+// }, [API]);
+
+// ================= FETCH UNREAD SUPPORT COUNT =================
 useEffect(() => {
+
+    let isMounted = true;
+
     const fetchUnreadCount = async () => {
         try {
-            const res = await fetch(`${API}/api/support/unread-count`, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
+
+            const res = await fetch(
+                `${API}/api/support/unread-count`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
                 }
-            });
+            );
 
             const data = await res.json();
 
-            if (res.ok) {
+            if (res.ok && isMounted) {
                 setUnreadSupportCount(data.count || 0);
             }
+
         } catch (err) {
             console.error(err);
         }
     };
 
-    fetchUnreadCount();
-}, [API]);
+    // SMALL DELAY TO ALLOW BACKEND seen:true UPDATE
+    const timeout = setTimeout(() => {
+        fetchUnreadCount();
+    }, 300);
 
+    return () => {
+        isMounted = false;
+        clearTimeout(timeout);
+    };
+
+}, [API]);
+    
     // ================= BIND / UPDATE WALLET =================
     const handleBindWallet = async () => {
         if (!walletAddress) return alert("Please enter a wallet address.");
