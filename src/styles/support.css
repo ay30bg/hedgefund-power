@@ -166,17 +166,22 @@
   align-items: center;
   justify-content: center;
 
-  background: #f5f7fb;
-
   text-align: center;
 
   padding: 20px;
+
+  background: #f5f7fb;
 }
 
-/* ICON */
+/* =========================
+   LOADING ICON
+========================= */
+
 .loading-icon {
-  width: 90px;
-  height: 90px;
+  position: relative;
+
+  width: 92px;
+  height: 92px;
 
   border-radius: 50%;
 
@@ -186,44 +191,57 @@
   align-items: center;
   justify-content: center;
 
-  font-size: 38px;
-
   margin-bottom: 18px;
 
-  position: relative;
-
-  animation: pulse 1.8s infinite ease-in-out;
+  animation: pulse 1.8s ease-in-out infinite;
 
   box-shadow:
-    0 8px 20px rgba(0,0,0,0.04),
-    inset 0 0 0 1px rgba(0,0,0,0.03);
+    0 8px 20px rgba(0, 0, 0, 0.04),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.03);
 }
 
 /* INNER WHITE CIRCLE */
+
 .loading-icon::before {
   content: "";
 
   position: absolute;
 
-  width: 54px;
-  height: 54px;
+  width: 52px;
+  height: 52px;
 
   border-radius: 50%;
 
-  background: white;
+  background: #ffffff;
 
   box-shadow:
-    0 2px 8px rgba(0,0,0,0.08);
-}
-
-/* EMOJI */
-.loading-icon {
-  position: relative;
+    0 3px 10px rgba(0, 0, 0, 0.08);
 
   z-index: 1;
 }
 
-/* TEXT */
+/* ICON */
+
+.loading-icon span {
+  position: relative;
+
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 30px;
+
+  color: #8b6b2f;
+
+  line-height: 1;
+}
+
+/* =========================
+   TEXT
+========================= */
+
 .loading-state p {
   margin: 0;
 
@@ -231,17 +249,23 @@
 
   font-size: 15px;
   font-weight: 500;
+
+  letter-spacing: 0.2px;
 }
 
-/* ANIMATION */
+/* =========================
+   ANIMATION
+========================= */
+
 @keyframes pulse {
+
   0% {
     transform: scale(1);
     opacity: 1;
   }
 
   50% {
-    transform: scale(1.04);
+    transform: scale(1.05);
     opacity: 0.92;
   }
 
@@ -250,7 +274,6 @@
     opacity: 1;
   }
 }
-
 /* =========================
    MESSAGES AREA
 ========================= */
