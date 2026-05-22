@@ -338,7 +338,7 @@ useEffect(() => {
     <span>Support</span>
 
 </div>
-
+</div>
             {/* LOGOUT */}
             <button className="logout-btn" onClick={handleLogout}>
                 <FiLogOut /> Sign Out
