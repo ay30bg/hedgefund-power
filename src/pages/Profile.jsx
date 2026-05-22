@@ -310,12 +310,25 @@ useEffect(() => {
                     <span>About</span>
                 </div>
 
-                <div
+              <div
     className="menu-item"
-    onClick={() => {
+    onClick={async () => {
 
-        // RESET BADGE IMMEDIATELY
+        // REMOVE BADGE IMMEDIATELY
         setUnreadSupportCount(0);
+
+        try {
+
+            // MARK ALL ADMIN MESSAGES AS SEEN
+            await fetch(`${API}/api/support/messages`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
 
         navigate("/support");
     }}
