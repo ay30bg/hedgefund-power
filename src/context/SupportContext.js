@@ -86,8 +86,8 @@ export const SupportProvider = ({ children }) => {
 
     const [unreadSupportCount, setUnreadSupportCount] = useState(0);
 
-    // TEMPORARY LOCAL HIDE
-    const [supportOpened, setSupportOpened] = useState(false);
+    // THIS PREVENTS BADGE REMOUNT
+    const [badgeCleared, setBadgeCleared] = useState(false);
 
     const fetchUnreadSupportCount = useCallback(async () => {
 
@@ -107,8 +107,17 @@ export const SupportProvider = ({ children }) => {
             if (!res.ok) return;
 
             // IF USER ALREADY OPENED SUPPORT,
-            // IGNORE OLD UNREAD COUNT
-            if (supportOpened && data.count > 0) {
+            // DO NOT RESTORE OLD BADGE
+            if (badgeCleared) {
+
+                // ONLY RESTORE IF COUNT INCREASES AGAIN
+                if (data.count > unreadSupportCount) {
+
+                    setBadgeCleared(false);
+
+                    setUnreadSupportCount(data.count);
+                }
+
                 return;
             }
 
@@ -118,31 +127,36 @@ export const SupportProvider = ({ children }) => {
             console.error(err);
         }
 
-    }, [API, supportOpened]);
+    }, [API, badgeCleared, unreadSupportCount]);
 
-    // INITIAL FETCH
     useEffect(() => {
 
         if (!localStorage.getItem("token")) return;
 
         fetchUnreadSupportCount();
 
+        const interval = setInterval(() => {
+            fetchUnreadSupportCount();
+        }, 5000);
+
+        return () => clearInterval(interval);
+
     }, [fetchUnreadSupportCount]);
 
-    // OPEN SUPPORT
+    // CLEAR BADGE
     const clearSupportBadge = () => {
 
-        setSupportOpened(true);
+        setBadgeCleared(true);
 
         setUnreadSupportCount(0);
     };
 
-    // NEW ADMIN MESSAGE
-    const restoreSupportBadge = () => {
+    // NEW MESSAGE
+    const restoreSupportBadge = (count) => {
 
-        setSupportOpened(false);
+        setBadgeCleared(false);
 
-        fetchUnreadSupportCount();
+        setUnreadSupportCount(count);
     };
 
     return (
