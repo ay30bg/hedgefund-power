@@ -24,7 +24,7 @@ const Profile = () => {
 
     const { balance, setBalance } = useBalance();
     const { currency } = useCurrency();
-    const { unreadSupportCount, setUnreadSupportCount, fetchUnreadSupportCount } = useSupport();
+    const { unreadSupportCount, setUnreadSupportCount, setHasOpenedSupport } = useSupport();
 
     const [user, setUser] = useState(null);
     const [showBalance, setShowBalance] = useState(true);
@@ -288,11 +288,14 @@ const Profile = () => {
                     <span>About</span>
                 </div>
 
-                <div
+      <div
     className="menu-item"
     onClick={async () => {
 
-        // instantly clear badge
+        // PREVENT REMOUNT FETCH
+        setHasOpenedSupport(true);
+
+        // REMOVE BADGE IMMEDIATELY
         setUnreadSupportCount(0);
 
         try {
