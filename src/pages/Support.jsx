@@ -227,8 +227,8 @@ const Support = () => {
     <div className="loading-state">
 
         <div className="loading-icon">
-            💬
-        </div>
+    <span>💬</span>
+</div>
 
         <p>
             Loading messages...
