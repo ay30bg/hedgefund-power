@@ -10,11 +10,17 @@
 
 // export const SupportProvider = ({ children }) => {
 
-//     const [unreadSupportCount, setUnreadSupportCount] = useState(0);
-
 //     const API = process.env.REACT_APP_API_URL;
 
+//     const [unreadSupportCount, setUnreadSupportCount] = useState(0);
+
+//     // IMPORTANT
+//     const [hasOpenedSupport, setHasOpenedSupport] = useState(false);
+
 //     const fetchUnreadSupportCount = useCallback(async () => {
+
+//         // DO NOT REFETCH AFTER SUPPORT OPENED
+//         if (hasOpenedSupport) return;
 
 //         try {
 
@@ -37,7 +43,7 @@
 //             console.error(err);
 //         }
 
-//     }, [API]);
+//     }, [API, hasOpenedSupport]);
 
 //     useEffect(() => {
 
@@ -52,7 +58,9 @@
 //             value={{
 //                 unreadSupportCount,
 //                 setUnreadSupportCount,
-//                 fetchUnreadSupportCount
+//                 fetchUnreadSupportCount,
+//                 hasOpenedSupport,
+//                 setHasOpenedSupport
 //             }}
 //         >
 //             {children}
@@ -78,13 +86,12 @@ export const SupportProvider = ({ children }) => {
 
     const [unreadSupportCount, setUnreadSupportCount] = useState(0);
 
-    // IMPORTANT
-    const [hasOpenedSupport, setHasOpenedSupport] = useState(false);
+    // LAST TIME USER OPENED SUPPORT
+    const [lastSeenTimestamp, setLastSeenTimestamp] = useState(
+        localStorage.getItem("lastSeenSupportTimestamp") || null
+    );
 
     const fetchUnreadSupportCount = useCallback(async () => {
-
-        // DO NOT REFETCH AFTER SUPPORT OPENED
-        if (hasOpenedSupport) return;
 
         try {
 
@@ -99,15 +106,28 @@ export const SupportProvider = ({ children }) => {
 
             const data = await res.json();
 
-            if (res.ok) {
-                setUnreadSupportCount(data.count || 0);
+            if (!res.ok) return;
+
+            // backend should return latest admin message timestamp
+            const latestMessageTime = data.latestMessageTime;
+
+            // if no new message after support opened
+            if (
+                lastSeenTimestamp &&
+                latestMessageTime &&
+                new Date(latestMessageTime) <= new Date(lastSeenTimestamp)
+            ) {
+                setUnreadSupportCount(0);
+                return;
             }
+
+            setUnreadSupportCount(data.count || 0);
 
         } catch (err) {
             console.error(err);
         }
 
-    }, [API, hasOpenedSupport]);
+    }, [API, lastSeenTimestamp]);
 
     useEffect(() => {
 
@@ -117,14 +137,28 @@ export const SupportProvider = ({ children }) => {
 
     }, [fetchUnreadSupportCount]);
 
+    // OPEN SUPPORT
+    const markSupportAsSeen = () => {
+
+        const now = new Date().toISOString();
+
+        localStorage.setItem(
+            "lastSeenSupportTimestamp",
+            now
+        );
+
+        setLastSeenTimestamp(now);
+
+        setUnreadSupportCount(0);
+    };
+
     return (
         <SupportContext.Provider
             value={{
                 unreadSupportCount,
                 setUnreadSupportCount,
                 fetchUnreadSupportCount,
-                hasOpenedSupport,
-                setHasOpenedSupport
+                markSupportAsSeen
             }}
         >
             {children}
