@@ -24,7 +24,10 @@ const Profile = () => {
 
     const { balance, setBalance } = useBalance();
     const { currency } = useCurrency();
-    const { unreadSupportCount, markSupportAsSeen } = useSupport();
+    const {
+    unreadSupportCount,
+    clearSupportBadge
+} = useSupport();
 
     const [user, setUser] = useState(null);
     const [showBalance, setShowBalance] = useState(true);
@@ -288,12 +291,12 @@ const Profile = () => {
                     <span>About</span>
                 </div>
 
-     <div
+ <div
     className="menu-item"
     onClick={async () => {
 
-        // instantly clear
-        markSupportAsSeen();
+        // INSTANTLY HIDE BADGE
+        clearSupportBadge();
 
         try {
 
