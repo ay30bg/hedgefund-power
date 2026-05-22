@@ -44,6 +44,7 @@ const Profile = () => {
     const [showCurrentPwd, setShowCurrentPwd] = useState(false);
     const [showNewPwd, setShowNewPwd] = useState(false);
     const [showConfirmPwd, setShowConfirmPwd] = useState(false);
+    const [unreadSupportCount, setUnreadSupportCount] = useState(0);
 
     const [loading, setLoading] = useState(false);
 
@@ -77,6 +78,29 @@ const Profile = () => {
 
         fetchUser();
     }, [API, setBalance]);
+
+    // ================= FETCH UNREAD SUPPORT COUNT =================
+useEffect(() => {
+    const fetchUnreadCount = async () => {
+        try {
+            const res = await fetch(`${API}/api/support/unread-count`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                setUnreadSupportCount(data.count || 0);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    fetchUnreadCount();
+}, [API]);
 
     // ================= BIND / UPDATE WALLET =================
     const handleBindWallet = async () => {
@@ -286,10 +310,24 @@ const Profile = () => {
                     <span>About</span>
                 </div>
 
-                 <div className="menu-item" onClick={() => navigate("/support")}>
+                 {/* <div className="menu-item" onClick={() => navigate("/support")}>
                     <FiHeadphones  />
                     <span>Support</span>
-                </div>
+                </div> */}
+
+                <div className="menu-item" onClick={() => navigate("/support")}>
+    <div className="menu-icon-wrapper">
+        <FiHeadphones />
+
+        {unreadSupportCount > 0 && (
+            <div className="support-badge">
+                {unreadSupportCount > 99 ? "99+" : unreadSupportCount}
+            </div>
+        )}
+    </div>
+
+    <span>Support</span>
+</div>
             </div>
 
             {/* LOGOUT */}
