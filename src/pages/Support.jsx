@@ -222,35 +222,17 @@ const Support = () => {
                 {/* ================= CHAT BODY ================= */}
 
                 <div className="chat-messages">
+{loading ? (
 
-              {loading ? (
+    <div className="loading-state">
 
-    <div className="chat-loading">
+        <div className="loading-icon">
+            💬
+        </div>
 
-        {[1, 2, 3, 4].map((item) => (
-
-            <div
-                key={item}
-                className={`chat-skeleton ${
-                    item % 2 === 0
-                        ? "user-skeleton"
-                        : "ai-skeleton"
-                }`}
-            >
-
-                <div className="skeleton-message-box">
-
-                    <div className="skeleton-line short"></div>
-
-                    <div className="skeleton-line"></div>
-
-                    <div className="skeleton-time"></div>
-
-                </div>
-
-            </div>
-
-        ))}
+        <p>
+            Loading messages...
+        </p>
 
     </div>
 
