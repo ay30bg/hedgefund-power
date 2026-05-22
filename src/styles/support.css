@@ -154,6 +154,131 @@
 }
 
 /* =========================
+   CHAT LOADING SKELETON
+========================= */
+
+.chat-loading {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  padding: 18px 14px;
+
+  background: #f5f7fb;
+}
+
+/* WRAPPER */
+.chat-skeleton {
+  display: flex;
+
+  width: 100%;
+}
+
+/* AI SIDE */
+.ai-skeleton {
+  justify-content: flex-start;
+}
+
+/* USER SIDE */
+.user-skeleton {
+  justify-content: flex-end;
+}
+
+/* MESSAGE BOX */
+.skeleton-message-box {
+  position: relative;
+
+  overflow: hidden;
+
+  width: 220px;
+
+  max-width: 75%;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  background: #e9ecef;
+}
+
+/* USER STYLE */
+.user-skeleton .skeleton-message-box {
+  background: rgba(212, 166, 79, 0.18);
+
+  border-top-right-radius: 2px;
+}
+
+/* AI STYLE */
+.ai-skeleton .skeleton-message-box {
+  background: #ffffff;
+
+  border-top-left-radius: 2px;
+
+  border: 1px solid #edf0f2;
+}
+
+/* SHIMMER */
+.skeleton-message-box::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -150px;
+
+  width: 150px;
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.55),
+    transparent
+  );
+
+  animation: skeletonShimmer 1.2s infinite;
+}
+
+/* LINES */
+.skeleton-line {
+  height: 10px;
+
+  border-radius: 30px;
+
+  background: rgba(255,255,255,0.5);
+
+  margin-bottom: 10px;
+
+  width: 100%;
+}
+
+.skeleton-line.short {
+  width: 65%;
+}
+
+/* TIME */
+.skeleton-time {
+  width: 40px;
+  height: 8px;
+
+  border-radius: 20px;
+
+  margin-top: 6px;
+
+  background: rgba(255,255,255,0.45);
+}
+
+/* ANIMATION */
+@keyframes skeletonShimmer {
+  100% {
+    left: 100%;
+  }
+}
+
+/* =========================
    MESSAGES AREA
 ========================= */
 .chat-messages {
