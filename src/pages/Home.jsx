@@ -918,23 +918,6 @@ const DashboardHomepage = () => {
 
   return (
     <div className="dashboard">
-      {/* ================= WELCOME ================= */}
-      <div className="dashboard-welcome">
-        <h2>
-          Welcome back,
-          {" "}
-          {user?.username ||
-            user?.name ||
-            "Investor"}
-        </h2>
-
-        <p>
-          Monitor your
-          portfolio
-          performance in
-          real time.
-        </p>
-      </div>
 
       {/* ================= OVERVIEW ================= */}
       <div className="overview-card">
