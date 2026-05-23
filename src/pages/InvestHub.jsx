@@ -13,10 +13,13 @@
 
 //   const [showInvestModal, setShowInvestModal] = useState(false);
 //   const [showDetailsModal, setShowDetailsModal] = useState(false);
+
 //   const [selectedPlan, setSelectedPlan] = useState(null);
+
 //   const [amount, setAmount] = useState("");
 
 //   const [loading, setLoading] = useState(false);
+
 //   const [liveROI, setLiveROI] = useState({});
 
 //   // ================= FETCH PLANS =================
@@ -26,11 +29,14 @@
 //         const res = await fetch(
 //           `${process.env.REACT_APP_API_URL}/api/plans`
 //         );
+
 //         const data = await res.json();
 
 //         setPlans(data.plans || []);
+
 //       } catch (err) {
 //         console.error("Failed to fetch plans:", err);
+
 //       } finally {
 //         setLoadingPlans(false);
 //       }
@@ -49,20 +55,29 @@
 //       plans.forEach((plan) => {
 //         let volatility = 2;
 
-//         if (plan.percent > 1000) volatility = 15;
-//         else if (plan.percent > 100) volatility = 6;
+//         if (plan.percent > 1000) {
+//           volatility = 15;
 
-//         const change = Math.random() * volatility - volatility / 2;
-//         updated[plan.name] = plan.percent + change;
+//         } else if (plan.percent > 100) {
+//           volatility = 6;
+//         }
+
+//         const change =
+//           Math.random() * volatility - volatility / 2;
+
+//         updated[plan._id] = plan.percent + change;
 //       });
 
 //       setLiveROI(updated);
+
 //     }, 3000);
 
 //     return () => clearInterval(interval);
+
 //   }, [plans]);
 
-//   const getROI = (plan) => liveROI[plan.name] ?? plan.percent;
+//   const getROI = (plan) =>
+//     liveROI[plan._id] ?? plan.percent;
 
 //   // ================= MODALS =================
 //   const openInvestModal = (plan) => {
@@ -78,14 +93,17 @@
 
 //   const closeModal = () => {
 //     if (loading) return;
+
 //     setShowInvestModal(false);
 //     setShowDetailsModal(false);
+
 //     setSelectedPlan(null);
+
 //     setAmount("");
 //   };
 
 //   // ================= CALCULATIONS =================
-//   const numAmount = parseFloat(amount) || 0;
+//   const numAmount = Number(amount) || 0;
 
 //   const expectedIncome =
 //     numAmount && selectedPlan
@@ -93,36 +111,60 @@
 //       : 0;
 
 //   const format = (value) =>
-//     `${currency.symbol}${Number(value * currency.rate).toLocaleString(
-//       undefined,
-//       { maximumFractionDigits: 2 }
-//     )}`;
+//     `${currency.symbol}${Number(
+//       value * currency.rate
+//     ).toLocaleString(undefined, {
+//       maximumFractionDigits: 2
+//     })}`;
 
 //   // ================= INVEST =================
 //   const handleInvest = async () => {
-//     if (!selectedPlan || !numAmount) return;
+//     if (
+//       !selectedPlan ||
+//       !numAmount ||
+//       isNaN(numAmount)
+//     ) {
+//       return;
+//     }
 
-//     if (numAmount < 10) {
-//       alert("Minimum investment is $10");
+//     if (numAmount < (selectedPlan.minimum || 10)) {
+//       alert(
+//         `Minimum investment is $${
+//           selectedPlan.minimum || 10
+//         }`
+//       );
+
+//       return;
+//     }
+
+//     if (numAmount > balance) {
+//       alert("Insufficient balance");
 //       return;
 //     }
 
 //     setLoading(true);
 
 //     try {
+//       const token = localStorage.getItem("token");
+
+//       if (!token) {
+//         alert("Authentication required");
+//         return;
+//       }
+
 //       const res = await fetch(
 //         `${process.env.REACT_APP_API_URL}/api/invest`,
 //         {
 //           method: "POST",
+
 //           headers: {
 //             "Content-Type": "application/json",
-//             Authorization: `Bearer ${localStorage.getItem("token")}`
+//             Authorization: `Bearer ${token}`
 //           },
+
 //           body: JSON.stringify({
-//             plan: selectedPlan.name,
-//             amount: numAmount,
-//             roi: getROI(selectedPlan),
-//             days: selectedPlan.days
+//             planId: selectedPlan._id,
+//             amount: Number(numAmount)
 //           })
 //         }
 //       );
@@ -139,10 +181,14 @@
 //       }
 
 //       alert("Investment successful!");
+
 //       closeModal();
+
 //     } catch (err) {
-//       console.error(err);
-//       alert("Network error. Try again.");
+//       console.error("Investment Error:", err);
+
+//       alert("Network error. Please try again.");
+
 //     } finally {
 //       setLoading(false);
 //     }
@@ -153,23 +199,29 @@
 //     return (
 //       <div className="invest-container">
 //         {[1, 2, 3, 4].map((i) => (
-//           <div className="plan-card skeleton-card" key={i}>
+//           <div
+//             className="plan-card skeleton-card"
+//             key={i}
+//           >
 //             <div className="plan-header">
 //               <div className="skeleton plan-img"></div>
 
 //               <div className="plan-name">
 //                 <div className="skeleton line short"></div>
+
 //                 <div className="skeleton line tiny"></div>
 //               </div>
 //             </div>
 
 //             <div className="plan-info">
 //               <div className="skeleton box"></div>
+
 //               <div className="skeleton box"></div>
 //             </div>
 
 //             <div className="plan-actions">
 //               <div className="skeleton button"></div>
+
 //               <div className="skeleton button"></div>
 //             </div>
 //           </div>
@@ -183,33 +235,45 @@
 //     <div className="invest-container">
 
 //       {/* ================= PLANS ================= */}
-//       {plans.map((plan, index) => {
+//       {plans.map((plan) => {
 //         const roi = getROI(plan);
 
 //         return (
-//           <div className="plan-card" key={index}>
+//           <div
+//             className="plan-card"
+//             key={plan._id}
+//           >
 
 //             <div className="plan-header">
 //               <img
 //                 src={`${process.env.REACT_APP_API_URL}${plan.image}`}
-//                 alt="plan"
+//                 alt={plan.name}
 //               />
 
 //               <div className="plan-name">
 //                 <h3>{plan.name}</h3>
-//                 <span className="plan-tag">Investment Plan</span>
+
+//                 <span className="plan-tag">
+//                   Investment Plan
+//                 </span>
 //               </div>
 //             </div>
 
 //             <div className="plan-info">
 
 //               <div>
-//                 <span className="plan-value">+{roi.toFixed(1)}%</span>
+//                 <span className="plan-value">
+//                   +{roi.toFixed(1)}%
+//                 </span>
+
 //                 <p>Total Return</p>
 //               </div>
 
 //               <div>
-//                 <span className="plan-value">{plan.days}</span>
+//                 <span className="plan-value">
+//                   {plan.days}
+//                 </span>
+
 //                 <p>Days</p>
 //               </div>
 
@@ -219,17 +283,27 @@
 
 //               <button
 //                 className="plan-details"
-//                 onClick={() => openDetailsModal(plan)}
+//                 onClick={() =>
+//                   openDetailsModal(plan)
+//                 }
 //               >
 //                 Details
 //               </button>
 
 //               <button
 //                 className={`plan-invest ${
-//                   loadingPlans || balance < 10 ? "disabled" : ""
+//                   loadingPlans ||
+//                   balance < (plan.minimum || 10)
+//                     ? "disabled"
+//                     : ""
 //                 }`}
-//                 disabled={loadingPlans || balance < 10}
-//                 onClick={() => openInvestModal(plan)}
+//                 disabled={
+//                   loadingPlans ||
+//                   balance < (plan.minimum || 10)
+//                 }
+//                 onClick={() =>
+//                   openInvestModal(plan)
+//                 }
 //               >
 //                 Invest
 //               </button>
@@ -247,7 +321,7 @@
 
 //             <img
 //               src={`${process.env.REACT_APP_API_URL}${selectedPlan.image}`}
-//               alt=""
+//               alt={selectedPlan.name}
 //             />
 
 //             <h2>{selectedPlan.name}</h2>
@@ -255,19 +329,28 @@
 //             <div className="details-grid">
 
 //               <div>
-//                 <span>{getROI(selectedPlan).toFixed(1)}%</span>
+//                 <span>
+//                   {getROI(selectedPlan).toFixed(1)}%
+//                 </span>
+
 //                 <p>Total ROI</p>
 //               </div>
 
 //               <div>
 //                 <span>{selectedPlan.days}</span>
+
 //                 <p>Duration</p>
 //               </div>
 
 //               <div>
 //                 <span>
-//                   {(getROI(selectedPlan) / selectedPlan.days).toFixed(2)}%
+//                   {(
+//                     getROI(selectedPlan) /
+//                     selectedPlan.days
+//                   ).toFixed(2)}
+//                   %
 //                 </span>
+
 //                 <p>Daily ROI</p>
 //               </div>
 
@@ -277,13 +360,17 @@
 //               className="details-invest"
 //               onClick={() => {
 //                 setShowDetailsModal(false);
+
 //                 openInvestModal(selectedPlan);
 //               }}
 //             >
 //               Invest Now
 //             </button>
 
-//             <button className="details-close" onClick={closeModal}>
+//             <button
+//               className="details-close"
+//               onClick={closeModal}
+//             >
 //               Close
 //             </button>
 
@@ -296,40 +383,88 @@
 //         <div className="invest-overlay">
 //           <div className="invest-modal">
 
-//             <h3>Invest ({selectedPlan.days} Days)</h3>
+//             <h3>
+//               Invest ({selectedPlan.days} Days)
+//             </h3>
 
-//             <label>Deposit Amount (USD)</label>
+//             <label>
+//               Deposit Amount (USD)
+//             </label>
 
 //             <input
 //               type="number"
-//               placeholder="Minimum $10"
+//               min={selectedPlan.minimum || 10}
+//               step="0.01"
+//               inputMode="decimal"
+//               placeholder={`Minimum $${
+//                 selectedPlan.minimum || 10
+//               }`}
 //               value={amount}
-//               onChange={(e) => setAmount(e.target.value)}
+//               onChange={(e) => {
+//                 const value = e.target.value;
+
+//                 if (value === "") {
+//                   setAmount("");
+//                   return;
+//                 }
+
+//                 const numericValue =
+//                   Number(value);
+
+//                 if (
+//                   !Number.isFinite(numericValue)
+//                 ) {
+//                   return;
+//                 }
+
+//                 if (numericValue < 0) {
+//                   return;
+//                 }
+
+//                 setAmount(value);
+//               }}
 //             />
 
 //             {amount && (
 //               <p className="converted">
-//                 ≈ <span className="converted-value">{format(numAmount)}</span>
+//                 ≈{" "}
+//                 <span className="converted-value">
+//                   {format(numAmount)}
+//                 </span>
 //               </p>
 //             )}
 
 //             <div className="expected-income">
 //               Expected Income:
-//               <b> ${expectedIncome.toFixed(2)} </b>
+
+//               <b>
+//                 ${expectedIncome.toFixed(2)}
+//               </b>
 //             </div>
 
 //             <div className="modal-actions">
 
-//               <button className="modal-cancel" onClick={closeModal}>
+//               <button
+//                 className="modal-cancel"
+//                 onClick={closeModal}
+//               >
 //                 Cancel
 //               </button>
 
 //               <button
 //                 className="modal-confirm"
 //                 onClick={handleInvest}
-//                 disabled={loading || balance < 10 || numAmount < 10}
+//                 disabled={
+//                   loading ||
+//                   !numAmount ||
+//                   numAmount <
+//                     (selectedPlan.minimum || 10) ||
+//                   numAmount > balance
+//                 }
 //               >
-//                 {loading ? "Processing..." : "Confirm Investment"}
+//                 {loading
+//                   ? "Processing..."
+//                   : "Confirm Investment"}
 //               </button>
 
 //             </div>
@@ -364,8 +499,6 @@ export default function InvestHub() {
 
   const [loading, setLoading] = useState(false);
 
-  const [liveROI, setLiveROI] = useState({});
-
   // ================= FETCH PLANS =================
   useEffect(() => {
     const fetchPlans = async () => {
@@ -389,49 +522,21 @@ export default function InvestHub() {
     fetchPlans();
   }, []);
 
-  // ================= LIVE ROI =================
-  useEffect(() => {
-    if (!plans.length) return;
-
-    const interval = setInterval(() => {
-      const updated = {};
-
-      plans.forEach((plan) => {
-        let volatility = 2;
-
-        if (plan.percent > 1000) {
-          volatility = 15;
-
-        } else if (plan.percent > 100) {
-          volatility = 6;
-        }
-
-        const change =
-          Math.random() * volatility - volatility / 2;
-
-        updated[plan._id] = plan.percent + change;
-      });
-
-      setLiveROI(updated);
-
-    }, 3000);
-
-    return () => clearInterval(interval);
-
-  }, [plans]);
-
-  const getROI = (plan) =>
-    liveROI[plan._id] ?? plan.percent;
+  // ================= STATIC ROI =================
+  const getROI = (plan) => plan.percent;
 
   // ================= MODALS =================
   const openInvestModal = (plan) => {
     setSelectedPlan(plan);
+
     setAmount("");
+
     setShowInvestModal(true);
   };
 
   const openDetailsModal = (plan) => {
     setSelectedPlan(plan);
+
     setShowDetailsModal(true);
   };
 
@@ -439,6 +544,7 @@ export default function InvestHub() {
     if (loading) return;
 
     setShowInvestModal(false);
+
     setShowDetailsModal(false);
 
     setSelectedPlan(null);
@@ -483,6 +589,7 @@ export default function InvestHub() {
 
     if (numAmount > balance) {
       alert("Insufficient balance");
+
       return;
     }
 
@@ -493,6 +600,7 @@ export default function InvestHub() {
 
       if (!token) {
         alert("Authentication required");
+
         return;
       }
 
@@ -503,6 +611,7 @@ export default function InvestHub() {
 
           headers: {
             "Content-Type": "application/json",
+
             Authorization: `Bearer ${token}`
           },
 
@@ -517,6 +626,7 @@ export default function InvestHub() {
 
       if (!res.ok) {
         alert(data.message || "Investment failed");
+
         return;
       }
 
@@ -579,84 +689,80 @@ export default function InvestHub() {
     <div className="invest-container">
 
       {/* ================= PLANS ================= */}
-      {plans.map((plan) => {
-        const roi = getROI(plan);
+      {plans.map((plan) => (
+        <div
+          className="plan-card"
+          key={plan._id}
+        >
 
-        return (
-          <div
-            className="plan-card"
-            key={plan._id}
-          >
+          <div className="plan-header">
+            <img
+              src={`${process.env.REACT_APP_API_URL}${plan.image}`}
+              alt={plan.name}
+            />
 
-            <div className="plan-header">
-              <img
-                src={`${process.env.REACT_APP_API_URL}${plan.image}`}
-                alt={plan.name}
-              />
+            <div className="plan-name">
+              <h3>{plan.name}</h3>
 
-              <div className="plan-name">
-                <h3>{plan.name}</h3>
+              <span className="plan-tag">
+                Investment Plan
+              </span>
+            </div>
+          </div>
 
-                <span className="plan-tag">
-                  Investment Plan
-                </span>
-              </div>
+          <div className="plan-info">
+
+            <div>
+              <span className="plan-value">
+                +{getROI(plan).toFixed(1)}%
+              </span>
+
+              <p>Total Return</p>
             </div>
 
-            <div className="plan-info">
+            <div>
+              <span className="plan-value">
+                {plan.days}
+              </span>
 
-              <div>
-                <span className="plan-value">
-                  +{roi.toFixed(1)}%
-                </span>
-
-                <p>Total Return</p>
-              </div>
-
-              <div>
-                <span className="plan-value">
-                  {plan.days}
-                </span>
-
-                <p>Days</p>
-              </div>
-
-            </div>
-
-            <div className="plan-actions">
-
-              <button
-                className="plan-details"
-                onClick={() =>
-                  openDetailsModal(plan)
-                }
-              >
-                Details
-              </button>
-
-              <button
-                className={`plan-invest ${
-                  loadingPlans ||
-                  balance < (plan.minimum || 10)
-                    ? "disabled"
-                    : ""
-                }`}
-                disabled={
-                  loadingPlans ||
-                  balance < (plan.minimum || 10)
-                }
-                onClick={() =>
-                  openInvestModal(plan)
-                }
-              >
-                Invest
-              </button>
-
+              <p>Days</p>
             </div>
 
           </div>
-        );
-      })}
+
+          <div className="plan-actions">
+
+            <button
+              className="plan-details"
+              onClick={() =>
+                openDetailsModal(plan)
+              }
+            >
+              Details
+            </button>
+
+            <button
+              className={`plan-invest ${
+                loadingPlans ||
+                balance < (plan.minimum || 10)
+                  ? "disabled"
+                  : ""
+              }`}
+              disabled={
+                loadingPlans ||
+                balance < (plan.minimum || 10)
+              }
+              onClick={() =>
+                openInvestModal(plan)
+              }
+            >
+              Invest
+            </button>
+
+          </div>
+
+        </div>
+      ))}
 
       {/* ================= DETAILS MODAL ================= */}
       {showDetailsModal && selectedPlan && (
@@ -749,6 +855,7 @@ export default function InvestHub() {
 
                 if (value === "") {
                   setAmount("");
+
                   return;
                 }
 
