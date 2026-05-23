@@ -1,369 +1,369 @@
-// // import React, { useState, useEffect } from "react";
-// // import "../styles/market.css";
+// import React, { useState, useEffect } from "react";
+// import "../styles/market.css";
 
-// // import { useCurrency } from "../context/CurrencyContext";
-// // import { useBalance } from "../context/BalanceContext";
+// import { useCurrency } from "../context/CurrencyContext";
+// import { useBalance } from "../context/BalanceContext";
 
-// // export default function PurchaseHall() {
-// //   const { currency } = useCurrency();
-// //   const { balance, setBalance } = useBalance();
+// export default function PurchaseHall() {
+//   const { currency } = useCurrency();
+//   const { balance, setBalance } = useBalance();
 
-// //   const [machines, setMachines] = useState([]);
-// //   const [loadingMachines, setLoadingMachines] = useState(true);
+//   const [machines, setMachines] = useState([]);
+//   const [loadingMachines, setLoadingMachines] = useState(true);
 
-// //   const [showDetails, setShowDetails] = useState(false);
-// //   const [showBuy, setShowBuy] = useState(false);
-// //   const [selectedMachine, setSelectedMachine] = useState(null);
+//   const [showDetails, setShowDetails] = useState(false);
+//   const [showBuy, setShowBuy] = useState(false);
+//   const [selectedMachine, setSelectedMachine] = useState(null);
 
-// //   const [loading, setLoading] = useState(false);
-// //   const [buying, setBuying] = useState(false);
-// //   const [buyingId, setBuyingId] = useState(null);
+//   const [loading, setLoading] = useState(false);
+//   const [buying, setBuying] = useState(false);
+//   const [buyingId, setBuyingId] = useState(null);
 
-// //   const token = localStorage.getItem("token");
+//   const token = localStorage.getItem("token");
 
-// //   // ================= FETCH MACHINES =================
-// //   useEffect(() => {
-// //     const fetchMachines = async () => {
-// //       const controller = new AbortController();
+//   // ================= FETCH MACHINES =================
+//   useEffect(() => {
+//     const fetchMachines = async () => {
+//       const controller = new AbortController();
 
-// //       try {
-// //         const res = await fetch(
-// //           `${process.env.REACT_APP_API_URL}/api/machines`,
-// //           {
-// //             headers: {
-// //               Authorization: `Bearer ${token}`,
-// //             },
-// //             signal: controller.signal,
-// //           }
-// //         );
+//       try {
+//         const res = await fetch(
+//           `${process.env.REACT_APP_API_URL}/api/machines`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//             signal: controller.signal,
+//           }
+//         );
 
-// //         const data = await res.json();
+//         const data = await res.json();
 
-// //         if (res.status === 401) {
-// //           alert("Session expired. Please login again.");
-// //           window.location.href = "/login";
-// //           return;
-// //         }
+//         if (res.status === 401) {
+//           alert("Session expired. Please login again.");
+//           window.location.href = "/login";
+//           return;
+//         }
 
-// //         if (!res.ok) {
-// //           console.error(data.message);
-// //           return;
-// //         }
+//         if (!res.ok) {
+//           console.error(data.message);
+//           return;
+//         }
 
-// //         setMachines(data.machines);
-// //       } catch (err) {
-// //         if (err.name !== "AbortError") {
-// //           console.error("Error fetching machines:", err);
-// //         }
-// //       } finally {
-// //         setLoadingMachines(false);
-// //       }
-// //     };
+//         setMachines(data.machines);
+//       } catch (err) {
+//         if (err.name !== "AbortError") {
+//           console.error("Error fetching machines:", err);
+//         }
+//       } finally {
+//         setLoadingMachines(false);
+//       }
+//     };
 
-// //     fetchMachines();
-// //   }, [token]);
+//     fetchMachines();
+//   }, [token]);
 
-// //   // ================= FORMAT CURRENCY =================
-// //   const format = (value) => {
-// //     return `${currency.symbol}${(value * currency.rate).toLocaleString(
-// //       undefined,
-// //       { maximumFractionDigits: 4 }
-// //     )}`;
-// //   };
+//   // ================= FORMAT CURRENCY =================
+//   const format = (value) => {
+//     return `${currency.symbol}${(value * currency.rate).toLocaleString(
+//       undefined,
+//       { maximumFractionDigits: 4 }
+//     )}`;
+//   };
 
-// //   // ================= MODALS =================
-// //   const openDetails = (machine) => {
-// //     setSelectedMachine(machine);
-// //     setShowDetails(true);
-// //   };
+//   // ================= MODALS =================
+//   const openDetails = (machine) => {
+//     setSelectedMachine(machine);
+//     setShowDetails(true);
+//   };
 
-// //   // const openBuy = (machine) => {
-// //   //   setSelectedMachine(machine);
-// //   //   setShowBuy(true);
-// //   // };
+//   // const openBuy = (machine) => {
+//   //   setSelectedMachine(machine);
+//   //   setShowBuy(true);
+//   // };
 
-// // const openBuy = (machine) => {
-// //   if (balance < machine.price) {
-// //     alert("Insufficient balance to purchase this machine.");
-// //     return;
-// //   }
+// const openBuy = (machine) => {
+//   if (balance < machine.price) {
+//     alert("Insufficient balance to purchase this machine.");
+//     return;
+//   }
 
-// //   setSelectedMachine(machine);
-// //   setShowBuy(true);
-// // };
+//   setSelectedMachine(machine);
+//   setShowBuy(true);
+// };
   
-// //   const closeModal = () => {
-// //     if (loading || buying) return;
-// //     setShowDetails(false);
-// //     setShowBuy(false);
-// //     setSelectedMachine(null);
-// //   };
+//   const closeModal = () => {
+//     if (loading || buying) return;
+//     setShowDetails(false);
+//     setShowBuy(false);
+//     setSelectedMachine(null);
+//   };
 
-// //   // ================= BUY =================
-// //   const handleBuy = async () => {
-// //     if (!selectedMachine || loading || buying) return;
+//   // ================= BUY =================
+//   const handleBuy = async () => {
+//     if (!selectedMachine || loading || buying) return;
 
-// //     setLoading(true);
-// //     setBuying(true);
-// //     setBuyingId(selectedMachine._id);
+//     setLoading(true);
+//     setBuying(true);
+//     setBuyingId(selectedMachine._id);
 
-// //     const controller = new AbortController();
-// //     const timeout = setTimeout(() => controller.abort(), 10000);
+//     const controller = new AbortController();
+//     const timeout = setTimeout(() => controller.abort(), 10000);
 
-// //     try {
-// //       const res = await fetch(
-// //         `${process.env.REACT_APP_API_URL}/api/market`,
-// //         {
-// //           method: "POST",
-// //           headers: {
-// //             "Content-Type": "application/json",
-// //             Authorization: `Bearer ${token}`,
-// //           },
-// //           body: JSON.stringify({
-// //             machineId: selectedMachine._id,
-// //           }),
-// //           signal: controller.signal,
-// //         }
-// //       );
+//     try {
+//       const res = await fetch(
+//         `${process.env.REACT_APP_API_URL}/api/market`,
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//             Authorization: `Bearer ${token}`,
+//           },
+//           body: JSON.stringify({
+//             machineId: selectedMachine._id,
+//           }),
+//           signal: controller.signal,
+//         }
+//       );
 
-// //       const data = await res.json();
+//       const data = await res.json();
 
-// //       if (res.status === 401) {
-// //         alert("Session expired. Please login again.");
-// //         window.location.href = "/login";
-// //         return;
-// //       }
+//       if (res.status === 401) {
+//         alert("Session expired. Please login again.");
+//         window.location.href = "/login";
+//         return;
+//       }
 
-// //       if (!res.ok) {
-// //         alert(data.message || "Purchase failed");
-// //         return;
-// //       }
+//       if (!res.ok) {
+//         alert(data.message || "Purchase failed");
+//         return;
+//       }
 
-// //       setBalance(data.balance);
+//       setBalance(data.balance);
 
-// //       alert("Machine purchased successfully!");
-// //       closeModal();
-// //     } catch (error) {
-// //       if (error.name === "AbortError") {
-// //         alert("Request timed out. Try again.");
-// //       } else {
-// //         console.error("Purchase error:", error);
-// //         alert("Something went wrong");
-// //       }
-// //     } finally {
-// //       clearTimeout(timeout);
-// //       setLoading(false);
-// //       setBuying(false);
-// //       setBuyingId(null);
-// //     }
-// //   };
+//       alert("Machine purchased successfully!");
+//       closeModal();
+//     } catch (error) {
+//       if (error.name === "AbortError") {
+//         alert("Request timed out. Try again.");
+//       } else {
+//         console.error("Purchase error:", error);
+//         alert("Something went wrong");
+//       }
+//     } finally {
+//       clearTimeout(timeout);
+//       setLoading(false);
+//       setBuying(false);
+//       setBuyingId(null);
+//     }
+//   };
 
-// //   // ================= LOADING SKELETON =================
-// //   if (loadingMachines) {
-// //     return (
-// //       <div className="purchase-container purchase-loading">
+//   // ================= LOADING SKELETON =================
+//   if (loadingMachines) {
+//     return (
+//       <div className="purchase-container purchase-loading">
 
-// //         {[1, 2, 3, 4].map((i) => (
-// //           <div className="machine-card skeleton-card" key={i}>
+//         {[1, 2, 3, 4].map((i) => (
+//           <div className="machine-card skeleton-card" key={i}>
 
-// //             <div className="machine-header">
-// //               <div className="skeleton machine-img"></div>
+//             <div className="machine-header">
+//               <div className="skeleton machine-img"></div>
 
-// //               <div className="name-tag">
-// //                 <div className="skeleton line short"></div>
-// //                 <div className="skeleton line tiny"></div>
-// //               </div>
-// //             </div>
+//               <div className="name-tag">
+//                 <div className="skeleton line short"></div>
+//                 <div className="skeleton line tiny"></div>
+//               </div>
+//             </div>
 
-// //             <div className="machine-info">
-// //               <div className="skeleton box"></div>
-// //               <div className="skeleton box"></div>
-// //             </div>
+//             <div className="machine-info">
+//               <div className="skeleton box"></div>
+//               <div className="skeleton box"></div>
+//             </div>
 
-// //             <div className="machine-actions">
-// //               <div className="skeleton button"></div>
-// //               <div className="skeleton button"></div>
-// //             </div>
+//             <div className="machine-actions">
+//               <div className="skeleton button"></div>
+//               <div className="skeleton button"></div>
+//             </div>
 
-// //           </div>
-// //         ))}
+//           </div>
+//         ))}
 
-// //       </div>
-// //     );
-// //   }
+//       </div>
+//     );
+//   }
 
-// //   return (
-// //     <div className="purchase-container">
+//   return (
+//     <div className="purchase-container">
 
-// //       {/* MACHINES LIST */}
-// //       {machines.map((machine) => (
-// //         <div className="machine-card" key={machine._id}>
+//       {/* MACHINES LIST */}
+//       {machines.map((machine) => (
+//         <div className="machine-card" key={machine._id}>
 
-// //           <div className="machine-header">
-// //             <img
-// //               src={`${process.env.REACT_APP_API_URL}/${machine.img}`}
-// //               alt={machine.name}
-// //               onError={(e) => {
-// //                 e.target.src = "/fallback.png";
-// //               }}
-// //             />
+//           <div className="machine-header">
+//             <img
+//               src={`${process.env.REACT_APP_API_URL}/${machine.img}`}
+//               alt={machine.name}
+//               onError={(e) => {
+//                 e.target.src = "/fallback.png";
+//               }}
+//             />
 
-// //             <div className="name-tag">
-// //               <h3>{machine.name}</h3>
-// //               <span className="tag">Clean energy</span>
-// //             </div>
-// //           </div>
+//             <div className="name-tag">
+//               <h3>{machine.name}</h3>
+//               <span className="tag">Clean energy</span>
+//             </div>
+//           </div>
 
-// //           <div className="machine-info">
-// //             <div className="profit">
-// //               <span className="value">{format(machine.profit)}</span>
-// //               <p>Profit / Hour</p>
-// //             </div>
+//           <div className="machine-info">
+//             <div className="profit">
+//               <span className="value">{format(machine.profit)}</span>
+//               <p>Profit / Hour</p>
+//             </div>
 
-// //             <div className="price">
-// //               <span className="value">{format(machine.price)}</span>
-// //               <p>Price</p>
-// //             </div>
-// //           </div>
+//             <div className="price">
+//               <span className="value">{format(machine.price)}</span>
+//               <p>Price</p>
+//             </div>
+//           </div>
 
-// //           <div className="machine-actions">
-// //             <button
-// //               className="details"
-// //               onClick={() => openDetails(machine)}
-// //             >
-// //               Details
-// //             </button>
+//           <div className="machine-actions">
+//             <button
+//               className="details"
+//               onClick={() => openDetails(machine)}
+//             >
+//               Details
+//             </button>
 
-// //            <button
-// //   className={`buy ${
-// //     balance < machine.price || buyingId === machine._id ? "disabled" : ""
-// //   }`}
-// //   disabled={balance < machine.price || buyingId === machine._id}
-// //   onClick={() => openBuy(machine)}
-// // >
-// //   Buy
-// // </button>
-// //           </div>
+//            <button
+//   className={`buy ${
+//     balance < machine.price || buyingId === machine._id ? "disabled" : ""
+//   }`}
+//   disabled={balance < machine.price || buyingId === machine._id}
+//   onClick={() => openBuy(machine)}
+// >
+//   Buy
+// </button>
+//           </div>
 
-// //         </div>
-// //       ))}
+//         </div>
+//       ))}
 
-// //       {/* DETAILS MODAL */}
-// //       {showDetails && selectedMachine && (
-// //         <div className="modal-overlay">
-// //           <div className="details-modal">
+//       {/* DETAILS MODAL */}
+//       {showDetails && selectedMachine && (
+//         <div className="modal-overlay">
+//           <div className="details-modal">
 
-// //             <img
-// //               src={`${process.env.REACT_APP_API_URL}/${selectedMachine.img}`}
-// //               alt={selectedMachine.name}
-// //               onError={(e) => {
-// //                 e.target.src = "/fallback.png";
-// //               }}
-// //             />
+//             <img
+//               src={`${process.env.REACT_APP_API_URL}/${selectedMachine.img}`}
+//               alt={selectedMachine.name}
+//               onError={(e) => {
+//                 e.target.src = "/fallback.png";
+//               }}
+//             />
 
-// //             <h2>{selectedMachine.name}</h2>
+//             <h2>{selectedMachine.name}</h2>
 
-// //             <div className="details-grid">
-// //               <div>
-// //                 <span>{format(selectedMachine.price)}</span>
-// //                 <p>Machine Price</p>
-// //               </div>
+//             <div className="details-grid">
+//               <div>
+//                 <span>{format(selectedMachine.price)}</span>
+//                 <p>Machine Price</p>
+//               </div>
 
-// //               <div>
-// //                 <span>{format(selectedMachine.profit)}</span>
-// //                 <p>Profit / Hour</p>
-// //               </div>
+//               <div>
+//                 <span>{format(selectedMachine.profit)}</span>
+//                 <p>Profit / Hour</p>
+//               </div>
 
-// //               <div>
-// //                 <span>{format(selectedMachine.profit * 24)}</span>
-// //                 <p>Daily Profit</p>
-// //               </div>
+//               <div>
+//                 <span>{format(selectedMachine.profit * 24)}</span>
+//                 <p>Daily Profit</p>
+//               </div>
 
-// //               <div>
-// //                 <span>{selectedMachine.duration} Days</span>
-// //                 <p>Duration</p>
-// //               </div>
-// //             </div>
+//               <div>
+//                 <span>{selectedMachine.duration} Days</span>
+//                 <p>Duration</p>
+//               </div>
+//             </div>
 
-// //             <button
-// //               className="details-buy"
-// //               onClick={() => {
-// //                 setSelectedMachine(selectedMachine);
-// //                 setShowDetails(false);
-// //                 setShowBuy(true);
-// //               }}
-// //             >
-// //               Buy Machine
-// //             </button>
+//             <button
+//               className="details-buy"
+//               onClick={() => {
+//                 setSelectedMachine(selectedMachine);
+//                 setShowDetails(false);
+//                 setShowBuy(true);
+//               }}
+//             >
+//               Buy Machine
+//             </button>
 
-// //             <button className="details-close" onClick={closeModal}>
-// //               Close
-// //             </button>
+//             <button className="details-close" onClick={closeModal}>
+//               Close
+//             </button>
 
-// //           </div>
-// //         </div>
-// //       )}
+//           </div>
+//         </div>
+//       )}
 
-// //       {/* BUY MODAL */}
-// //       {showBuy && selectedMachine && (
-// //         <div className="modal-overlay">
-// //           <div className="details-modal">
+//       {/* BUY MODAL */}
+//       {showBuy && selectedMachine && (
+//         <div className="modal-overlay">
+//           <div className="details-modal">
 
-// //             <img
-// //               src={`${process.env.REACT_APP_API_URL}/${selectedMachine.img}`}
-// //               alt={selectedMachine.name}
-// //               onError={(e) => {
-// //                 e.target.src = "/fallback.png";
-// //               }}
-// //             />
+//             <img
+//               src={`${process.env.REACT_APP_API_URL}/${selectedMachine.img}`}
+//               alt={selectedMachine.name}
+//               onError={(e) => {
+//                 e.target.src = "/fallback.png";
+//               }}
+//             />
 
-// //             <h2>Confirm Purchase</h2>
+//             <h2>Confirm Purchase</h2>
 
-// //             <div className="details-grid">
-// //               <div>
-// //                 <span>{format(selectedMachine.price)}</span>
-// //                 <p>Machine Price</p>
-// //               </div>
+//             <div className="details-grid">
+//               <div>
+//                 <span>{format(selectedMachine.price)}</span>
+//                 <p>Machine Price</p>
+//               </div>
 
-// //               <div>
-// //                 <span>{format(selectedMachine.profit)}</span>
-// //                 <p>Profit / Hour</p>
-// //               </div>
+//               <div>
+//                 <span>{format(selectedMachine.profit)}</span>
+//                 <p>Profit / Hour</p>
+//               </div>
 
-// //               <div>
-// //                 <span>{format(selectedMachine.profit * 24)}</span>
-// //                 <p>Daily Profit</p>
-// //               </div>
+//               <div>
+//                 <span>{format(selectedMachine.profit * 24)}</span>
+//                 <p>Daily Profit</p>
+//               </div>
 
-// //               <div>
-// //                 <span>{selectedMachine.duration} Days</span>
-// //                 <p>Duration</p>
-// //               </div>
-// //             </div>
+//               <div>
+//                 <span>{selectedMachine.duration} Days</span>
+//                 <p>Duration</p>
+//               </div>
+//             </div>
 
-// //             <button
-// //               className="details-buy"
-// //               onClick={handleBuy}
-// //               disabled={loading || buying}
-// //             >
-// //               {loading ? "Processing..." : "Confirm Purchase"}
-// //             </button>
+//             <button
+//               className="details-buy"
+//               onClick={handleBuy}
+//               disabled={loading || buying}
+//             >
+//               {loading ? "Processing..." : "Confirm Purchase"}
+//             </button>
 
-// //             <button
-// //               className="details-close"
-// //               onClick={closeModal}
-// //               disabled={loading || buying}
-// //             >
-// //               Cancel
-// //             </button>
+//             <button
+//               className="details-close"
+//               onClick={closeModal}
+//               disabled={loading || buying}
+//             >
+//               Cancel
+//             </button>
 
-// //           </div>
-// //         </div>
-// //       )}
+//           </div>
+//         </div>
+//       )}
 
-// //     </div>
-// //   );
-// // }
+//     </div>
+//   );
+// }
 
 // import React, { useState, useEffect, useCallback } from "react";
 // import "../styles/market.css";
@@ -978,7 +978,8 @@ export default function PurchaseHall() {
   // ================= FORMAT CURRENCY =================
   const format = (value) => {
     return `${currency.symbol}${(
-      value * currency.rate
+      Number(value || 0) *
+      currency.rate
     ).toLocaleString(undefined, {
       maximumFractionDigits: 4,
     })}`;
@@ -987,7 +988,13 @@ export default function PurchaseHall() {
   // ================= FETCH MACHINES =================
   const fetchMachines = useCallback(
     async (signal) => {
-      if (!token) return;
+      if (!token) {
+        setMachines([]);
+
+        setLoadingMachines(false);
+
+        return;
+      }
 
       try {
         setLoadingMachines(true);
@@ -1032,17 +1039,23 @@ export default function PurchaseHall() {
               "Failed to fetch machines"
           );
 
-          return;
-        }
-
-        // ================= VALIDATE ARRAY =================
-        if (!Array.isArray(data.machines)) {
           setMachines([]);
 
           return;
         }
 
-        // ================= ONLY ACTIVE MACHINES =================
+        // ================= VALIDATE ARRAY =================
+        if (
+          !Array.isArray(
+            data.machines
+          )
+        ) {
+          setMachines([]);
+
+          return;
+        }
+
+        // ================= FILTER VALID MACHINES =================
         const filtered =
           data.machines.filter(
             (m) =>
@@ -1050,16 +1063,35 @@ export default function PurchaseHall() {
               m.active === true &&
               m._id &&
               m.name &&
-              typeof m.price ===
-                "number" &&
-              typeof m.profit ===
-                "number"
+              !isNaN(
+                Number(m.price)
+              ) &&
+              !isNaN(
+                Number(m.profit)
+              )
           );
 
-        setMachines(filtered);
+        // ================= NORMALIZE VALUES =================
+        const normalized =
+          filtered.map((m) => ({
+            ...m,
+
+            price: Number(
+              m.price
+            ),
+
+            profit: Number(
+              m.profit
+            ),
+          }));
+
+        setMachines(normalized);
 
       } catch (err) {
-        if (err.name !== "AbortError") {
+        if (
+          err.name !==
+          "AbortError"
+        ) {
           console.error(
             "Fetch machines error:",
             err
@@ -1081,7 +1113,9 @@ export default function PurchaseHall() {
     const controller =
       new AbortController();
 
-    fetchMachines(controller.signal);
+    fetchMachines(
+      controller.signal
+    );
 
     return () =>
       controller.abort();
@@ -1110,9 +1144,10 @@ export default function PurchaseHall() {
 
     // ================= PRICE VALIDATION =================
     if (
-      typeof machine.price !==
-        "number" ||
-      machine.price <= 0
+      isNaN(
+        Number(machine.price)
+      ) ||
+      Number(machine.price) <= 0
     ) {
       alert("Invalid machine price");
 
@@ -1120,7 +1155,10 @@ export default function PurchaseHall() {
     }
 
     // ================= BALANCE CHECK =================
-    if (balance < machine.price) {
+    if (
+      balance <
+      Number(machine.price)
+    ) {
       alert("Insufficient balance");
 
       return;
@@ -1159,8 +1197,11 @@ export default function PurchaseHall() {
     // ================= MACHINE VALIDATION =================
     if (
       !selectedMachine._id ||
-      typeof selectedMachine.price !==
-        "number"
+      isNaN(
+        Number(
+          selectedMachine.price
+        )
+      )
     ) {
       alert("Invalid machine");
 
@@ -1170,7 +1211,9 @@ export default function PurchaseHall() {
     // ================= BALANCE RECHECK =================
     if (
       balance <
-      selectedMachine.price
+      Number(
+        selectedMachine.price
+      )
     ) {
       alert("Insufficient balance");
 
@@ -1246,10 +1289,13 @@ export default function PurchaseHall() {
 
       // ================= SAFE BALANCE UPDATE =================
       if (
-        typeof data.balance ===
-        "number"
+        !isNaN(
+          Number(data.balance)
+        )
       ) {
-        setBalance(data.balance);
+        setBalance(
+          Number(data.balance)
+        );
       }
 
       // ================= SUCCESS =================
@@ -1260,11 +1306,17 @@ export default function PurchaseHall() {
       closeModal();
 
       // ================= REFRESH MACHINES =================
-      fetchMachines();
+      const refreshController =
+        new AbortController();
+
+      fetchMachines(
+        refreshController.signal
+      );
 
     } catch (error) {
       if (
-        error.name === "AbortError"
+        error.name ===
+        "AbortError"
       ) {
         alert(
           "Request timeout. Try again."
@@ -1290,7 +1342,8 @@ export default function PurchaseHall() {
 
   // ================= IMAGE FALLBACK =================
   const handleImageError = (e) => {
-    e.target.src = "/fallback.png";
+    e.target.src =
+      "/fallback.png";
   };
 
   // ================= LOADING =================
@@ -1365,7 +1418,9 @@ export default function PurchaseHall() {
           <div className="machine-info">
             <div className="profit">
               <span className="value">
-                {format(machine.profit)}
+                {format(
+                  machine.profit
+                )}
               </span>
 
               <p>Profit / Hour</p>
@@ -1373,7 +1428,9 @@ export default function PurchaseHall() {
 
             <div className="price">
               <span className="value">
-                {format(machine.price)}
+                {format(
+                  machine.price
+                )}
               </span>
 
               <p>Price</p>
