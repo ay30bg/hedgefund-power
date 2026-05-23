@@ -94,7 +94,7 @@ export const AuthProvider = ({
     );
 
     // redirect to login
-    window.location.href = "/login";
+    window.location.href = "/";
   }, []);
 
   // ================= LOGIN =================
