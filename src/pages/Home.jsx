@@ -1,6 +1,5 @@
 // import React, { useEffect, useState } from "react";
 // import "../styles/home.css";
-
 // import { useCurrency } from "../context/CurrencyContext";
 
 // import {
@@ -20,23 +19,14 @@
 
 //   const [aiLoading, setAiLoading] = useState(true);
 //   const [lastUpdated, setLastUpdated] = useState("");
+//   const [chartData, setChartData] = useState([]);
 
-//   const [chartData, setChartData] = useState([
-//     { day: "Mon", profit: 120 },
-//     { day: "Tue", profit: 210 },
-//     { day: "Wed", profit: 180 },
-//     { day: "Thu", profit: 260 },
-//     { day: "Fri", profit: 320 },
-//     { day: "Sat", profit: 280 },
-//     { day: "Sun", profit: 350 },
-//   ]);
-
-//   // ================= ID GENERATOR (69e811 style) =================
+//   // ================= ID GENERATOR =================
 //   const generateId = () => {
 //     return "69" + Math.random().toString(16).slice(2, 6);
 //   };
 
-//    // ================= MASK ID (last 2 chars hidden) =================
+//   // ================= MASK ID =================
 //   const maskId = (id) => {
 //     return id.slice(0, 4) + "**";
 //   };
@@ -81,6 +71,36 @@
 //     };
 
 //     fetchPortfolio();
+//   }, []);
+
+//   // ================= FETCH EARNINGS =================
+//   useEffect(() => {
+//     const fetchEarnings = async () => {
+//       try {
+//         const token = localStorage.getItem("token");
+
+//         const res = await fetch(
+//           `${process.env.REACT_APP_API_URL}/api/dashboard/earnings`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//             },
+//           }
+//         );
+
+//         const data = await res.json();
+
+//         if (res.ok) {
+//           setChartData(data.earnings);
+//         } else {
+//           console.error("Earnings error:", data);
+//         }
+//       } catch (err) {
+//         console.error("Error fetching earnings:", err);
+//       }
+//     };
+
+//     fetchEarnings();
 //   }, []);
 
 //   // ================= AI LOADING =================
@@ -137,24 +157,11 @@
 //     return () => clearInterval(interval);
 //   }, []);
 
-//   // ================= CHART =================
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setChartData((prev) =>
-//         prev.map((item) => ({
-//           ...item,
-//           profit: Math.max(
-//             50,
-//             item.profit + Math.floor(Math.random() * 40 - 20)
-//           ),
-//         }))
-//       );
-//     }, 4000);
-
-//     return () => clearInterval(interval);
-//   }, []);
-
 //   // ================= PORTFOLIO VALUES =================
+//   const totalInvested = portfolio?.totals?.totalInvested ?? 0;
+//   const totalProfit = portfolio?.totals?.totalProfit ?? 0;
+//   const totalWithdrawn = portfolio?.totals?.totalWithdrawn ?? 0;
+
 //   const roiPower = portfolio?.strength?.roiPower ?? 0;
 //   const efficiency = portfolio?.strength?.efficiency ?? 0;
 //   const riskLevel = portfolio?.strength?.riskLevel ?? "Low";
@@ -172,7 +179,7 @@
 //   const trend =
 //     efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
 
-//  // ================= SKELETON LOADING =================
+//    // ================= SKELETON LOADING =================
 // if (loadingPortfolio) {
 //   return (
 //     <div className="dashboard">
@@ -241,22 +248,30 @@
 
 //   return (
 //     <div className="dashboard">
-
 //       {/* ================= OVERVIEW ================= */}
 //       <div className="overview-card">
 //         <div className="overview-item">
 //           <p>Total Invested</p>
-//           <h2>{currency.symbol}{0}</h2>
+//           <h2>
+//             {currency.symbol}
+//             {(totalInvested * currency.rate).toFixed(2)}
+//           </h2>
 //         </div>
 
 //         <div className="overview-item">
 //           <p>Total Profit</p>
-//           <h2 className="positive">{currency.symbol}{0}</h2>
+//           <h2 className="positive">
+//             {currency.symbol}
+//             {(totalProfit * currency.rate).toFixed(2)}
+//           </h2>
 //         </div>
 
 //         <div className="overview-item">
 //           <p>Total Withdrawal</p>
-//           <h2>{currency.symbol}{0}</h2>
+//           <h2>
+//             {currency.symbol}
+//             {(totalWithdrawn * currency.rate).toFixed(2)}
+//           </h2>
 //         </div>
 
 //         <div className="overview-item">
@@ -266,38 +281,37 @@
 //       </div>
 
 //       {/* ================= INSIGHTS ================= */}
-//             <div className="insights">
-//          <div className="insight-card">
-//            <p className="label">Active Plans</p>
-//            <h3>{plansCount}</h3>
-//            <span>Currently running</span>
-//        </div>
-
+//       <div className="insights">
 //         <div className="insight-card">
-//          <p className="label">Active Machines</p>
-//          <h3>{machinesCount}</h3>
-//          <span>Mining in progress</span>
+//           <p className="label">Active Plans</p>
+//           <h3>{plansCount}</h3>
+//           <span>Currently running</span>
 //         </div>
 
-//          <div className="insight-card">
-//            <p className="label">Best Machine</p>
-//            <h3>{bestMachineName}</h3>
-//           <span className="positive">
-//              {currency.symbol}
-//              {(bestDailyYield * currency.rate).toFixed(2)} / day
-//            </span>
-//          </div>
+//         <div className="insight-card">
+//           <p className="label">Active Machines</p>
+//           <h3>{machinesCount}</h3>
+//           <span>Mining in progress</span>
+//         </div>
 
-//          <div className="insight-card">
-//            <p className="label">Market Status</p>
-//            <h3>{marketStatus}</h3>
+//         <div className="insight-card">
+//           <p className="label">Best Machine</p>
+//           <h3>{bestMachineName}</h3>
+//           <span className="positive">
+//             {currency.symbol}
+//             {(bestDailyYield * currency.rate).toFixed(2)} / day
+//           </span>
+//         </div>
+
+//         <div className="insight-card">
+//           <p className="label">Market Status</p>
+//           <h3>{marketStatus}</h3>
 //           <span>{marketNote}</span>
-//          </div>
-//        </div> 
+//         </div>
+//       </div>
 
 //       {/* ================= GRID ================= */}
 //       <div className="grid">
-
 //         {/* CHART */}
 //         <div className="card">
 //           <h3>Earnings Overview</h3>
@@ -324,7 +338,6 @@
 //             <div className="activity-track">
 //               {activities.concat(activities).map((item, index) => (
 //                 <div key={index} className="activity-row">
-
 //                   <span className="time">
 //                     {formatTimeAgo(item.createdAt)}
 //                   </span>
@@ -342,7 +355,6 @@
 //                     {currency.symbol}
 //                     {item.amount}
 //                   </span>
-
 //                 </div>
 //               ))}
 //             </div>
@@ -350,12 +362,12 @@
 //         </div>
 
 //          {/* PORTFOLIO STRENGTH */}
-//           <div className="card">
-//           <h3>Portfolio Strength</h3>
+//            <div className="card">
+//            <h3>Portfolio Strength</h3>
 
-//            <div className="gauge-grid">
-//               <div className="gauge">
-//                <div
+//             <div className="gauge-grid">
+//                <div className="gauge">
+//                 <div
 //                 className="circle"
 //                 style={{
 //                   background: `conic-gradient(#d6a85a ${Math.min(
@@ -507,7 +519,9 @@
 
 import React, { useEffect, useState } from "react";
 import "../styles/home.css";
+
 import { useCurrency } from "../context/CurrencyContext";
+import { useAuth } from "../context/AuthContext";
 
 import {
   LineChart,
@@ -520,17 +534,31 @@ import {
 const DashboardHomepage = () => {
   const { currency } = useCurrency();
 
+  const { token, user, loading } = useAuth();
+
   const [activities, setActivities] = useState([]);
   const [portfolio, setPortfolio] = useState(null);
-  const [loadingPortfolio, setLoadingPortfolio] = useState(true);
 
-  const [aiLoading, setAiLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState("");
-  const [chartData, setChartData] = useState([]);
+  const [loadingPortfolio, setLoadingPortfolio] =
+    useState(true);
+
+  const [aiLoading, setAiLoading] =
+    useState(true);
+
+  const [lastUpdated, setLastUpdated] =
+    useState("");
+
+  const [chartData, setChartData] =
+    useState([]);
 
   // ================= ID GENERATOR =================
   const generateId = () => {
-    return "69" + Math.random().toString(16).slice(2, 6);
+    return (
+      "69" +
+      Math.random()
+        .toString(16)
+        .slice(2, 6)
+    );
   };
 
   // ================= MASK ID =================
@@ -539,281 +567,497 @@ const DashboardHomepage = () => {
   };
 
   // ================= TIME FORMAT =================
-  const formatTimeAgo = (timestamp) => {
-    const diff = Math.floor((Date.now() - timestamp) / 1000);
+  const formatTimeAgo = (
+    timestamp
+  ) => {
+    const diff = Math.floor(
+      (Date.now() - timestamp) /
+        1000
+    );
 
-    if (diff < 3) return "just now";
-    if (diff < 60) return `${diff}s`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m`;
-    return `${Math.floor(diff / 3600)}h`;
+    if (diff < 3)
+      return "just now";
+
+    if (diff < 60)
+      return `${diff}s`;
+
+    if (diff < 3600)
+      return `${Math.floor(
+        diff / 60
+      )}m`;
+
+    return `${Math.floor(
+      diff / 3600
+    )}h`;
   };
 
   // ================= FETCH PORTFOLIO =================
   useEffect(() => {
-    const fetchPortfolio = async () => {
-      try {
-        const token = localStorage.getItem("token");
+    if (!token) return;
 
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+    const fetchPortfolio =
+      async () => {
+        try {
+          const res =
+            await fetch(
+              `${process.env.REACT_APP_API_URL}/api/dashboard/portfolio`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+          const data =
+            await res.json();
+
+          if (res.ok) {
+            setPortfolio(
+              data.portfolio
+            );
+          } else {
+            console.error(
+              "Portfolio error:",
+              data
+            );
           }
-        );
-
-        const data = await res.json();
-
-        if (res.ok) {
-          setPortfolio(data.portfolio);
-        } else {
-          console.error("Portfolio error:", data);
+        } catch (err) {
+          console.error(
+            "Error fetching portfolio:",
+            err
+          );
+        } finally {
+          setLoadingPortfolio(
+            false
+          );
         }
-      } catch (err) {
-        console.error("Error fetching portfolio:", err);
-      } finally {
-        setLoadingPortfolio(false);
-      }
-    };
+      };
 
     fetchPortfolio();
-  }, []);
+  }, [token]);
 
   // ================= FETCH EARNINGS =================
   useEffect(() => {
-    const fetchEarnings = async () => {
-      try {
-        const token = localStorage.getItem("token");
+    if (!token) return;
 
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/dashboard/earnings`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+    const fetchEarnings =
+      async () => {
+        try {
+          const res =
+            await fetch(
+              `${process.env.REACT_APP_API_URL}/api/dashboard/earnings`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+          const data =
+            await res.json();
+
+          if (res.ok) {
+            setChartData(
+              data.earnings
+            );
+          } else {
+            console.error(
+              "Earnings error:",
+              data
+            );
           }
-        );
-
-        const data = await res.json();
-
-        if (res.ok) {
-          setChartData(data.earnings);
-        } else {
-          console.error("Earnings error:", data);
+        } catch (err) {
+          console.error(
+            "Error fetching earnings:",
+            err
+          );
         }
-      } catch (err) {
-        console.error("Error fetching earnings:", err);
-      }
-    };
+      };
 
     fetchEarnings();
-  }, []);
+  }, [token]);
 
   // ================= AI LOADING =================
   useEffect(() => {
     if (!loadingPortfolio) {
       setAiLoading(true);
 
-      const timer = setTimeout(() => {
-        setAiLoading(false);
-      }, Math.random() * 1200 + 1800);
+      const timer =
+        setTimeout(() => {
+          setAiLoading(false);
+        },
+        Math.random() * 1200 +
+          1800);
 
-      return () => clearTimeout(timer);
+      return () =>
+        clearTimeout(timer);
     }
-  }, [loadingPortfolio, portfolio]);
+  }, [
+    loadingPortfolio,
+    portfolio,
+  ]);
 
   // ================= LAST UPDATED =================
   useEffect(() => {
     if (!aiLoading) {
       setLastUpdated(
-        new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
+        new Date().toLocaleTimeString(
+          [],
+          {
+            hour: "2-digit",
+            minute:
+              "2-digit",
+          }
+        )
       );
     }
   }, [aiLoading]);
 
   // ================= LIVE ACTIVITY =================
   useEffect(() => {
-    const saved = localStorage.getItem("activities");
+    const saved =
+      localStorage.getItem(
+        "activities"
+      );
 
     if (saved) {
-      setActivities(JSON.parse(saved));
+      setActivities(
+        JSON.parse(saved)
+      );
     }
 
-    const interval = setInterval(() => {
-      const type = Math.random() > 0.5 ? "deposit" : "withdrawal";
-      const amount = Math.floor(Math.random() * 2000) + 100;
+    const interval =
+      setInterval(() => {
+        const type =
+          Math.random() > 0.5
+            ? "deposit"
+            : "withdrawal";
 
-      const newActivity = {
-        id: generateId(),
-        type,
-        amount,
-        createdAt: Date.now(),
-      };
+        const amount =
+          Math.floor(
+            Math.random() * 2000
+          ) + 100;
 
-      setActivities((prev) => {
-        const updated = [newActivity, ...prev].slice(0, 15);
-        localStorage.setItem("activities", JSON.stringify(updated));
-        return updated;
-      });
-    }, 3000);
+        const newActivity = {
+          id: generateId(),
+          type,
+          amount,
+          createdAt:
+            Date.now(),
+        };
 
-    return () => clearInterval(interval);
+        setActivities(
+          (prev) => {
+            const updated = [
+              newActivity,
+              ...prev,
+            ].slice(0, 15);
+
+            localStorage.setItem(
+              "activities",
+              JSON.stringify(
+                updated
+              )
+            );
+
+            return updated;
+          }
+        );
+      }, 3000);
+
+    return () =>
+      clearInterval(interval);
   }, []);
 
   // ================= PORTFOLIO VALUES =================
-  const totalInvested = portfolio?.totals?.totalInvested ?? 0;
-  const totalProfit = portfolio?.totals?.totalProfit ?? 0;
-  const totalWithdrawn = portfolio?.totals?.totalWithdrawn ?? 0;
+  const totalInvested =
+    portfolio?.totals
+      ?.totalInvested ?? 0;
 
-  const roiPower = portfolio?.strength?.roiPower ?? 0;
-  const efficiency = portfolio?.strength?.efficiency ?? 0;
-  const riskLevel = portfolio?.strength?.riskLevel ?? "Low";
+  const totalProfit =
+    portfolio?.totals
+      ?.totalProfit ?? 0;
 
-  const plansCount = portfolio?.assetSummary?.plansCount ?? 0;
-  const machinesCount = portfolio?.assetSummary?.machinesCount ?? 0;
+  const totalWithdrawn =
+    portfolio?.totals
+      ?.totalWithdrawn ?? 0;
 
-  const bestDailyYield = portfolio?.assetSummary?.bestDailyYield ?? 0;
+  const roiPower =
+    portfolio?.strength
+      ?.roiPower ?? 0;
+
+  const efficiency =
+    portfolio?.strength
+      ?.efficiency ?? 0;
+
+  const riskLevel =
+    portfolio?.strength
+      ?.riskLevel ?? "Low";
+
+  const plansCount =
+    portfolio?.assetSummary
+      ?.plansCount ?? 0;
+
+  const machinesCount =
+    portfolio?.assetSummary
+      ?.machinesCount ?? 0;
+
+  const bestDailyYield =
+    portfolio?.assetSummary
+      ?.bestDailyYield ?? 0;
+
   const bestMachineName =
-    portfolio?.assetSummary?.bestMachineName ?? "N/A";
+    portfolio?.assetSummary
+      ?.bestMachineName ??
+    "N/A";
 
-  const marketStatus = portfolio?.market?.status ?? "Stable";
-  const marketNote = portfolio?.market?.note ?? "";
+  const marketStatus =
+    portfolio?.market
+      ?.status ?? "Stable";
+
+  const marketNote =
+    portfolio?.market
+      ?.note ?? "";
 
   const trend =
-    efficiency < 50 ? "down" : efficiency > 75 ? "up" : "stable";
+    efficiency < 50
+      ? "down"
+      : efficiency > 75
+      ? "up"
+      : "stable";
 
-   // ================= SKELETON LOADING =================
-if (loadingPortfolio) {
-  return (
-    <div className="dashboard">
+  // ================= AUTH LOADING =================
+  if (loading) {
+    return null;
+  }
 
-      {/* ================= OVERVIEW SKELETON ================= */}
-      <div className="overview-card">
-        {[1, 2, 3, 4].map((i) => (
-          <div className="overview-item" key={i}>
-            <div className="skeleton line short"></div>
-            <div className="skeleton line long"></div>
-          </div>
-        ))}
-      </div>
+  // ================= SKELETON LOADING =================
+  if (loadingPortfolio) {
+    return (
+      <div className="dashboard">
+        {/* ================= OVERVIEW SKELETON ================= */}
+        <div className="overview-card">
+          {[1, 2, 3, 4].map(
+            (i) => (
+              <div
+                className="overview-item"
+                key={i}
+              >
+                <div className="skeleton line short"></div>
 
-      {/* ================= INSIGHTS SKELETON ================= */}
-      <div className="insights">
-        {[1, 2, 3, 4].map((i) => (
-          <div className="insight-card" key={i}>
-            <div className="skeleton line short"></div>
+                <div className="skeleton line long"></div>
+              </div>
+            )
+          )}
+        </div>
+
+        {/* ================= INSIGHTS SKELETON ================= */}
+        <div className="insights">
+          {[1, 2, 3, 4].map(
+            (i) => (
+              <div
+                className="insight-card"
+                key={i}
+              >
+                <div className="skeleton line short"></div>
+
+                <div className="skeleton line medium"></div>
+
+                <div className="skeleton line long"></div>
+              </div>
+            )
+          )}
+        </div>
+
+        {/* ================= GRID SKELETON ================= */}
+        <div className="grid">
+          {/* CHART */}
+          <div className="card">
             <div className="skeleton line medium"></div>
-            <div className="skeleton line long"></div>
+
+            <div className="skeleton chart"></div>
           </div>
-        ))}
-      </div>
 
-      {/* ================= GRID SKELETON ================= */}
-      <div className="grid">
+          {/* LIVE ACTIVITY */}
+          <div className="card">
+            <div className="skeleton line medium"></div>
 
-        {/* CHART */}
-        <div className="card">
-          <div className="skeleton line medium"></div>
-          <div className="skeleton chart"></div>
-        </div>
+            {[1, 2, 3, 4, 5, 6].map(
+              (i) => (
+                <div
+                  className="skeleton activity-row"
+                  key={i}
+                ></div>
+              )
+            )}
+          </div>
 
-        {/* LIVE ACTIVITY */}
-        <div className="card">
-          <div className="skeleton line medium"></div>
+          {/* PORTFOLIO STRENGTH */}
+          <div className="card">
+            <div className="skeleton line medium"></div>
 
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div className="skeleton activity-row" key={i}></div>
-          ))}
-        </div>
+            <div className="gauge-grid">
+              <div className="skeleton gauge"></div>
 
-        {/* PORTFOLIO STRENGTH */}
-        <div className="card">
-          <div className="skeleton line medium"></div>
+              <div className="skeleton gauge"></div>
 
-          <div className="gauge-grid">
-            <div className="skeleton gauge"></div>
-            <div className="skeleton gauge"></div>
-            <div className="skeleton gauge"></div>
+              <div className="skeleton gauge"></div>
+            </div>
+          </div>
+
+          {/* AI CARD */}
+          <div className="card smart-card-ai">
+            <div className="skeleton ai-header"></div>
+
+            <div className="skeleton ai-body"></div>
           </div>
         </div>
-
-        {/* AI CARD */}
-        <div className="card smart-card-ai">
-          <div className="skeleton ai-header"></div>
-          <div className="skeleton ai-body"></div>
-        </div>
-
       </div>
-
-    </div>
-  );
-}
+    );
+  }
 
   return (
     <div className="dashboard">
+      {/* ================= WELCOME ================= */}
+      <div className="dashboard-welcome">
+        <h2>
+          Welcome back,
+          {" "}
+          {user?.username ||
+            user?.name ||
+            "Investor"}
+        </h2>
+
+        <p>
+          Monitor your
+          portfolio
+          performance in
+          real time.
+        </p>
+      </div>
+
       {/* ================= OVERVIEW ================= */}
       <div className="overview-card">
         <div className="overview-item">
-          <p>Total Invested</p>
+          <p>
+            Total Invested
+          </p>
+
           <h2>
             {currency.symbol}
-            {(totalInvested * currency.rate).toFixed(2)}
+
+            {(
+              totalInvested *
+              currency.rate
+            ).toFixed(2)}
           </h2>
         </div>
 
         <div className="overview-item">
-          <p>Total Profit</p>
+          <p>
+            Total Profit
+          </p>
+
           <h2 className="positive">
             {currency.symbol}
-            {(totalProfit * currency.rate).toFixed(2)}
+
+            {(
+              totalProfit *
+              currency.rate
+            ).toFixed(2)}
           </h2>
         </div>
 
         <div className="overview-item">
-          <p>Total Withdrawal</p>
+          <p>
+            Total Withdrawal
+          </p>
+
           <h2>
             {currency.symbol}
-            {(totalWithdrawn * currency.rate).toFixed(2)}
+
+            {(
+              totalWithdrawn *
+              currency.rate
+            ).toFixed(2)}
           </h2>
         </div>
 
         <div className="overview-item">
           <p>ROI (Avg)</p>
-          <h2>{roiPower.toFixed(1)}%</h2>
+
+          <h2>
+            {roiPower.toFixed(
+              1
+            )}
+            %
+          </h2>
         </div>
       </div>
 
       {/* ================= INSIGHTS ================= */}
       <div className="insights">
         <div className="insight-card">
-          <p className="label">Active Plans</p>
-          <h3>{plansCount}</h3>
-          <span>Currently running</span>
-        </div>
+          <p className="label">
+            Active Plans
+          </p>
 
-        <div className="insight-card">
-          <p className="label">Active Machines</p>
-          <h3>{machinesCount}</h3>
-          <span>Mining in progress</span>
-        </div>
+          <h3>
+            {plansCount}
+          </h3>
 
-        <div className="insight-card">
-          <p className="label">Best Machine</p>
-          <h3>{bestMachineName}</h3>
-          <span className="positive">
-            {currency.symbol}
-            {(bestDailyYield * currency.rate).toFixed(2)} / day
+          <span>
+            Currently running
           </span>
         </div>
 
         <div className="insight-card">
-          <p className="label">Market Status</p>
-          <h3>{marketStatus}</h3>
-          <span>{marketNote}</span>
+          <p className="label">
+            Active Machines
+          </p>
+
+          <h3>
+            {machinesCount}
+          </h3>
+
+          <span>
+            Mining in progress
+          </span>
+        </div>
+
+        <div className="insight-card">
+          <p className="label">
+            Best Machine
+          </p>
+
+          <h3>
+            {bestMachineName}
+          </h3>
+
+          <span className="positive">
+            {currency.symbol}
+
+            {(
+              bestDailyYield *
+              currency.rate
+            ).toFixed(2)}
+            {" "}
+            / day
+          </span>
+        </div>
+
+        <div className="insight-card">
+          <p className="label">
+            Market Status
+          </p>
+
+          <h3>
+            {marketStatus}
+          </h3>
+
+          <span>
+            {marketNote}
+          </span>
         </div>
       </div>
 
@@ -821,11 +1065,22 @@ if (loadingPortfolio) {
       <div className="grid">
         {/* CHART */}
         <div className="card">
-          <h3>Earnings Overview</h3>
-          <ResponsiveContainer width="100%" height={180}>
-            <LineChart data={chartData}>
+          <h3>
+            Earnings
+            Overview
+          </h3>
+
+          <ResponsiveContainer
+            width="100%"
+            height={180}
+          >
+            <LineChart
+              data={chartData}
+            >
               <XAxis dataKey="day" />
+
               <Tooltip />
+
               <Line
                 type="monotone"
                 dataKey="profit"
@@ -839,42 +1094,78 @@ if (loadingPortfolio) {
 
         {/* LIVE ACTIVITY */}
         <div className="card">
-          <h3>Live Activity</h3>
+          <h3>
+            Live Activity
+          </h3>
 
           <div className="activity-ticker">
             <div className="activity-track">
-              {activities.concat(activities).map((item, index) => (
-                <div key={index} className="activity-row">
-                  <span className="time">
-                    {formatTimeAgo(item.createdAt)}
-                  </span>
+              {activities
+                .concat(
+                  activities
+                )
+                .map(
+                  (
+                    item,
+                    index
+                  ) => (
+                    <div
+                      key={
+                        index
+                      }
+                      className="activity-row"
+                    >
+                      <span className="time">
+                        {formatTimeAgo(
+                          item.createdAt
+                        )}
+                      </span>
 
-                  <span className="name">{maskId(item.id)}</span>
+                      <span className="name">
+                        {maskId(
+                          item.id
+                        )}
+                      </span>
 
-                  <span
-                    className={
-                      item.type === "deposit"
-                        ? "amount positive"
-                        : "amount negative"
-                    }
-                  >
-                    {item.type === "deposit" ? "+" : "-"}
-                    {currency.symbol}
-                    {item.amount}
-                  </span>
-                </div>
-              ))}
+                      <span
+                        className={
+                          item.type ===
+                          "deposit"
+                            ? "amount positive"
+                            : "amount negative"
+                        }
+                      >
+                        {item.type ===
+                        "deposit"
+                          ? "+"
+                          : "-"}
+
+                        {
+                          currency.symbol
+                        }
+
+                        {
+                          item.amount
+                        }
+                      </span>
+                    </div>
+                  )
+                )}
             </div>
           </div>
         </div>
 
-         {/* PORTFOLIO STRENGTH */}
-           <div className="card">
-           <h3>Portfolio Strength</h3>
+        {/* PORTFOLIO STRENGTH */}
+        <div className="card">
+          <h3>
+            Portfolio
+            Strength
+          </h3>
 
-            <div className="gauge-grid">
-               <div className="gauge">
-                <div
+          <div className="gauge-grid">
+            {/* ROI */}
+            <div className="gauge">
+              <div
                 className="circle"
                 style={{
                   background: `conic-gradient(#d6a85a ${Math.min(
@@ -884,12 +1175,21 @@ if (loadingPortfolio) {
                 }}
               >
                 <div className="inner">
-                  <h2>{roiPower.toFixed(0)}%</h2>
+                  <h2>
+                    {roiPower.toFixed(
+                      0
+                    )}
+                    %
+                  </h2>
                 </div>
               </div>
-              <p>ROI Power</p>
+
+              <p>
+                ROI Power
+              </p>
             </div>
 
+            {/* EFFICIENCY */}
             <div className="gauge">
               <div
                 className="circle"
@@ -898,20 +1198,31 @@ if (loadingPortfolio) {
                 }}
               >
                 <div className="inner">
-                  <h2>{efficiency}%</h2>
+                  <h2>
+                    {
+                      efficiency
+                    }
+                    %
+                  </h2>
                 </div>
               </div>
-              <p>Efficiency</p>
+
+              <p>
+                Efficiency
+              </p>
             </div>
 
+            {/* RISK */}
             <div className="gauge">
               <div
                 className="circle"
                 style={{
                   background: `conic-gradient(#ff4d4f ${
-                    riskLevel === "High"
+                    riskLevel ===
+                    "High"
                       ? 90
-                      : riskLevel === "Medium"
+                      : riskLevel ===
+                        "Medium"
                       ? 60
                       : 30
                   }%, rgba(255,255,255,0.08) 0%)`,
@@ -919,15 +1230,20 @@ if (loadingPortfolio) {
               >
                 <div className="inner">
                   <h2>
-                    {riskLevel === "High"
+                    {riskLevel ===
+                    "High"
                       ? "H"
-                      : riskLevel === "Low"
+                      : riskLevel ===
+                        "Low"
                       ? "L"
                       : "M"}
                   </h2>
                 </div>
               </div>
-              <p>Risk Level</p>
+
+              <p>
+                Risk Level
+              </p>
             </div>
           </div>
         </div>
@@ -939,84 +1255,160 @@ if (loadingPortfolio) {
           <div className="smart-header-ai">
             <div className="ai-title">
               <span className="ai-dot"></span>
-              AI Insight Engine
+
+              AI Insight
+              Engine
             </div>
-            <div className="ai-status">● Live</div>
+
+            <div className="ai-status">
+              ● Live
+            </div>
           </div>
 
           <div className="smart-body-ai">
             <div className="ai-avatar">
               <div className="pulse-ring"></div>
+
               🤖
             </div>
 
             <div className="ai-content">
               {aiLoading ? (
                 <div className="ai-thinking">
-                  <span></span><span></span><span></span>
-                  <p>Scanning portfolio signals...</p>
+                  <span></span>
+                  <span></span>
+                  <span></span>
+
+                  <p>
+                    Scanning
+                    portfolio
+                    signals...
+                  </p>
                 </div>
               ) : (
                 <>
                   <p className="ai-system-text">
-                    {trend === "down"
+                    {trend ===
+                    "down"
                       ? "Signal detected: performance decline."
-                      : trend === "up"
+                      : trend ===
+                        "up"
                       ? "Optimization signal: growth trend active."
                       : "System stable: monitoring portfolio."}
                   </p>
 
                   <p className="ai-text fade-in">
-                    {efficiency < 50
-                      ? <>Efficiency at <b>{efficiency}%</b>. Below optimal.</>
-                      : riskLevel === "High"
-                      ? <>High risk exposure detected.</>
-                      : plansCount === 0
-                      ? <>No active plans found.</>
-                      : machinesCount === 0
-                      ? <>No machine assets detected.</>
-                      : <>Portfolio operating optimally.</>}
+                    {efficiency <
+                    50 ? (
+                      <>
+                        Efficiency
+                        at
+                        {" "}
+                        <b>
+                          {
+                            efficiency
+                          }
+                          %
+                        </b>
+                        . Below
+                        optimal.
+                      </>
+                    ) : riskLevel ===
+                      "High" ? (
+                      <>
+                        High risk
+                        exposure
+                        detected.
+                      </>
+                    ) : plansCount ===
+                      0 ? (
+                      <>
+                        No active
+                        plans
+                        found.
+                      </>
+                    ) : machinesCount ===
+                      0 ? (
+                      <>
+                        No machine
+                        assets
+                        detected.
+                      </>
+                    ) : (
+                      <>
+                        Portfolio
+                        operating
+                        optimally.
+                      </>
+                    )}
                   </p>
 
-                  <div className={`ai-trend ${trend}`}>
-                    {trend === "down" && "↓ Performance dropping"}
-                    {trend === "up" && "↑ Performance improving"}
-                    {trend === "stable" && "→ Stable performance"}
+                  <div
+                    className={`ai-trend ${trend}`}
+                  >
+                    {trend ===
+                      "down" &&
+                      "↓ Performance dropping"}
+
+                    {trend ===
+                      "up" &&
+                      "↑ Performance improving"}
+
+                    {trend ===
+                      "stable" &&
+                      "→ Stable performance"}
                   </div>
 
                   <p className="ai-sub">
-                    {efficiency < 50
+                    {efficiency <
+                    50
                       ? "Reallocation recommended."
-                      : riskLevel === "High"
+                      : riskLevel ===
+                        "High"
                       ? "Reduce exposure."
-                      : plansCount === 0
+                      : plansCount ===
+                        0
                       ? "Start investing."
-                      : machinesCount === 0
+                      : machinesCount ===
+                        0
                       ? "Deploy machines."
                       : "Maintain strategy."}
                   </p>
 
-                  <div className={`ai-tag ${
-                    efficiency < 50 || riskLevel === "High"
-                      ? "danger"
-                      : "safe"
-                  }`}>
-                    {efficiency < 50
+                  <div
+                    className={`ai-tag ${
+                      efficiency <
+                        50 ||
+                      riskLevel ===
+                        "High"
+                        ? "danger"
+                        : "safe"
+                    }`}
+                  >
+                    {efficiency <
+                    50
                       ? "Optimization Needed"
-                      : riskLevel === "High"
+                      : riskLevel ===
+                        "High"
                       ? "Risk Alert"
                       : "System Stable"}
                   </div>
 
                   <p className="ai-time">
-                    Updated at {lastUpdated} • Live analysis
+                    Updated at
+                    {" "}
+                    {
+                      lastUpdated
+                    }
+                    {" "}
+                    • Live
+                    analysis
                   </p>
                 </>
               )}
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
