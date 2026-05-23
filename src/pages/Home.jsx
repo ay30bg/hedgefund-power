@@ -15,7 +15,7 @@ import {
 const DashboardHomepage = () => {
   const { currency } = useCurrency();
 
-  const { token, user, loading } = useAuth();
+  const { token, loading } = useAuth();
 
   const [activities, setActivities] = useState([]);
   const [portfolio, setPortfolio] = useState(null);
