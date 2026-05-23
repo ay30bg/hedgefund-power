@@ -510,6 +510,7 @@
 import React, {
     useState,
     useEffect,
+    useCallback,
 } from "react";
 
 import "../styles/portfolio.css";
@@ -529,7 +530,7 @@ import pp9 from "../assets/pp9 1.png";
 import pp10 from "../assets/pp10 1.png";
 import pp11 from "../assets/pp11 1.png";
 
-/* ---------------- Machine Image Map ---------------- */
+/* ---------------- MACHINE IMAGE MAP ---------------- */
 const machineImages = {
     "Flash Speed Power Pumping Machine": pp1,
     "Godspeed Power Pumping Machine": pp4,
@@ -541,42 +542,82 @@ const machineImages = {
     "Spark Power Pumping Machine": pp11,
 };
 
-/* ---------------- Helpers ---------------- */
-const getStatus = (start, end, claimed) => {
-    if (!start || !end) return "waiting";
+/* ---------------- HELPERS ---------------- */
+const getStatus = (
+    start,
+    end,
+    claimed
+) => {
 
-    if (claimed) return "claimed";
+    if (!start || !end)
+        return "waiting";
+
+    if (claimed)
+        return "claimed";
 
     const now = new Date();
-    const startDate = new Date(start);
-    const endDate = new Date(end);
 
-    if (now >= startDate && now < endDate) return "running";
-    if (now >= endDate) return "claimable";
+    const startDate =
+        new Date(start);
+
+    const endDate =
+        new Date(end);
+
+    if (
+        now >= startDate &&
+        now < endDate
+    ) {
+        return "running";
+    }
+
+    if (now >= endDate) {
+        return "claimable";
+    }
 
     return "waiting";
 };
 
-const getProgress = (start, end) => {
-    if (!start || !end) return 0;
+const getProgress = (
+    start,
+    end
+) => {
+
+    if (!start || !end)
+        return 0;
 
     const now = new Date();
-    const startDate = new Date(start);
-    const endDate = new Date(end);
 
-    const total = endDate - startDate;
-    const current = now - startDate;
+    const startDate =
+        new Date(start);
+
+    const endDate =
+        new Date(end);
+
+    const total =
+        endDate - startDate;
+
+    const current =
+        now - startDate;
 
     return Math.min(
-        Math.max((current / total) * 100, 0),
+        Math.max(
+            (current / total) *
+                100,
+            0
+        ),
         100
     );
 };
 
-const formatDateTime = (date) => {
+const formatDateTime = (
+    date
+) => {
+
     if (!date) return "N/A";
 
-    return new Date(date).toLocaleString(
+    return new Date(
+        date
+    ).toLocaleString(
         undefined,
         {
             year: "numeric",
@@ -590,9 +631,9 @@ const formatDateTime = (date) => {
 
 export default function Portfolio() {
 
-    const { currency } = useCurrency();
+    const { currency } =
+        useCurrency();
 
-    // ✅ AUTH CONTEXT
     const {
         token,
         logout,
@@ -600,13 +641,17 @@ export default function Portfolio() {
     } = useAuth();
 
     const [activeTab, setActiveTab] =
-        useState("investments");
+        useState(
+            "investments"
+        );
 
     const [machines, setMachines] =
         useState([]);
 
-    const [investments, setInvestments] =
-        useState([]);
+    const [
+        investments,
+        setInvestments,
+    ] = useState([]);
 
     const [loadingId, setLoadingId] =
         useState(null);
@@ -634,272 +679,363 @@ export default function Portfolio() {
     const [, forceUpdate] =
         useState(0);
 
-    /* ---------------- LIVE REFRESH ---------------- */
+    /* ---------------- LIVE TIMER ---------------- */
     useEffect(() => {
-        const interval = setInterval(() => {
-            forceUpdate((n) => n + 1);
-        }, 1000);
+
+        const interval =
+            setInterval(() => {
+                forceUpdate(
+                    (n) => n + 1
+                );
+            }, 1000);
 
         return () =>
-            clearInterval(interval);
+            clearInterval(
+                interval
+            );
 
     }, []);
 
     /* ---------------- FETCH MACHINES ---------------- */
-    const fetchMachines = async () => {
-        try {
+    const fetchMachines =
+        useCallback(
+            async () => {
 
-            if (!token) return;
+                try {
 
-            const res = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/market/user`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                    if (!token)
+                        return;
+
+                    const res =
+                        await fetch(
+                            `${process.env.REACT_APP_API_URL}/api/market/user`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
+                        );
+
+                    if (
+                        res.status ===
+                        401
+                    ) {
+                        logout();
+                        return;
+                    }
+
+                    const data =
+                        await res.json();
+
+                    if (res.ok) {
+
+                        const list =
+                            data.machines ||
+                            [];
+
+                        setMachines(
+                            list
+                        );
+
+                        setMachineSkeletonCount(
+                            list.length ||
+                                3
+                        );
+                    }
+
+                } catch (err) {
+
+                    console.error(
+                        "FETCH MACHINES ERROR:",
+                        err
+                    );
+
+                } finally {
+
+                    setLoadingMachines(
+                        false
+                    );
+
                 }
-            );
 
-            // ✅ auto logout on invalid token
-            if (res.status === 401) {
-                logout();
-                return;
-            }
-
-            const data =
-                await res.json();
-
-            if (res.ok) {
-
-                const list =
-                    data.machines || [];
-
-                setMachines(list);
-
-                setMachineSkeletonCount(
-                    list.length || 3
-                );
-            }
-
-        } catch (err) {
-
-            console.error(
-                "FETCH MACHINES ERROR:",
-                err
-            );
-
-        } finally {
-
-            setLoadingMachines(false);
-
-        }
-    };
+            },
+            [token, logout]
+        );
 
     /* ---------------- FETCH INVESTMENTS ---------------- */
-    const fetchInvestments = async () => {
-        try {
+    const fetchInvestments =
+        useCallback(
+            async () => {
 
-            if (!token) return;
+                try {
 
-            const res = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/invest/user`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                    if (!token)
+                        return;
+
+                    const res =
+                        await fetch(
+                            `${process.env.REACT_APP_API_URL}/api/invest/user`,
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
+                        );
+
+                    if (
+                        res.status ===
+                        401
+                    ) {
+                        logout();
+                        return;
+                    }
+
+                    const data =
+                        await res.json();
+
+                    if (res.ok) {
+
+                        const list =
+                            data.investments ||
+                            [];
+
+                        setInvestments(
+                            list
+                        );
+
+                        setInvestSkeletonCount(
+                            list.length ||
+                                3
+                        );
+                    }
+
+                } catch (err) {
+
+                    console.error(
+                        "FETCH INVESTMENTS ERROR:",
+                        err
+                    );
+
+                } finally {
+
+                    setLoadingInvestments(
+                        false
+                    );
+
                 }
-            );
 
-            // ✅ auto logout on invalid token
-            if (res.status === 401) {
-                logout();
-                return;
-            }
-
-            const data =
-                await res.json();
-
-            if (res.ok) {
-
-                const list =
-                    data.investments || [];
-
-                setInvestments(list);
-
-                setInvestSkeletonCount(
-                    list.length || 3
-                );
-            }
-
-        } catch (err) {
-
-            console.error(
-                "FETCH INVESTMENTS ERROR:",
-                err
-            );
-
-        } finally {
-
-            setLoadingInvestments(false);
-
-        }
-    };
+            },
+            [token, logout]
+        );
 
     /* ---------------- INITIAL FETCH ---------------- */
     useEffect(() => {
 
-        if (!isAuthenticated || !token) {
-            setLoadingInvestments(false);
-            setLoadingMachines(false);
+        if (
+            !isAuthenticated ||
+            !token
+        ) {
+            setLoadingMachines(
+                false
+            );
+
+            setLoadingInvestments(
+                false
+            );
+
             return;
         }
 
         fetchMachines();
+
         fetchInvestments();
 
-    }, [token, isAuthenticated]);
+    }, [
+        token,
+        isAuthenticated,
+        fetchMachines,
+        fetchInvestments,
+    ]);
 
     /* ---------------- FORMAT MONEY ---------------- */
-    const format = (value) =>
+    const format = (
+        value
+    ) =>
         `${currency.symbol}${(
-            value * currency.rate
-        ).toLocaleString(undefined, {
-            maximumFractionDigits: 2,
-        })}`;
+            value *
+            currency.rate
+        ).toLocaleString(
+            undefined,
+            {
+                maximumFractionDigits: 2,
+            }
+        )}`;
 
     /* ---------------- CLAIM INVESTMENT ---------------- */
-    const handleClaimInvestment = async (id) => {
+    const handleClaimInvestment =
+        async (id) => {
 
-        try {
+            try {
 
-            setLoadingId(id);
-
-            const res = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/invest/claim/${id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            if (res.status === 401) {
-                logout();
-                return;
-            }
-
-            const data =
-                await res.json();
-
-            if (!res.ok) {
-
-                alert(
-                    data.message ||
-                    "Claim failed"
+                setLoadingId(
+                    id
                 );
 
-                return;
+                const res =
+                    await fetch(
+                        `${process.env.REACT_APP_API_URL}/api/invest/claim/${id}`,
+                        {
+                            method:
+                                "POST",
+
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+
+                if (
+                    res.status ===
+                    401
+                ) {
+                    logout();
+                    return;
+                }
+
+                const data =
+                    await res.json();
+
+                if (!res.ok) {
+
+                    alert(
+                        data.message ||
+                            "Claim failed"
+                    );
+
+                    return;
+                }
+
+                alert(
+                    "Investment claimed successfully"
+                );
+
+                // instant UI update
+                setInvestments(
+                    (prev) =>
+                        prev.map(
+                            (
+                                inv
+                            ) =>
+                                inv._id ===
+                                id
+                                    ? {
+                                          ...inv,
+                                          claimed: true,
+                                      }
+                                    : inv
+                        )
+                );
+
+                await fetchInvestments();
+
+            } catch (err) {
+
+                console.error(
+                    "CLAIM INVESTMENT ERROR:",
+                    err
+                );
+
+            } finally {
+
+                setLoadingId(
+                    null
+                );
+
             }
-
-            alert(
-                "Investment claimed successfully"
-            );
-
-            // ✅ instant UI update
-            setInvestments((prev) =>
-                prev.map((inv) =>
-                    inv._id === id
-                        ? {
-                              ...inv,
-                              claimed: true,
-                          }
-                        : inv
-                )
-            );
-
-            await fetchInvestments();
-
-        } catch (err) {
-
-            console.error(
-                "CLAIM INVESTMENT ERROR:",
-                err
-            );
-
-        } finally {
-
-            setLoadingId(null);
-
-        }
-    };
+        };
 
     /* ---------------- CLAIM MACHINE ---------------- */
-    const handleClaimMachine = async (id) => {
+    const handleClaimMachine =
+        async (id) => {
 
-        try {
+            try {
 
-            setLoadingId(id);
-
-            const res = await fetch(
-                `${process.env.REACT_APP_API_URL}/api/market/claim/${id}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-
-            if (res.status === 401) {
-                logout();
-                return;
-            }
-
-            const data =
-                await res.json();
-
-            if (!res.ok) {
-
-                alert(
-                    data.message ||
-                    "Claim failed"
+                setLoadingId(
+                    id
                 );
 
-                return;
+                const res =
+                    await fetch(
+                        `${process.env.REACT_APP_API_URL}/api/market/claim/${id}`,
+                        {
+                            method:
+                                "POST",
+
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+
+                if (
+                    res.status ===
+                    401
+                ) {
+                    logout();
+                    return;
+                }
+
+                const data =
+                    await res.json();
+
+                if (!res.ok) {
+
+                    alert(
+                        data.message ||
+                            "Claim failed"
+                    );
+
+                    return;
+                }
+
+                alert(
+                    "Machine profit claimed"
+                );
+
+                // instant UI update
+                setMachines(
+                    (prev) =>
+                        prev.map(
+                            (
+                                machine
+                            ) =>
+                                machine._id ===
+                                id
+                                    ? {
+                                          ...machine,
+                                          claimed: true,
+                                      }
+                                    : machine
+                        )
+                );
+
+                await fetchMachines();
+
+            } catch (err) {
+
+                console.error(
+                    "CLAIM MACHINE ERROR:",
+                    err
+                );
+
+            } finally {
+
+                setLoadingId(
+                    null
+                );
+
             }
-
-            alert(
-                "Machine profit claimed"
-            );
-
-            // ✅ instant UI update
-            setMachines((prev) =>
-                prev.map((machine) =>
-                    machine._id === id
-                        ? {
-                              ...machine,
-                              claimed: true,
-                          }
-                        : machine
-                )
-            );
-
-            await fetchMachines();
-
-        } catch (err) {
-
-            console.error(
-                "CLAIM MACHINE ERROR:",
-                err
-            );
-
-        } finally {
-
-            setLoadingId(null);
-
-        }
-    };
+        };
 
     return (
         <div className="portfolio-page">
@@ -909,7 +1045,8 @@ export default function Portfolio() {
 
                 <button
                     className={`portfolio-tab ${
-                        activeTab === "investments"
+                        activeTab ===
+                        "investments"
                             ? "active"
                             : ""
                     }`}
@@ -924,7 +1061,8 @@ export default function Portfolio() {
 
                 <button
                     className={`portfolio-tab ${
-                        activeTab === "machines"
+                        activeTab ===
+                        "machines"
                             ? "active"
                             : ""
                     }`}
@@ -947,18 +1085,28 @@ export default function Portfolio() {
                     <div className="invest-cards">
 
                         {loadingInvestments ? (
+
                             [...Array(
                                 investSkeletonCount
-                            )].map((_, i) => (
-                                <div
-                                    className="invest-card skeleton-card"
-                                    key={i}
-                                >
-                                    Loading...
-                                </div>
-                            ))
+                            )].map(
+                                (
+                                    _,
+                                    i
+                                ) => (
+                                    <div
+                                        className="invest-card skeleton-card"
+                                        key={
+                                            i
+                                        }
+                                    >
+                                        Loading...
+                                    </div>
+                                )
+                            )
+
                         ) : investments.length ===
                           0 ? (
+
                             <div className="empty-state premium">
 
                                 <div className="empty-glow"></div>
@@ -968,8 +1116,7 @@ export default function Portfolio() {
                                 </h3>
 
                                 <p>
-                                    Your portfolio is
-                                    waiting.
+                                    Start investing to unlock earnings.
                                 </p>
 
                                 <button
@@ -983,9 +1130,13 @@ export default function Portfolio() {
                                 </button>
 
                             </div>
+
                         ) : (
+
                             investments.map(
-                                (inv) => {
+                                (
+                                    inv
+                                ) => {
 
                                     const status =
                                         getStatus(
@@ -1028,6 +1179,7 @@ export default function Portfolio() {
                                                 />
 
                                                 <div className="name-tag">
+
                                                     <h3>
                                                         {
                                                             inv.name
@@ -1040,6 +1192,7 @@ export default function Portfolio() {
                                                         }{" "}
                                                         Day(s)
                                                     </span>
+
                                                 </div>
 
                                                 <span
@@ -1055,6 +1208,7 @@ export default function Portfolio() {
                                             <div className="invest-info">
 
                                                 <div>
+
                                                     <span>
                                                         Deposit
                                                     </span>
@@ -1064,12 +1218,13 @@ export default function Portfolio() {
                                                             inv.amount
                                                         )}
                                                     </strong>
+
                                                 </div>
 
                                                 <div>
+
                                                     <span>
-                                                        Total
-                                                        Profit
+                                                        Total Profit
                                                     </span>
 
                                                     <strong>
@@ -1077,6 +1232,7 @@ export default function Portfolio() {
                                                             inv.profit
                                                         )}
                                                     </strong>
+
                                                 </div>
 
                                             </div>
@@ -1096,8 +1252,7 @@ export default function Portfolio() {
                                                 {formatDateTime(
                                                     inv.startDate
                                                 )}{" "}
-                                                -
-                                                {" "}
+                                                -{" "}
                                                 {formatDateTime(
                                                     inv.endDate
                                                 )}
@@ -1105,6 +1260,7 @@ export default function Portfolio() {
 
                                             {status ===
                                                 "claimable" && (
+
                                                 <button
                                                     className="claim-btn"
                                                     onClick={() =>
@@ -1122,22 +1278,26 @@ export default function Portfolio() {
                                                         ? "Processing..."
                                                         : "Claim Profit"}
                                                 </button>
+
                                             )}
 
                                             {status ===
                                                 "claimed" && (
+
                                                 <button
                                                     className="claim-btn claimed"
                                                     disabled
                                                 >
                                                     Claimed
                                                 </button>
+
                                             )}
 
                                         </div>
                                     );
                                 }
                             )
+
                         )}
 
                     </div>
@@ -1153,18 +1313,28 @@ export default function Portfolio() {
                     <div className="machine-cards">
 
                         {loadingMachines ? (
+
                             [...Array(
                                 machineSkeletonCount
-                            )].map((_, i) => (
-                                <div
-                                    className="machine-card skeleton-card"
-                                    key={i}
-                                >
-                                    Loading...
-                                </div>
-                            ))
+                            )].map(
+                                (
+                                    _,
+                                    i
+                                ) => (
+                                    <div
+                                        className="machine-card skeleton-card"
+                                        key={
+                                            i
+                                        }
+                                    >
+                                        Loading...
+                                    </div>
+                                )
+                            )
+
                         ) : machines.length ===
                           0 ? (
+
                             <div className="empty-state premium">
 
                                 <div className="empty-glow"></div>
@@ -1174,8 +1344,7 @@ export default function Portfolio() {
                                 </h3>
 
                                 <p>
-                                    Purchase a machine
-                                    to start earning.
+                                    Purchase a machine to start generating profits.
                                 </p>
 
                                 <button
@@ -1189,9 +1358,13 @@ export default function Portfolio() {
                                 </button>
 
                             </div>
+
                         ) : (
+
                             machines.map(
-                                (machine) => {
+                                (
+                                    machine
+                                ) => {
 
                                     const status =
                                         getStatus(
@@ -1233,6 +1406,7 @@ export default function Portfolio() {
                                                 />
 
                                                 <div className="name-tag">
+
                                                     <h3>
                                                         {
                                                             machine.name
@@ -1245,6 +1419,7 @@ export default function Portfolio() {
                                                         }{" "}
                                                         Days
                                                     </span>
+
                                                 </div>
 
                                                 <span
@@ -1260,9 +1435,9 @@ export default function Portfolio() {
                                             <div className="machine-info">
 
                                                 <div>
+
                                                     <span>
-                                                        Profit
-                                                        / Hour
+                                                        Profit / Hour
                                                     </span>
 
                                                     <strong>
@@ -1270,12 +1445,13 @@ export default function Portfolio() {
                                                             machine.profit
                                                         )}
                                                     </strong>
+
                                                 </div>
 
                                                 <div>
+
                                                     <span>
-                                                        Daily
-                                                        Profit
+                                                        Daily Profit
                                                     </span>
 
                                                     <strong>
@@ -1284,6 +1460,7 @@ export default function Portfolio() {
                                                                 24
                                                         )}
                                                     </strong>
+
                                                 </div>
 
                                             </div>
@@ -1303,8 +1480,7 @@ export default function Portfolio() {
                                                 {formatDateTime(
                                                     machine.purchaseDate
                                                 )}{" "}
-                                                -
-                                                {" "}
+                                                -{" "}
                                                 {formatDateTime(
                                                     machine.expiryDate
                                                 )}
@@ -1312,6 +1488,7 @@ export default function Portfolio() {
 
                                             {status ===
                                                 "claimable" && (
+
                                                 <button
                                                     className="claim-btn"
                                                     onClick={() =>
@@ -1329,22 +1506,26 @@ export default function Portfolio() {
                                                         ? "Processing..."
                                                         : "Claim Profit"}
                                                 </button>
+
                                             )}
 
                                             {status ===
                                                 "claimed" && (
+
                                                 <button
                                                     className="claim-btn claimed"
                                                     disabled
                                                 >
                                                     Claimed
                                                 </button>
+
                                             )}
 
                                         </div>
                                     );
                                 }
                             )
+
                         )}
 
                     </div>
