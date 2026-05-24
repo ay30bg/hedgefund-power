@@ -1178,7 +1178,6 @@ export default function Portfolio() {
     const [loadingId, setLoadingId] =
         useState(null);
 
-    /* PAGE LOADING */
     const [pageLoading, setPageLoading] =
         useState(true);
 
@@ -1656,14 +1655,38 @@ export default function Portfolio() {
                                 ) => (
                                     <div
                                         className="invest-card skeleton-card"
-                                        key={
-                                            i
-                                        }
+                                        key={i}
                                     >
 
                                         <div className="invest-header">
-                                            Loading...
+
+                                            <div className="skeleton skeleton-img"></div>
+
+                                            <div className="name-tag">
+
+                                                <div className="skeleton skeleton-line short"></div>
+
+                                                <div className="skeleton skeleton-line tiny"></div>
+
+                                            </div>
+
+                                            <div className="skeleton skeleton-badge"></div>
+
                                         </div>
+
+                                        <div className="invest-info">
+
+                                            <div className="skeleton skeleton-box"></div>
+
+                                            <div className="skeleton skeleton-box"></div>
+
+                                        </div>
+
+                                        <div className="skeleton skeleton-progress"></div>
+
+                                        <div className="skeleton skeleton-line full"></div>
+
+                                        <div className="skeleton skeleton-button"></div>
 
                                     </div>
                                 )
@@ -1888,14 +1911,38 @@ export default function Portfolio() {
                                 ) => (
                                     <div
                                         className="machine-card skeleton-card"
-                                        key={
-                                            i
-                                        }
+                                        key={i}
                                     >
 
                                         <div className="machine-header">
-                                            Loading...
+
+                                            <div className="skeleton skeleton-img"></div>
+
+                                            <div className="name-tag">
+
+                                                <div className="skeleton skeleton-line short"></div>
+
+                                                <div className="skeleton skeleton-line tiny"></div>
+
+                                            </div>
+
+                                            <div className="skeleton skeleton-badge"></div>
+
                                         </div>
+
+                                        <div className="machine-info">
+
+                                            <div className="skeleton skeleton-box"></div>
+
+                                            <div className="skeleton skeleton-box"></div>
+
+                                        </div>
+
+                                        <div className="skeleton skeleton-progress"></div>
+
+                                        <div className="skeleton skeleton-line full"></div>
+
+                                        <div className="skeleton skeleton-button"></div>
 
                                     </div>
                                 )
