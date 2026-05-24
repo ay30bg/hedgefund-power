@@ -1714,7 +1714,14 @@ export default function Portfolio() {
 
                         ) : (
 
-                            investments.map(
+                            // investments.map(
+                              [...investments]
+    .sort(
+        (a, b) =>
+            new Date(a.startDate) -
+            new Date(b.startDate)
+    )
+    .map(
                                 (
                                     inv
                                 ) => {
