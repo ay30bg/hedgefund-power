@@ -680,58 +680,55 @@ const InviteFriends = () => {
       </div>
 
       {/* ================= REFERRALS ================= */}
-      <div className="referral-list">
+<div className="referral-list">
 
-        <h4>
-          Your Referrals
-        </h4>
+  <h4>
+    Your Referrals
+  </h4>
 
-        {referrals.length === 0 ? (
+  {referrals.length === 0 ? (
 
-          <p className="empty-text">
-            No referrals yet
-          </p>
+    <p className="empty-text">
+      No referrals yet
+    </p>
 
-        ) : (
+  ) : (
 
-          paginatedReferrals.map(
-            (ref, i) => (
-              <div
-                key={i}
-                className="referral-row"
-              >
+    <>
+      {paginatedReferrals.map(
+        (ref, i) => (
+          <div
+            key={i}
+            className="referral-row"
+          >
 
-                <span className="referral-email">
-                  {ref.name?.length > 18
-                    ? `${ref.name.substring(
-                        0,
-                        18
-                      )}...`
-                    : ref.name}
-                </span>
+            <span className="referral-email">
+              {ref.name?.length > 18
+                ? `${ref.name.substring(
+                    0,
+                    18
+                  )}...`
+                : ref.name}
+            </span>
 
-                <span
-                  className={
-                    ref.status ===
-                    "Completed"
-                      ? "success"
-                      : "pending"
-                  }
-                >
-                  {ref.status}
-                </span>
+            <span
+              className={
+                ref.status ===
+                "Completed"
+                  ? "success"
+                  : "pending"
+              }
+            >
+              {ref.status}
+            </span>
 
-                <span>
-                  {format(ref.reward)}
-                </span>
+            <span>
+              {format(ref.reward)}
+            </span>
 
-              </div>
-            )
-          )
-
-        )}
-
-      </div>
+          </div>
+        )
+      )}
 
       {/* ================= PAGINATION ================= */}
       {referrals.length >
@@ -775,6 +772,11 @@ const InviteFriends = () => {
 
       )}
 
+    </>
+  )}
+
+</div>
+      
       {/* ================= RULES ================= */}
       <div className="invite-rules">
 
