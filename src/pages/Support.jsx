@@ -117,6 +117,10 @@ const Support = () => {
         fetchMessages();
     }, [fetchMessages]);
 
+useEffect(() => {
+    document.title = "Support Center";
+}, []);
+    
     // =========================
     // SEND MESSAGE
     // =========================
