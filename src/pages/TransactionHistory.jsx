@@ -274,7 +274,7 @@ const TransactionHistory = () => {
 
         {transactions.length === 0 ? (
 
-         <div className="tx-empty">
+        <div className="tx-empty">
 
   <div className="tx-empty-icon">
     <FiInbox />
@@ -283,7 +283,7 @@ const TransactionHistory = () => {
   <p>No transactions found</p>
 
   <span>
-    Your transaction history will appear here
+    Your transactions will appear here
   </span>
 
 </div>
