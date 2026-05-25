@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/faq.css";
 
@@ -162,6 +162,10 @@ const faqData = {
 
 const FAQ = () => {
   const navigate = useNavigate();
+
+   useEffect(() => {
+    document.title = "FAQs | Hedgefund Power";
+  }, []);
 
   const [activeCategory, setActiveCategory] = useState("Popular");
   const [activeIndex, setActiveIndex] = useState(null);
