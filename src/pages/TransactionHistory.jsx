@@ -37,6 +37,11 @@ const TransactionHistory = () => {
     totalWithdrawals: 0,
   });
 
+  useEffect(() => {
+  document.title =
+    "Transaction History | Hedgefund Power";
+}, []);
+
   const API_URL = process.env.REACT_APP_API_URL;
 
   // ===== FETCH TRANSACTIONS =====
