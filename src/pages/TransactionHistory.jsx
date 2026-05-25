@@ -9,6 +9,7 @@ import {
   FiArrowLeft,
   FiArrowDownLeft,
   FiArrowUpRight,
+  FiInbox,
 } from "react-icons/fi";
 
 const ITEMS_PER_PAGE = 6;
@@ -273,9 +274,19 @@ const TransactionHistory = () => {
 
         {transactions.length === 0 ? (
 
-          <p className="tx-empty">
-            No transactions found
-          </p>
+         <div className="tx-empty">
+
+  <div className="tx-empty-icon">
+    <FiInbox />
+  </div>
+
+  <p>No transactions found</p>
+
+  <span>
+    Your transaction history will appear here
+  </span>
+
+</div>
 
         ) : (
 
