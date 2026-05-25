@@ -170,6 +170,13 @@ export default function Portfolio() {
     const [, forceUpdate] =
         useState(0);
 
+    useEffect(() => {
+  document.title =
+    activeTab === "investments"
+      ? "Investments | Hedgefund Power"
+      : "Machines | Hedgefund Power";
+}, [activeTab]);
+
     /* ---------------- LIVE TIMER ---------------- */
     useEffect(() => {
 
