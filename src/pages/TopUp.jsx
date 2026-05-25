@@ -44,6 +44,14 @@ const TopUp = () => {
     useState("");
 
   // ==============================
+// DYNAMIC PAGE TITLE
+// ==============================
+
+useEffect(() => {
+  document.title = "Top-Up | Hedgefund Power";
+}, []);
+
+  // ==============================
   // CREATE PAYMENT
   // ==============================
   const createPayment = async () => {
