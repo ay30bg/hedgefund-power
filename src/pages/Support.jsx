@@ -118,7 +118,7 @@ const Support = () => {
     }, [fetchMessages]);
 
 useEffect(() => {
-    document.title = "Support Center | Hedgefund Power";
+    document.title = "Live Support Chat";
 }, []);
     
     // =========================
