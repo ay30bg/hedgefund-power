@@ -54,6 +54,10 @@ const InviteFriends = () => {
   const [referrals, setReferrals] =
     useState([]);
 
+  useEffect(() => {
+  document.title = "Invite Friends | Hedgefund Power";
+}, []);
+
   // ================= FORMAT =================
   const format = (value) =>
     `${currency.symbol}${(
