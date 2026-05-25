@@ -280,8 +280,6 @@ const TransactionHistory = () => {
     <FiInbox />
   </div>
 
-  <p>No transactions found</p>
-
   <span>
     Your transactions will appear here
   </span>
