@@ -260,6 +260,45 @@
   cursor: pointer;
 }
 
+.tx-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.tx-empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tx-empty-icon svg {
+  font-size: 32px;
+  color: #cbd5e1;
+}
+
+.tx-empty p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f3f4f6;
+  margin-bottom: 6px;
+}
+
+.tx-empty span {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
 /* LIST */
 .tx-list {
   display: flex;
