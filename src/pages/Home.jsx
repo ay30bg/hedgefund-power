@@ -32,14 +32,6 @@ const DashboardHomepage = () => {
   const [chartData, setChartData] =
     useState([]);
 
-  useEffect(() => {
-  if (plansCount > 0) {
-    document.title = `Portfolio Active | Hedgefund Power`;
-  } else {
-    document.title = `Start Investing | Hedgefund Power`;
-  }
-}, [plansCount]);
-
   // ================= ID GENERATOR =================
   const generateId = () => {
     return (
@@ -314,6 +306,15 @@ const DashboardHomepage = () => {
       : efficiency > 75
       ? "up"
       : "stable";
+
+   useEffect(() => {
+  if (plansCount > 0) {
+    document.title = `Portfolio Active | Hedgefund Power`;
+  } else {
+    document.title = `Start Investing | Hedgefund Power`;
+  }
+}, [plansCount]);
+
 
   // ================= AUTH LOADING =================
   if (loading) {
