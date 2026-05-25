@@ -6,6 +6,11 @@ import "../styles/privacyPolicy.css";
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    document.title = "Privacy Policy | Hedgefund Power";
+  }, []);
+
+
   return (
     <div className="privacy-page">
 
