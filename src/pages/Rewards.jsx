@@ -9,7 +9,7 @@ const Rewards = () => {
   const { currency } = useCurrency();
 
   useEffect(() => {
-    document.title = "About Us | Hedgefund Power";
+    document.title = "Rewards | Hedgefund Power";
   }, []);
   
 
