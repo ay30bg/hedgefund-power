@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/rewards.css";
 import { FiGift, FiStar, FiUsers, FiArrowLeft } from "react-icons/fi";
@@ -7,6 +7,11 @@ import { useCurrency } from "../context/CurrencyContext";
 const Rewards = () => {
   const navigate = useNavigate();
   const { currency } = useCurrency();
+
+  useEffect(() => {
+    document.title = "About Us | Hedgefund Power";
+  }, []);
+  
 
   // =========================
   // FIXED REWARD RULES
