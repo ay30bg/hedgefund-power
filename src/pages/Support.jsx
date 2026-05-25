@@ -403,7 +403,8 @@
 import React, {
     useState,
     useRef,
-    useEffect
+    useEffect,
+    useCallback
 } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -457,94 +458,116 @@ const Support = () => {
     // FETCH MESSAGES
     // =========================
 
+    const fetchMessages =
+        useCallback(async () => {
+            try {
+                if (!token) return;
+
+                const res =
+                    await axios.get(
+                        `${API_URL}/api/support/messages`,
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                if (
+                    res.data.length ===
+                    0
+                ) {
+                    setMessages([
+                        {
+                            sender:
+                                "admin",
+
+                            message:
+                                "Hello 👋 Welcome to Support Center. How can we help you today?",
+
+                            createdAt:
+                                new Date()
+                        }
+                    ]);
+                } else {
+                    setMessages(
+                        res.data
+                    );
+                }
+
+            } catch (error) {
+                console.log(error);
+
+                // INVALID TOKEN
+                if (
+                    error.response
+                        ?.status ===
+                        401 ||
+                    error.response
+                        ?.status ===
+                        403
+                ) {
+                    logout();
+                }
+
+            } finally {
+                setLoading(false);
+            }
+        }, [token, logout]);
+
     useEffect(() => {
         fetchMessages();
-    }, []);
-
-    const fetchMessages = async () => {
-        try {
-            if (!token) return;
-
-            const res = await axios.get(
-                `${API_URL}/api/support/messages`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            if (res.data.length === 0) {
-                setMessages([
-                    {
-                        sender: "admin",
-                        message:
-                            "Hello 👋 Welcome to Support Center. How can we help you today?",
-                        createdAt:
-                            new Date()
-                    }
-                ]);
-            } else {
-                setMessages(
-                    res.data
-                );
-            }
-
-        } catch (error) {
-            console.log(error);
-
-            // INVALID TOKEN
-            if (
-                error.response?.status === 401 ||
-                error.response?.status === 403
-            ) {
-                logout();
-            }
-
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [fetchMessages]);
 
     // =========================
     // SEND MESSAGE
     // =========================
 
-    const sendMessage = async () => {
-        if (!input.trim()) return;
+    const sendMessage =
+        async () => {
+            if (!input.trim())
+                return;
 
-        try {
-            const res = await axios.post(
-                `${API_URL}/api/support/send`,
-                {
-                    message: input
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+            try {
+                const res =
+                    await axios.post(
+                        `${API_URL}/api/support/send`,
+                        {
+                            message:
+                                input
+                        },
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                setMessages(
+                    (prev) => [
+                        ...prev,
+                        res.data
+                    ]
+                );
+
+                setInput("");
+
+            } catch (error) {
+                console.log(error);
+
+                // INVALID TOKEN
+                if (
+                    error.response
+                        ?.status ===
+                        401 ||
+                    error.response
+                        ?.status ===
+                        403
+                ) {
+                    logout();
                 }
-            );
-
-            setMessages((prev) => [
-                ...prev,
-                res.data
-            ]);
-
-            setInput("");
-
-        } catch (error) {
-            console.log(error);
-
-            // INVALID TOKEN
-            if (
-                error.response?.status === 401 ||
-                error.response?.status === 403
-            ) {
-                logout();
             }
-        }
-    };
+        };
 
     // =========================
     // FORMAT DATE LABEL
@@ -646,11 +669,14 @@ const Support = () => {
                         <div className="loading-state">
 
                             <div className="loading-icon">
-                                <span>💬</span>
+                                <span>
+                                    💬
+                                </span>
                             </div>
 
                             <p>
-                                Loading messages...
+                                Loading
+                                messages...
                             </p>
 
                         </div>
@@ -688,14 +714,19 @@ const Support = () => {
                                         : "No Date";
 
                                 const previousDate =
-                                    index > 0 &&
+                                    index >
+                                        0 &&
                                     messages[
-                                        index - 1
-                                    ].createdAt
+                                        index -
+                                            1
+                                    ]
+                                        .createdAt
                                         ? new Date(
                                               messages[
-                                                  index - 1
-                                              ].createdAt
+                                                  index -
+                                                      1
+                                              ]
+                                                  .createdAt
                                           ).toDateString()
                                         : null;
 
@@ -791,7 +822,8 @@ const Support = () => {
                         value={input}
                         onChange={(e) =>
                             setInput(
-                                e.target.value
+                                e.target
+                                    .value
                             )
                         }
                         onKeyDown={(e) =>
