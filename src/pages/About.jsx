@@ -19,6 +19,10 @@ import {
 const About = () => {
   const navigate = useNavigate();
 
+useEffect(() => {
+    document.title = "About Us | Hedgefund Power";
+  }, []);
+  
   return (
     <div className="about-page">
 
