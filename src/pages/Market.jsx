@@ -54,6 +54,10 @@ export default function PurchaseHall() {
   const [buyingId, setBuyingId] =
     useState(null);
 
+useEffect(() => {
+  document.title = "Market | Hedgefund Power";
+}, []);
+  
   // ================= FORMAT CURRENCY =================
   const format = useCallback(
     (value) => {
