@@ -40,6 +40,14 @@ const Withdraw = () => {
     process.env.REACT_APP_API_URL;
 
   // =========================
+// DYNAMIC PAGE TITLE
+// =========================
+useEffect(() => {
+  document.title =
+    "Withdraw | Hedgefund Power";
+}, []);
+
+  // =========================
   // SAFE NUMBER CONVERSION
   // =========================
   const numericAmount =
