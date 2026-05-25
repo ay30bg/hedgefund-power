@@ -42,6 +42,14 @@ const Support = () => {
     const messagesEndRef =
         useRef(null);
 
+    // ==============================
+// DYNAMIC PAGE TITLE
+// ==============================
+
+useEffect(() => {
+  document.title = "Top-Up | Hedgefund Power";
+}, []);
+
     // =========================
     // AUTO SCROLL
     // =========================
