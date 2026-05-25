@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import "../styles/terms.css";
 
 const TermsPage = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+  document.title = "Terms of Use";
+}, []);
 
   return (
     <div className="terms-page">
