@@ -400,9 +400,9 @@ const TopUp = () => {
     setError("");
 
     // MINIMUM = $5
-    if (!amount || Number(amount) < 5) {
+    if (!amount || Number(amount) < 10) {
       return setError(
-        "Minimum deposit is $5"
+        "Minimum deposit is $10"
       );
     }
 
@@ -608,7 +608,7 @@ const TopUp = () => {
 
         <input
           type="number"
-          placeholder="Minimum $5"
+          placeholder="Minimum $10"
           value={amount}
           onChange={(e) =>
             setAmount(e.target.value)
@@ -631,7 +631,7 @@ const TopUp = () => {
 
         {/* QUICK AMOUNTS */}
         <div className="quick-amounts">
-          {[10, 50, 100, 500, 1000].map(
+          {[10, 50, 100, 500].map(
             (amt) => (
               <button
                 key={amt}
@@ -805,7 +805,7 @@ const TopUp = () => {
         </p>
 
         <p>
-          • Minimum deposit: $5
+          • Minimum deposit: $10
         </p>
 
         <p>
