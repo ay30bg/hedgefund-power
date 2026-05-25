@@ -7,7 +7,7 @@ const TermsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  document.title = "Terms of Use";
+  document.title = "Terms of Use | Hedgefund Power";
 }, []);
 
   return (
